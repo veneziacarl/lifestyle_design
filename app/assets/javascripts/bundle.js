@@ -28934,13 +28934,17 @@
 	    key: 'handleHabitSubmit',
 	    value: function handleHabitSubmit(habit) {
 	      _jquery2.default.ajax({
-	        url: '/habits.json',
+	        url: '/api/v1/habits',
 	        dataType: 'json',
 	        type: 'POST',
 	        data: habit,
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
 	        success: (function (habits) {
 	          var habitsArray = this.state.habits.daily;
-	          var newHabits = habitsArray.concat(habits);
+	          var newHabits = habitsArray.concat(habits.habit);
+	          debugger;
 	          this.setState({ habits: { daily: newHabits } });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
@@ -28952,10 +28956,12 @@
 	    key: 'handleHabitDelete',
 	    value: function handleHabitDelete(habit) {
 	      _jquery2.default.ajax({
-	        url: '/habits',
-	        method: 'DELETE',
-	        data: habit.id,
+	        url: '/api/v1/habits/' + habit.id.id,
+	        method: 'delete',
 	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
 	        cache: false,
 	        success: (function (habits) {
 	          var habitsArray = this.state.habits.daily;
@@ -28975,10 +28981,13 @@
 	    key: 'handleHabitEdit',
 	    value: function handleHabitEdit(habitDetails) {
 	      _jquery2.default.ajax({
-	        url: '/habits.json',
-	        method: 'PUT',
+	        url: '/api/v1/habits/' + habit.id.id,
+	        method: 'put',
 	        data: habitDetails,
 	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
 	        cache: false,
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29001,8 +29010,6 @@
 	        }).bind(this)
 	      });
 	    }
-	    // url: '/' + tab + '.json',
-
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {

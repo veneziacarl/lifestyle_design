@@ -30,7 +30,8 @@ _phase 1_
 - [ ] add monthly view
 - [ ] add yearly view
 - [ ] add infinite scroll box
-- [ ] finish building API 
+- [x] build out JSON API
+- [ ] strengthen params in API (require habit as parent param, etc)
 
 _phase 2_
 - [ ] switch from Sinatra/ActiveRecord to rails

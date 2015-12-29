@@ -19,13 +19,15 @@ class HabitBox extends React.Component {
 
   handleHabitSubmit (habit) {
     $.ajax({
-      url: '/habits.json',
+      url: '/api/v1/habits',
       dataType: 'json',
       type: 'POST',
       data: habit,
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       success: function(habits) {
         var habitsArray = this.state.habits.daily;
-        var newHabits = habitsArray.concat(habits);
+        var newHabits = habitsArray.concat(habits.habit);
+        debugger;
         this.setState({habits: {daily: newHabits}});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -36,10 +38,10 @@ class HabitBox extends React.Component {
 
   handleHabitDelete (habit) {
     $.ajax({
-      url: '/habits',
-      method: 'DELETE',
-      data: habit.id,
+      url: '/api/v1/habits/' + habit.id.id,
+      method: 'delete',
       dataType: "json",
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
       success: function(habits) {
         var habitsArray = this.state.habits.daily;
@@ -58,10 +60,11 @@ class HabitBox extends React.Component {
 
   handleHabitEdit (habitDetails) {
     $.ajax({
-      url: '/habits.json',
-      method: 'PUT',
+      url: '/api/v1/habits/' + habit.id.id,
+      method: 'put',
       data: habitDetails,
       dataType: "json",
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -83,7 +86,6 @@ class HabitBox extends React.Component {
       }.bind(this)
     });
   }
-  // url: '/' + tab + '.json',
 
   componentDidMount () {
     this.handleOpenTab('daily');

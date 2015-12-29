@@ -16,5 +16,37 @@ class Api::V1::HabitsController < Api::V1::BaseController
       )
     )
   end
-  
+
+  def create
+    habit = Habit.new(habit_params)
+
+    if habit.save
+      flash[:notice] = "Habit Successfully Created"
+      flash[:color]= "valid"
+    else
+      flash[:notice] = "Form is invalid"
+      flash[:color]= "invalid"
+    end
+
+    render json: habit
+  end
+
+  def destroy
+    habit = Habit.find(params[:id])
+    Habit.destroy(habit.id)
+
+    render json: habit
+  end
+
+  def update
+
+  end
+
+
+  private
+
+  def habit_params
+    params.permit(:title, :description, :time_type)
+  end
+
 end
