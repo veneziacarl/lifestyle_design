@@ -1,7 +1,7 @@
 {
-  "name": "react_rails_boilerplate",
+  "name": "lifestyle_design",
   "version": "1.0.0",
-  "description": "a template for rails with react asset pipeline integration through webpack",
+  "description": "habitual on rails",
   "main": "./client/entry.jsx",
   "scripts": {
     "start": "webpack --progress --inline --watch"
@@ -24,12 +24,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/veneziacarl/react_rails_boilerplate.git"
+    "url": "git+https://github.com/veneziacarl/lifestyle_design.git"
   },
   "author": "Carl Venezia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/veneziacarl/react_rails_boilerplate/issues"
+    "url": "https://github.com/veneziacarl/lifestyle_design/issues"
   },
-  "homepage": "https://github.com/veneziacarl/react_rails_boilerplate#readme"
+  "homepage": "https://github.com/veneziacarl/lifestyle_design#readme"
 }

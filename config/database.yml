@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: react_rails_boilerplate_development
+  database: lifestyle_design_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: react_rails_boilerplate_test
+  database: lifestyle_design_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: react_rails_boilerplate_production
-  username: react_rails_boilerplate
-  password: <%= ENV['REACT_RAILS_BOILERPLATE_DATABASE_PASSWORD'] %>
+  database: lifestyle_design_production
+  username: lifestyle_design
+  password: <%= ENV['LIFESTYLE_DESIGN_DATABASE_PASSWORD'] %>

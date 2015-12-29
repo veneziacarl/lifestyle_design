@@ -1,10 +1,10 @@
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
-const Tabs = require('material-ui/lib/tabs/tabs');
-const Tab = require('material-ui/lib/tabs/tab');
-import HabitRow from './HabitRow.jsx';
+import { Tabs, Tab } from 'material-ui';
 import React from 'react';
 import $ from 'jquery';
+
+import HabitRow from './HabitRow.jsx';
 
 
 class TimeTabs extends React.Component {
@@ -60,19 +60,3 @@ class TimeTabs extends React.Component {
 }
 
 export default TimeTabs;
-
-      // <Tabs onChange={this._handleChangeTabs.bind(this)} value={this.state.slideIndex + ''}>
-      //   <Tab label="Tab One" value="0" />
-      //   <Tab label="Tab Two" value="1" />
-      //   <Tab label="Tab Three" value="2" />
-      // </Tabs>
-
-      // <Tabs
-      //   valueLink={{value: this.state.tabsValue, requestChange: this._handleTabsChange.bind(this)}}>
-      //   <Tab label="Tab A" value="a" >
-      //     (Tab content...)
-      //   </Tab>
-      //   <Tab label="Tab B" value="b">
-      //     (Tab content...)
-      //   </Tab>
-      // </Tabs>

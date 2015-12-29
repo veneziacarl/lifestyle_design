@@ -22,13 +22,15 @@ _phase 1_
 - [ ] add dynamic in-line editing to title
 - [ ] add cancel button to inline-editing
 - [ ] retain multi-line functionality in description
-- [ ] refactor import statements to be more like `import { Card, CardActions, CardExpandable, etc.. } from 'material-ui';`
+- [ ] add drag-and-drop functionality
+- [x] refactor import statements to be more like `import { Card, CardActions, CardExpandable, etc.. } from 'material-ui';`
 - [ ] do wireframes and user stories/criteria
 - [ ] fix delete and edit paths to not have to use habit.id.id (change object being passed in)
 - [ ] change form habit type to radio button from text area
 - [ ] add monthly view
 - [ ] add yearly view
 - [ ] add infinite scroll box
+- [ ] finish building API 
 
 _phase 2_
 - [ ] switch from Sinatra/ActiveRecord to rails

@@ -9,10 +9,8 @@ class HabitBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      habits: { daily: [], weekly: [], yearly: [] },
-      labels: [
-      "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"
-      ]};
+      habits: { daily: [], weekly: [], yearly: [] }
+    };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleHabitDelete = this.handleHabitDelete.bind(this);
     this.handleHabitEdit = this.handleHabitEdit.bind(this);
@@ -73,18 +71,19 @@ class HabitBox extends React.Component {
 
   handleOpenTab (tab) {
     $.ajax({
-      url: '/' + tab + '.json',
+      url: '/api/v1/habits',
       method: 'GET',
       dataType: 'json',
       cache: false,
-      success: function(habits) {
-        this.setState({habits:{daily: habits}});
+      success: function(habit_info) {
+        this.setState({habits:{daily: habit_info.habits}});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
       }.bind(this)
     });
   }
+  // url: '/' + tab + '.json',
 
   componentDidMount () {
     this.handleOpenTab('daily');
