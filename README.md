@@ -8,6 +8,9 @@ in two separate windows in your rails root run
 
 **TODO:**
 
+Where I left off:
+put a pry in the controller update method and try and get the update function to work property. having issues actually getting the update to persist.
+
 _phase 1_
 - [x] complete Entry component
 - [x] complete HabitForm component
@@ -32,6 +35,7 @@ _phase 1_
 - [ ] add infinite scroll box
 - [x] build out JSON API
 - [ ] strengthen params in API (require habit as parent param, etc)
+- [ ] make sure blank/null can't be sent through on the ajax update success call
 
 _phase 2_
 - [ ] switch from Sinatra/ActiveRecord to rails

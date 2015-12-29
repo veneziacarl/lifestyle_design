@@ -31,7 +31,7 @@ class HabitRow extends React.Component {
         <Row key={habit.id} id={habit.id} className="habitRow row">
           <Card initiallyExpanded={true}>
             <CardHeader
-              actAsExpander={true}
+              actAsExpander={false}
               showExpandableButton={true}
               avatar={<div></div>}
               title={<EditableText

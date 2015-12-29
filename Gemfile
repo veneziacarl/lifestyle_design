@@ -26,6 +26,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'active_model_serializers'
 
+gem 'pry'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -35,7 +36,6 @@ gem 'active_model_serializers'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'pry'
 end
 
 group :development do

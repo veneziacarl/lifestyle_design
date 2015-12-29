@@ -2,7 +2,6 @@ import React from 'react';
 import {render} from 'react-dom';
 import $ from 'jquery';
 import HabitForm from './HabitForm.jsx';
-import HabitList from './HabitList.jsx';
 import TimeTabs from './TimeTabs.jsx';
 
 class HabitBox extends React.Component {
@@ -60,12 +59,23 @@ class HabitBox extends React.Component {
 
   handleHabitEdit (habitDetails) {
     $.ajax({
-      url: '/api/v1/habits/' + habitDetails.id.id,
+      url: '/api/v1/habits/' + habitDetails.id,
       method: 'put',
       data: habitDetails,
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
+      success: function(habitInfo) {
+        var habitsArray = this.state.habits.daily;
+        debugger;
+        for(var i = 0; i < habitsArray.length; i++) {
+          var habit = habitsArray[i]
+          if(habit.id === habitInfo.id) {
+            habit.id, habit.title, habit.description, habit.time_type = [habitInfo.id, HabitInfo.title, HabitInfo.description, HabitInfo.time_type]
+          }
+        }
+        this.setState({habits: {daily: habitsArray}});
+      }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
       }.bind(this)
@@ -78,8 +88,8 @@ class HabitBox extends React.Component {
       method: 'GET',
       dataType: 'json',
       cache: false,
-      success: function(habit_info) {
-        this.setState({habits:{daily: habit_info.habits}});
+      success: function(habitInfo) {
+        this.setState({habits:{daily: habitInfo.habits}});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());

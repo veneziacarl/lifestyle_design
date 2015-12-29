@@ -1,13 +1,11 @@
 class Api::V1::HabitsController < Api::V1::BaseController
   def show
     habit = Habit.find(params[:id])
-
     render(json: Api::V1::HabitSerializer.new(habit).to_json)
   end
 
   def index
     habits = Habit.all
-
     render(
       json: ActiveModel::ArraySerializer.new(
         habits,
@@ -19,7 +17,6 @@ class Api::V1::HabitsController < Api::V1::BaseController
 
   def create
     habit = Habit.new(habit_params)
-
     if habit.save
       flash[:notice] = "Habit Successfully Created"
       flash[:color]= "valid"
@@ -27,26 +24,40 @@ class Api::V1::HabitsController < Api::V1::BaseController
       flash[:notice] = "Form is invalid"
       flash[:color]= "invalid"
     end
-
     render json: habit
   end
 
   def destroy
     habit = Habit.find(params[:id])
     Habit.destroy(habit.id)
-
     render json: habit
   end
 
   def update
-
+    habit = Habit.find(params[:id])
+    if habit_params[:title]
+      update_info(habit, habit_params[:title])
+    elsif habit_params[:description]
+      update_info(habit, habit_params[:description])
+    end
+    render json: habit
   end
 
 
   private
 
   def habit_params
-    params.permit(:title, :description, :time_type)
+    params.permit(:id, :title, :description, :time_type)
+  end
+
+  def update_info(habit, info)
+    if habit.update(info)
+      flash[:notice] = "Habit Successfully Updated"
+      flash[:color]= "valid"
+    else
+      flash[:notice] = "Form is invalid"
+      flash[:color]= "invalid"
+    end
   end
 
 end
