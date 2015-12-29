@@ -1,15 +1,66 @@
-This is a template for Rails projects with React injected in to the asset pipeline.
-
-app/assets/javascripts contains the bundle.js file which is picked up in the asset pipeline.
-client directory holds all component information and entry.jsx which is targeting in the webpack config
-
-To use:
-`$ git clone git@github.com:veneziacarl/react_rails_boilerplate.git`
+# Habitual
+### lifestyle design app
 
 Server commands:
 in two separate windows in your rails root run
 `$ webpack start`
 `$ rails s`
 
-TODO:
-- [ ] add in react transforms for reloading and error catching
+**TODO:**
+
+_phase 1_
+- [x] complete Entry component
+- [x] complete HabitForm component
+- [x] complete HabitLabelRow component
+- [x] complete HabitList component
+- [x] complete HabitDetails component
+- [x] switch from using `tables` to using `spans` and `divs`
+- [x] complete table drop down on click animation
+- [x] add delete path
+- [x] add edit button functionality
+- [x] add dynamic in-line editing to description
+- [ ] add dynamic in-line editing to title
+- [ ] add cancel button to inline-editing
+- [ ] retain multi-line functionality in description
+- [ ] refactor import statements to be more like `import { Card, CardActions, CardExpandable, etc.. } from 'material-ui';`
+- [ ] do wireframes and user stories/criteria
+- [ ] fix delete and edit paths to not have to use habit.id.id (change object being passed in)
+- [ ] change form habit type to radio button from text area
+- [ ] add monthly view
+- [ ] add yearly view
+- [ ] add infinite scroll box
+
+_phase 2_
+- [ ] switch from Sinatra/ActiveRecord to rails
+- [ ] install hot reloader
+- [ ] switch to rails foundation
+- [ ] add in 'skip' capability
+- [ ] write tests
+- [ ] create user log in with OAuth and internal user creation
+- [ ] add dynamic rendering based off of screen size (
+  examples of how this one guy did it:
+  https://github.com/andrewngu/sound-redux/blob/master/scripts/containers/App.js#L47
+  https://github.com/andrewngu/sound-redux/blob/master/scripts/actions/environment.js#L20
+  )
+
+
+_future phases_
+- [ ] add styling
+- [ ] add tracking / stats system
+- [ ] add twilio integration
+- [ ] add IBM api integration
+
+*current issues:*
+- [ ] issues in AJAX success for handleOpenTab: not allowing me to string interpolate (tab) might have to just do a large logic block with separate AJAX calls for different tabs
+
+*gems, etc. that I'm not sure how to add to Gemfile yet..*
+<ul>
+<li>npm react-tap-event-plugin</li>
+<li>npm material-ui</li>
+<li>npm React-Wysiwyg</li>
+<li>
+font: <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+</li>
+</ul>
+
+https://github.com/tastejs/todomvc/tree/gh-pages/examples/react as an example

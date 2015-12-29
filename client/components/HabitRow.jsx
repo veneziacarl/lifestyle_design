@@ -8,7 +8,6 @@ const CardTitle = require('material-ui/lib/card/card-title');
 const FlatButton = require('material-ui/lib/flat-button');
 const RaisedButton = require('material-ui/lib/raised-button');
 import React from 'react';
-import HabitDayStatus from './HabitDayStatus.jsx';
 import EditableText from './EditableText.jsx';
 
 class HabitRow extends React.Component {

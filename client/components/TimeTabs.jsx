@@ -3,7 +3,6 @@ injectTapEventPlugin();
 const Tabs = require('material-ui/lib/tabs/tabs');
 const Tab = require('material-ui/lib/tabs/tab');
 import HabitRow from './HabitRow.jsx';
-import HabitLabelRow from './HabitLabelRow.jsx';
 import React from 'react';
 import $ from 'jquery';
 
