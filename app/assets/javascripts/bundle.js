@@ -28981,7 +28981,7 @@
 	    key: 'handleHabitEdit',
 	    value: function handleHabitEdit(habitDetails) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habit.id.id,
+	        url: '/api/v1/habits/' + habitDetails.id.id,
 	        method: 'put',
 	        data: habitDetails,
 	        dataType: "json",
@@ -29270,29 +29270,20 @@
 	          _react2.default.createElement(
 	            _materialUi.Card,
 	            { initiallyExpanded: true },
-	            _react2.default.createElement(
-	              _materialUi.CardHeader,
-	              {
-	                actAsExpander: true,
-	                showExpandableButton: true,
-	                avatar: _react2.default.createElement('div', null)
-	              },
-	              _react2.default.createElement(_EditableText2.default, {
+	            _react2.default.createElement(_materialUi.CardHeader, {
+	              actAsExpander: true,
+	              showExpandableButton: true,
+	              avatar: _react2.default.createElement('div', null),
+	              title: _react2.default.createElement(_EditableText2.default, {
 	                title: habit.title,
-	                description: habit.description,
 	                id: habit.id,
-	                handleEdit: _this2.handleEdit.bind(_this2),
-	                style: {
-	                  width: '10%',
-	                  margin: '0 auto'
-	                }
+	                handleEdit: _this2.handleEdit.bind(_this2)
 	              })
-	            ),
+	            }),
 	            _react2.default.createElement(
 	              _materialUi.CardText,
 	              { expandable: true },
 	              _react2.default.createElement(_EditableText2.default, {
-	                title: habit.title,
 	                description: habit.description,
 	                id: habit.id,
 	                handleEdit: _this2.handleEdit.bind(_this2),
@@ -61255,9 +61246,14 @@
 	      this.setState({ editing: true });
 	    }
 	  }, {
-	    key: 'handleChange',
-	    value: function handleChange(event) {
-	      this.setState({ text: event.target.value });
+	    key: 'handleTitleChange',
+	    value: function handleTitleChange(event) {
+	      this.setState({ title: event.target.value });
+	    }
+	  }, {
+	    key: 'handleDescriptionChange',
+	    value: function handleDescriptionChange(event) {
+	      this.setState({ description: event.target.value });
 	    }
 	  }, {
 	    key: 'handleDescriptionSubmit',
@@ -61278,26 +61274,44 @@
 	        return _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement('textarea', { value: this.state.title, onChange: this.handleChange.bind(this) }),
-	          _react2.default.createElement(RaisedButton, { label: 'Submit', secondary: true, onClick: this.handleTitleSubmit.bind(this) })
+	          _react2.default.createElement('textarea', { value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
+	          _react2.default.createElement(RaisedButton, {
+	            label: 'Submit',
+	            secondary: true,
+	            onClick: this.handleTitleSubmit.bind(this)
+	          })
 	        );
 	      } else if (this.state.editing && this.state.description) {
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'editableDescription' },
-	          _react2.default.createElement('textarea', { value: this.state.description, onChange: this.handleChange.bind(this) }),
-	          _react2.default.createElement(RaisedButton, { label: 'Submit', secondary: true, onClick: this.handleDescriptionSubmit.bind(this) })
+	          _react2.default.createElement('textarea', { value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
+	          _react2.default.createElement(RaisedButton, {
+	            label: 'Submit',
+	            secondary: true,
+	            onClick: this.handleDescriptionSubmit.bind(this)
+	          })
 	        );
 	      } else {
+	        var text = this.state.title ? this.state.title : this.state.description;
 	        return _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
 	            'p',
 	            { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	            this.state.text
+	            text
 	          ),
-	          _react2.default.createElement(RaisedButton, { label: 'Edit', 'default': true, onClick: this.toggleEditingTrue.bind(this) })
+	          _react2.default.createElement(RaisedButton, {
+	            label: 'Edit',
+	            style: {
+	              display: 'block',
+	              height: '10px',
+	              width: '10px',
+	              background: 'green'
+	            },
+	            onClick: this.toggleEditingTrue.bind(this)
+	          })
 	        );
 	      }
 	    }
@@ -61307,25 +61321,6 @@
 	})(_react2.default.Component);
 
 	exports.default = EditableText;
-	// return (
-	//   <div>
-	//     {editableText}
-	//   </div>
-	// );
-
-	// var editableText = function() {
-	//   if (this.state.editing === true) {
-	//     debugger;
-	//     return ( <textarea type="text" value={this.state.text} /> )
-	//   } else {
-	//     debugger;
-	//     return (
-	// <p onDoubleClick={this.toggleEditingTrue}>
-	//   {this.state.text}
-	// </p>
-	//     )
-	//   }
-	// }
 
 /***/ },
 /* 371 */

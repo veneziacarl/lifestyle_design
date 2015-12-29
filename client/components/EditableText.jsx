@@ -15,8 +15,12 @@ class EditableText extends React.Component {
     this.setState({editing: true});
   }
 
-  handleChange (event) {
-    this.setState({text: event.target.value});
+  handleTitleChange (event) {
+    this.setState({title: event.target.value});
+  }
+
+  handleDescriptionChange (event) {
+    this.setState({description: event.target.value});
   }
 
   handleDescriptionSubmit (event) {
@@ -33,25 +37,42 @@ class EditableText extends React.Component {
     if (this.state.editing && this.state.title) {
       return (
         <div>
-          <textarea value={this.state.title} onChange={this.handleChange.bind(this)} />
-          <RaisedButton label="Submit" secondary={true} onClick={this.handleTitleSubmit.bind(this)} />
+          <textarea value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+          <RaisedButton
+            label="Submit"
+            secondary={true}
+            onClick={this.handleTitleSubmit.bind(this)}
+          />
         </div>
       )
     } else if (this.state.editing && this.state.description) {
       return (
         <div className="editableDescription">
-          <textarea value={this.state.description} onChange={this.handleChange.bind(this)} />
-          <RaisedButton label="Submit" secondary={true} onClick={this.handleDescriptionSubmit.bind(this)} />
+          <textarea value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
+          <RaisedButton
+            label="Submit"
+            secondary={true}
+            onClick={this.handleDescriptionSubmit.bind(this)}
+          />
         </div>
       )
-    }
-     else {
+    } else {
+      var text = this.state.title ? this.state.title : this.state.description
       return (
         <div>
-          <p onDoubleClick={this.toggleEditingTrue.bind(this)}>
-            {this.state.text}
+          <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
+            {text}
           </p>
-          <RaisedButton label="Edit" default={true} onClick={this.toggleEditingTrue.bind(this)} />
+          <RaisedButton
+            label="Edit"
+            style={{
+              display: 'block',
+              height: '10px',
+              width: '10px',
+              background: 'green'
+            }}
+            onClick={this.toggleEditingTrue.bind(this)}
+          />
         </div>
       )
     }
@@ -59,22 +80,3 @@ class EditableText extends React.Component {
 }
 
 export default EditableText;
-// return (
-//   <div>
-//     {editableText}
-//   </div>
-// );
-
-// var editableText = function() {
-//   if (this.state.editing === true) {
-//     debugger;
-//     return ( <textarea type="text" value={this.state.text} /> )
-//   } else {
-//     debugger;
-//     return (
-      // <p onDoubleClick={this.toggleEditingTrue}>
-      //   {this.state.text}
-      // </p>
-//     )
-//   }
-// }

@@ -60,7 +60,7 @@ class HabitBox extends React.Component {
 
   handleHabitEdit (habitDetails) {
     $.ajax({
-      url: '/api/v1/habits/' + habit.id.id,
+      url: '/api/v1/habits/' + habitDetails.id.id,
       method: 'put',
       data: habitDetails,
       dataType: "json",

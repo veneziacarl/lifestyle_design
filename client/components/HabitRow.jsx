@@ -34,21 +34,14 @@ class HabitRow extends React.Component {
               actAsExpander={true}
               showExpandableButton={true}
               avatar={<div></div>}
-            >
-              <EditableText
+              title={<EditableText
                 title={habit.title}
-                description={habit.description}
                 id={habit.id}
                 handleEdit={this.handleEdit.bind(this)}
-                style={{
-                  width: '10%',
-                  margin: '0 auto'
-                }}
-              />
-            </CardHeader>
+              />}
+            />
             <CardText expandable={true}>
               <EditableText
-                title={habit.title}
                 description={habit.description}
                 id={habit.id}
                 handleEdit={this.handleEdit.bind(this)}
