@@ -61222,13 +61222,15 @@
 	          { key: habit.id, id: habit.id, className: 'habitRow row' },
 	          _react2.default.createElement(
 	            _materialUi.Card,
-	            { initiallyExpanded: true },
+	            { initiallyExpanded: true, className: 'small-12 columns' },
 	            _react2.default.createElement(_materialUi.CardHeader, {
+	              className: 'small-12 columns',
 	              actAsExpander: false,
 	              showExpandableButton: true,
 	              avatar: _react2.default.createElement('div', null),
 	              title: _react2.default.createElement(_EditableText2.default, {
 	                title: habit.title,
+	                haveButton: false,
 	                id: habit.id,
 	                handleEdit: _this2.handleEdit.bind(_this2)
 	              })
@@ -61237,18 +61239,27 @@
 	              _materialUi.CardText,
 	              { expandable: true },
 	              _react2.default.createElement(_EditableText2.default, {
+	                className: 'small-12 columns',
 	                description: habit.description,
 	                id: habit.id,
 	                handleEdit: _this2.handleEdit.bind(_this2),
 	                multiline: true,
+	                haveButton: true,
 	                autofocus: true,
 	                maxLength: 200
 	              })
 	            ),
 	            _react2.default.createElement(
 	              _materialUi.CardActions,
-	              { expandable: true },
-	              _react2.default.createElement(_materialUi.RaisedButton, { label: 'Delete', primary: true, onClick: _this2.handleDelete.bind(_this2, habit.id) })
+	              { expandable: true, className: 'small-1 columns' },
+	              _react2.default.createElement(_materialUi.RaisedButton, {
+	                label: 'Delete',
+	                primary: true,
+	                style: {
+	                  height: '20px',
+	                  width: '10px'
+	                },
+	                onClick: _this2.handleDelete.bind(_this2, habit.id) })
 	            )
 	          )
 	        );
@@ -61304,7 +61315,9 @@
 	    _this.state = {
 	      title: _this.props.title,
 	      description: _this.props.description,
-	      editing: false
+	      editing: false,
+	      initialTitle: _this.props.title,
+	      initialDescription: _this.props.description
 	    };
 	    return _this;
 	  }
@@ -61337,6 +61350,12 @@
 	      this.setState({ editing: false });
 	    }
 	  }, {
+	    key: 'handleCancel',
+	    value: function handleCancel(event) {
+	      this.setState({ description: this.state.initialDescription });
+	      this.setState({ editing: false });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      if (this.state.editing && this.state.title) {
@@ -61348,6 +61367,11 @@
 	            label: 'Submit',
 	            secondary: true,
 	            onClick: this.handleTitleSubmit.bind(this)
+	          }),
+	          _react2.default.createElement(RaisedButton, {
+	            label: 'Cancel',
+	            primary: true,
+	            onClick: this.handleCancel.bind(this)
 	          })
 	        );
 	      } else if (this.state.editing && this.state.description) {
@@ -61359,28 +61383,50 @@
 	            label: 'Submit',
 	            secondary: true,
 	            onClick: this.handleDescriptionSubmit.bind(this)
+	          }),
+	          _react2.default.createElement(RaisedButton, {
+	            label: 'Cancel',
+	            primary: true,
+	            onClick: this.handleCancel.bind(this)
 	          })
 	        );
-	      } else {
+	      } else if (this.props.haveButton) {
 	        var text = this.state.title ? this.state.title : this.state.description;
 	        return _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-10 columns' },
+	            _react2.default.createElement(
+	              'p',
+	              { onDoubleClick: this.toggleEditingTrue.bind(this) },
+	              text
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-2 columns' },
+	            _react2.default.createElement(RaisedButton, {
+	              label: 'Edit',
+	              style: {
+	                height: '20px',
+	                width: '10px'
+	              },
+	              onClick: this.toggleEditingTrue.bind(this)
+	            })
+	          )
+	        );
+	      } else {
+	        var text = this.state.title ? this.state.title : this.state.description;
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'small-10 columns' },
+	          _react2.default.createElement(
 	            'p',
 	            { onDoubleClick: this.toggleEditingTrue.bind(this) },
 	            text
-	          ),
-	          _react2.default.createElement(RaisedButton, {
-	            label: 'Edit',
-	            style: {
-	              display: 'block',
-	              height: '10px',
-	              width: '10px',
-	              background: 'green'
-	            },
-	            onClick: this.toggleEditingTrue.bind(this)
-	          })
+	          )
 	        );
 	      }
 	    }

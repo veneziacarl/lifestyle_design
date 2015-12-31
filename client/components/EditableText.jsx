@@ -7,7 +7,9 @@ class EditableText extends React.Component {
     this.state = {
       title: this.props.title,
       description: this.props.description,
-      editing: false
+      editing: false,
+      initialTitle: this.props.title,
+      initialDescription: this.props.description
     };
   }
 
@@ -33,6 +35,11 @@ class EditableText extends React.Component {
     this.setState({editing: false})
   }
 
+  handleCancel (event) {
+    this.setState({description: this.state.initialDescription})
+    this.setState({editing: false})
+  }
+
   render () {
     if (this.state.editing && this.state.title) {
       return (
@@ -42,6 +49,11 @@ class EditableText extends React.Component {
             label="Submit"
             secondary={true}
             onClick={this.handleTitleSubmit.bind(this)}
+          />
+          <RaisedButton
+            label="Cancel"
+            primary={true}
+            onClick={this.handleCancel.bind(this)}
           />
         </div>
       )
@@ -54,25 +66,41 @@ class EditableText extends React.Component {
             secondary={true}
             onClick={this.handleDescriptionSubmit.bind(this)}
           />
+          <RaisedButton
+            label="Cancel"
+            primary={true}
+            onClick={this.handleCancel.bind(this)}
+          />
+        </div>
+      )
+    } else if (this.props.haveButton) {
+      var text = this.state.title ? this.state.title : this.state.description
+      return (
+        <div>
+          <div className="small-10 columns">
+            <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
+              {text}
+            </p>
+          </div>
+          <div className="small-2 columns">
+            <RaisedButton
+              label="Edit"
+              style={{
+                height: '20px',
+                width: '10px'
+              }}
+              onClick={this.toggleEditingTrue.bind(this)}
+            />
+          </div>
         </div>
       )
     } else {
       var text = this.state.title ? this.state.title : this.state.description
       return (
-        <div>
+        <div className="small-10 columns">
           <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
             {text}
           </p>
-          <RaisedButton
-            label="Edit"
-            style={{
-              display: 'block',
-              height: '10px',
-              width: '10px',
-              background: 'green'
-            }}
-            onClick={this.toggleEditingTrue.bind(this)}
-          />
         </div>
       )
     }
