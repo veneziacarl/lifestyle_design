@@ -7,7 +7,9 @@ class EditableText extends React.Component {
     this.state = {
       title: this.props.title,
       description: this.props.description,
-      editing: false
+      editing: false,
+      initialTitle: this.props.title,
+      initialDescription: this.props.description
     };
   }
 
@@ -15,8 +17,12 @@ class EditableText extends React.Component {
     this.setState({editing: true});
   }
 
-  handleChange (event) {
-    this.setState({text: event.target.value});
+  handleTitleChange (event) {
+    this.setState({title: event.target.value});
+  }
+
+  handleDescriptionChange (event) {
+    this.setState({description: event.target.value});
   }
 
   handleDescriptionSubmit (event) {
@@ -29,29 +35,72 @@ class EditableText extends React.Component {
     this.setState({editing: false})
   }
 
+  handleCancel (event) {
+    this.setState({description: this.state.initialDescription})
+    this.setState({editing: false})
+  }
+
   render () {
     if (this.state.editing && this.state.title) {
       return (
         <div>
-          <textarea value={this.state.title} onChange={this.handleChange.bind(this)} />
-          <RaisedButton label="Submit" secondary={true} onClick={this.handleTitleSubmit.bind(this)} />
+          <textarea value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+          <RaisedButton
+            label="Submit"
+            secondary={true}
+            onClick={this.handleTitleSubmit.bind(this)}
+          />
+          <RaisedButton
+            label="Cancel"
+            primary={true}
+            onClick={this.handleCancel.bind(this)}
+          />
         </div>
       )
     } else if (this.state.editing && this.state.description) {
       return (
         <div className="editableDescription">
-          <textarea value={this.state.description} onChange={this.handleChange.bind(this)} />
-          <RaisedButton label="Submit" secondary={true} onClick={this.handleDescriptionSubmit.bind(this)} />
+          <textarea value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
+          <RaisedButton
+            label="Submit"
+            secondary={true}
+            onClick={this.handleDescriptionSubmit.bind(this)}
+          />
+          <RaisedButton
+            label="Cancel"
+            primary={true}
+            onClick={this.handleCancel.bind(this)}
+          />
         </div>
       )
-    }
-     else {
+    } else if (this.props.haveButton) {
+      var text = this.state.title ? this.state.title : this.state.description
       return (
         <div>
-          <p onDoubleClick={this.toggleEditingTrue.bind(this)}>
-            {this.state.text}
+          <div className="small-10 columns">
+            <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
+              {text}
+            </p>
+          </div>
+          <div className="small-2 columns">
+            <RaisedButton
+              label="Edit"
+              style={{
+                height: '20px',
+                width: '10px'
+              }}
+              onClick={this.toggleEditingTrue.bind(this)}
+            />
+          </div>
+        </div>
+      )
+    } else {
+      var text = this.state.title ? this.state.title : this.state.description
+      return (
+        <div className="small-10 columns">
+          <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
+            {text}
           </p>
-          <RaisedButton label="Edit" default={true} onClick={this.toggleEditingTrue.bind(this)} />
         </div>
       )
     }
@@ -59,22 +108,3 @@ class EditableText extends React.Component {
 }
 
 export default EditableText;
-// return (
-//   <div>
-//     {editableText}
-//   </div>
-// );
-
-// var editableText = function() {
-//   if (this.state.editing === true) {
-//     debugger;
-//     return ( <textarea type="text" value={this.state.text} /> )
-//   } else {
-//     debugger;
-//     return (
-      // <p onDoubleClick={this.toggleEditingTrue}>
-      //   {this.state.text}
-      // </p>
-//     )
-//   }
-// }
