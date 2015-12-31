@@ -25,9 +25,8 @@ class HabitBox extends React.Component {
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       success: function(habits) {
         var habitsArray = this.state.habits.daily;
-        var newHabits = habitsArray.concat(habits.habit);
-        debugger;
-        this.setState({habits: {daily: newHabits}});
+        habitsArray.unshift(habits.habit);
+        this.setState({habits: {daily: habitsArray}});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -67,11 +66,10 @@ class HabitBox extends React.Component {
       cache: false,
       success: function(habitInfo) {
         var habitsArray = this.state.habits.daily;
-        debugger;
         for(var i = 0; i < habitsArray.length; i++) {
           var habit = habitsArray[i]
-          if(habit.id === habitInfo.id) {
-            habit.id, habit.title, habit.description, habit.time_type = [habitInfo.id, HabitInfo.title, HabitInfo.description, HabitInfo.time_type]
+          if(habit.id === habitInfo.habit.id) {
+            [habit.id, habit.title, habit.description, habit.time_type] = [habitInfo.habit.id, habitInfo.habit.title, habitInfo.habit.description, habitInfo.habit.time_type]
           }
         }
         this.setState({habits: {daily: habitsArray}});

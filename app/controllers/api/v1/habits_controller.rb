@@ -5,7 +5,7 @@ class Api::V1::HabitsController < Api::V1::BaseController
   end
 
   def index
-    habits = Habit.all
+    habits = Habit.order(id: :desc)
     render(
       json: ActiveModel::ArraySerializer.new(
         habits,
@@ -35,12 +35,14 @@ class Api::V1::HabitsController < Api::V1::BaseController
 
   def update
     habit = Habit.find(params[:id])
-    if habit_params[:title]
-      update_info(habit, habit_params[:title])
-    elsif habit_params[:description]
-      update_info(habit, habit_params[:description])
-    end
-    render json: habit
+    # binding.pry
+    updated_habit = update_info(habit, habit_params)
+    # if habit_params[:title]
+    #   update_info(habit, habit_params[:title])
+    # elsif habit_params[:description]
+    #   update_info(habit, habit_params[:description])
+    # end
+    render json: updated_habit
   end
 
 
@@ -58,6 +60,7 @@ class Api::V1::HabitsController < Api::V1::BaseController
       flash[:notice] = "Form is invalid"
       flash[:color]= "invalid"
     end
+    habit
   end
 
 end

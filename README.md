@@ -3,13 +3,15 @@
 
 Server commands:
 in two separate windows in your rails root run
-`$ webpack start`
+`$ npm start`
 `$ rails s`
 
 **TODO:**
 
 Where I left off:
-put a pry in the controller update method and try and get the update function to work property. having issues actually getting the update to persist.
+- put a pry in the controller update method and try and get the update function to work property. having issues actually getting the update to persist.
+- adding react dnd functionality
+
 
 _phase 1_
 - [x] complete Entry component
@@ -22,19 +24,19 @@ _phase 1_
 - [x] add delete path
 - [x] add edit button functionality
 - [x] add dynamic in-line editing to description
-- [ ] add dynamic in-line editing to title
+- [x] add dynamic in-line editing to title
 - [ ] add cancel button to inline-editing
 - [ ] retain multi-line functionality in description
 - [ ] add drag-and-drop functionality
 - [x] refactor import statements to be more like `import { Card, CardActions, CardExpandable, etc.. } from 'material-ui';`
 - [ ] do wireframes and user stories/criteria
-- [ ] fix delete and edit paths to not have to use habit.id.id (change object being passed in)
+- [x] fix delete and edit paths to not have to use habit.id.id (change object being passed in)
 - [ ] change form habit type to radio button from text area
 - [ ] add monthly view
 - [ ] add yearly view
 - [ ] add infinite scroll box
 - [x] build out JSON API
-- [ ] strengthen params in API (require habit as parent param, etc)
+- [ ] strengthen params in API for update function (require habit as parent param, etc)
 - [ ] make sure blank/null can't be sent through on the ajax update success call
 
 _phase 2_
@@ -69,5 +71,3 @@ _future phases_
 font: <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
 </li>
 </ul>
-
-https://github.com/tastejs/todomvc/tree/gh-pages/examples/react as an example
