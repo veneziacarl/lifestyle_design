@@ -29033,22 +29033,17 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'Add New Habit:'
-	          ),
-	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
 	          _react2.default.createElement(_TimeTabs2.default, {
 	            habits: this.state.habits,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
 	            onHabitEdit: this.handleHabitEdit })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit })
 	        )
 	      );
 	    }
@@ -29130,18 +29125,14 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'habitForm small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'habitForm small-12 medium-8 large-6 small-centered columns' },
-	          _react2.default.createElement(
-	            'form',
-	            { className: 'habitForm', onSubmit: this.handleSubmit.bind(this) },
-	            _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
-	            _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
-	            _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Type', value: this.state.time_type, onChange: this.handleTypeChange.bind(this) }),
-	            _react2.default.createElement('input', { type: 'submit', value: 'Post' })
-	          )
+	          'form',
+	          { className: 'habitForm', onSubmit: this.handleSubmit.bind(this) },
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Type', value: this.state.time_type, onChange: this.handleTypeChange.bind(this) }),
+	          _react2.default.createElement('input', { type: 'submit', value: 'Post' })
 	        )
 	      );
 	    }
@@ -29228,7 +29219,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'timetabs small-12 medium-8 large-6 small-centered columns' },
+	        { className: 'timetabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
 	          null,

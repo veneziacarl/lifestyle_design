@@ -35,7 +35,7 @@ class TimeTabs extends React.Component {
 
   render() {
     return (
-      <div className="timetabs small-12 medium-8 large-6 small-centered columns">
+      <div className="timetabs small-12 medium-6 large-4 columns">
         <Tabs>
           <Tab label="daily" onClick={this.handleChange.bind(this)}>
             <div>

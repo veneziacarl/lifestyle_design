@@ -103,10 +103,6 @@ class HabitBox extends React.Component {
     return (
       <div className="habitBox">
         <div>
-          <p>Add New Habit:</p>
-          <HabitForm onHabitSubmit={this.handleHabitSubmit} />
-        </div>
-        <div>
           <TimeTabs
             habits={this.state.habits}
             labels={this.state.labels}
@@ -114,6 +110,9 @@ class HabitBox extends React.Component {
             onHabitDelete={this.handleHabitDelete}
             onHabitEdit={this.handleHabitEdit}>
           </TimeTabs>
+        </div>
+        <div>
+          <HabitForm onHabitSubmit={this.handleHabitSubmit} />
         </div>
       </div>
     );
