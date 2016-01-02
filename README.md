@@ -1,15 +1,17 @@
 # Habitual
 ### lifestyle design app
 
-Server commands:
-in two separate windows in your rails root run
-`$ npm start`
-`$ rails s`
+**Commands:**
+in two separate windows in your rails root run:
+<ul>
+  <li>`$ npm start`</li>
+  <li>`$ rails s`</li>
+</ul>
 
 **TODO:**
 
 Where I left off:
-- get the cancel & edit & submit buttons to apply to both the description and the title instead of just one or the other.
+- get the cancel & edit & submit buttons to apply to both the description and the title instead of just one or the other, and fix the positioning of them.
 - style it nicer with foundation-rails and put it in to a "dashboard" format
 - add react dnd functionality
 
