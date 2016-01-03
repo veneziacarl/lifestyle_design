@@ -12,6 +12,10 @@ in two separate windows in your rails root run:
 
 Where I left off:
 - add react dnd functionality
+  - make it possible to move things up as well as down
+  - cleanup all the terribad code I wrote while figuring this out
+  - make the changes to ordering persist on refresh
+
 
 _phase 1_
 - [ ] retain multi-line functionality in description but NOT title

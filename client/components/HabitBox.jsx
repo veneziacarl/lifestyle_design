@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import $ from 'jquery';
+
 import HabitForm from './HabitForm.jsx';
 import TimeTabs from './TimeTabs.jsx';
 
@@ -104,7 +105,7 @@ class HabitBox extends React.Component {
       <div className="habitBox">
         <div>
           <TimeTabs
-            habits={this.state.habits}
+            habits={this.state.habits.daily}
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}
