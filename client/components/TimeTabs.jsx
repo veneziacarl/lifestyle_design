@@ -33,7 +33,7 @@ class TimeTabs extends React.Component {
 
     habits.splice(dragIndex, 1)
     habits.splice(hoverIndex, 0, dragHabit)
-    this.setState({ habits: habits });
+    this.props.onPositionChange(habits)
   }
 
   handleDelete (id) {
