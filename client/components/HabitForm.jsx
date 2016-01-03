@@ -32,15 +32,13 @@ class HabitForm extends React.Component {
 
   render() {
     return (
-      <div className="row">
-        <div className="habitForm small-12 medium-8 large-6 small-centered columns">
-          <form className="habitForm" onSubmit={this.handleSubmit.bind(this)}>
-            <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
-            <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
-            <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
-            <input type="submit" value="Post" />
-          </form>
-        </div>
+      <div className="habitForm small-12 medium-6 large-4 columns">
+        <form className="habitForm" onSubmit={this.handleSubmit.bind(this)}>
+          <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+          <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
+          <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
+          <input type="submit" value="Post" />
+        </form>
       </div>
     );
   }

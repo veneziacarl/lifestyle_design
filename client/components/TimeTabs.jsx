@@ -3,8 +3,10 @@ injectTapEventPlugin();
 import { Tabs, Tab } from 'material-ui';
 import React from 'react';
 import $ from 'jquery';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
-import HabitRow from './HabitRow.jsx';
+import HabitRows from './HabitRows.jsx';
 
 
 class TimeTabs extends React.Component {
@@ -15,6 +17,7 @@ class TimeTabs extends React.Component {
     }
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.moveHabit = this.moveHabit.bind(this)
   }
 
   handleChange (e) {
@@ -24,6 +27,14 @@ class TimeTabs extends React.Component {
     this.setState({tabType: tab})
   }
 
+  moveHabit(dragIndex, hoverIndex) {
+    const habits = this.props.habits;
+    const dragHabit = habits[dragIndex];
+
+    habits.splice(dragIndex, 1)
+    habits.splice(hoverIndex, 0, dragHabit)
+    this.setState({ habits: habits });
+  }
 
   handleDelete (id) {
     this.props.onHabitDelete({id});
@@ -35,16 +46,17 @@ class TimeTabs extends React.Component {
 
   render() {
     return (
-      <div className="timetabs small-12 medium-8 large-6 small-centered columns">
+      <div className="timetabs small-12 medium-6 large-4 columns">
         <Tabs>
           <Tab label="daily" onClick={this.handleChange.bind(this)}>
             <div>
-              <HabitRow
+              <HabitRows
                 habits={this.props.habits}
                 tabType={this.state.tabType}
                 onHabitDelete={this.handleDelete}
-                onHabitEdit={this.handleEdit}>
-              </HabitRow>
+                onHabitEdit={this.handleEdit}
+                moveHabit={this.moveHabit}
+              />
             </div>
           </Tab>
           <Tab label="monthly" onClick={this.handleChange.bind(this)}>
@@ -59,4 +71,4 @@ class TimeTabs extends React.Component {
   }
 }
 
-export default TimeTabs;
+export default DragDropContext(HTML5Backend)(TimeTabs);

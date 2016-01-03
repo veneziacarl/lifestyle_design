@@ -1,17 +1,20 @@
 # Habitual
 ### lifestyle design app
 
-Server commands:
-in two separate windows in your rails root run
-`$ npm start`
-`$ rails s`
+**Commands:**
+in two separate windows in your rails root run:
+<ul>
+  <li>`$ npm start`</li>
+  <li>`$ rails s`</li>
+</ul>
 
 **TODO:**
 
 Where I left off:
-- get the cancel & edit & submit buttons to apply to both the description and the title instead of just one or the other.
-- style it nicer with foundation-rails and put it in to a "dashboard" format
 - add react dnd functionality
+  - make it possible to move things up as well as down
+  - cleanup all the terribad code I wrote while figuring this out
+  - make the changes to ordering persist on refresh
 
 
 _phase 1_
@@ -24,6 +27,7 @@ _phase 1_
 - [ ] add infinite scroll box
 - [ ] strengthen params in API for update function (require habit as parent param, etc)
 - [ ] make sure blank/null can't be sent through on the ajax update success call
+- [ ] get the cancel & edit & submit buttons to apply to both the description and the title instead of just one or the other, and fix the positioning of them.
 
 _phase 2_
 - [ ] add in 'skip' capability
