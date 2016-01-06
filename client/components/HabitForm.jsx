@@ -1,4 +1,5 @@
 import React from 'react';
+import { RadioButton, RadioButtonGroup, RaisedButton } from 'material-ui';
 
 class HabitForm extends React.Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class HabitForm extends React.Component {
   }
 
   handleSubmit (e) {
-    e.preventDefault();
     var title = this.state.title.trim();
     var description = this.state.description.trim();
     var time_type = this.state.time_type.trim();
@@ -36,8 +36,40 @@ class HabitForm extends React.Component {
         <form className="habitForm" onSubmit={this.handleSubmit.bind(this)}>
           <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
           <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
-          <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
-          <input type="submit" value="Post" />
+          <RadioButtonGroup name="addHabit" onChange={this.handleTypeChange.bind(this)}>
+            <RadioButton
+              value="daily"
+              label="Daily"
+              style={{marginBottom:16}}
+            />
+            <RadioButton
+              value="weekly"
+              label="Weekly"
+              style={{marginBottom:16}}
+              disabled={false}
+            />
+            <RadioButton
+              value="monthly"
+              label="Monthly"
+              style={{marginBottom:16}}
+              disabled={true}
+            />
+            <RadioButton
+              value="yearly"
+              label="Yearly"
+              style={{marginBottom:16}}
+              disabled={true}
+            />
+          </RadioButtonGroup>
+          <RaisedButton
+            secondary={true}
+            label="Add Habit"
+            style={{
+              height: '30px',
+              width: '20px'
+            }}
+            onClick={this.handleSubmit.bind(this)}
+          />
         </form>
       </div>
     );
@@ -45,3 +77,9 @@ class HabitForm extends React.Component {
 }
 
 export default HabitForm;
+// <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
+// value={result.ADDRESS}
+// checked={this.state.address === result.ADDRESS}
+// onChange={this.onAddressChanged}
+
+// <input type="submit" value="Add Habit" />

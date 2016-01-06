@@ -14,8 +14,8 @@ class HabitBox extends React.Component {
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleHabitDelete = this.handleHabitDelete.bind(this);
     this.handleHabitEdit = this.handleHabitEdit.bind(this);
+    this.handlePositionChange = this.handlePositionChange.bind(this);
   }
-
 
   handleHabitSubmit (habit) {
     $.ajax({
@@ -100,6 +100,10 @@ class HabitBox extends React.Component {
     this.handleOpenTab('daily');
   }
 
+  handlePositionChange (habits) {
+    this.setState({ habits: { daily: habits }});
+  }
+
   render () {
     return (
       <div className="habitBox">
@@ -109,8 +113,9 @@ class HabitBox extends React.Component {
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}
-            onHabitEdit={this.handleHabitEdit}>
-          </TimeTabs>
+            onHabitEdit={this.handleHabitEdit}
+            onPositionChange={this.handlePositionChange}
+          />
         </div>
         <div>
           <HabitForm onHabitSubmit={this.handleHabitSubmit} />

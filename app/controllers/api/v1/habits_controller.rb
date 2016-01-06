@@ -35,13 +35,7 @@ class Api::V1::HabitsController < Api::V1::BaseController
 
   def update
     habit = Habit.find(params[:id])
-    # binding.pry
     updated_habit = update_info(habit, habit_params)
-    # if habit_params[:title]
-    #   update_info(habit, habit_params[:title])
-    # elsif habit_params[:description]
-    #   update_info(habit, habit_params[:description])
-    # end
     render json: updated_habit
   end
 

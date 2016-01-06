@@ -40,23 +40,15 @@ class HabitRows extends React.Component {
       connectDragPreview,
     } = this.props;
 
-    const styles = {
-      cursor: 'move',
-      opacity: isDragging ? 0.5 : 1,
-      padding: '10',
-      background: 'white',
-      margin: '2%',
-    }
-
     var habitRows = this.props.habits.map( (habit, i) => {
       return (
         <HabitCard
-         key={habit.id}
-         index={i}
-         moveHabit={this.props.moveHabit.bind(this)}
-         handleDelete={this.handleHabitDelete.bind(this)}
-         handleEdit={this.handleHabitEdit.bind(this)}
-         {...habit}
+          key={habit.id}
+          index={i}
+          moveHabit={this.props.moveHabit.bind(this)}
+          handleDelete={this.handleHabitDelete.bind(this)}
+          handleEdit={this.handleHabitEdit.bind(this)}
+          {...habit}
         />
       );
     })
