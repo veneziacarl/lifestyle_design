@@ -12,7 +12,6 @@ import HabitCard from './HabitCard.jsx';
 class HabitRows extends React.Component {
   constructor(props) {
     super(props);
-    var tabType = this.props.tabType;
   }
 
   handleHabitDelete (id) {

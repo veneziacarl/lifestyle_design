@@ -66,10 +66,22 @@ class TimeTabs extends React.Component {
             />
           </Tab>
           <Tab label="monthly" onClick={this.handleChange.bind(this)}>
-            (tab content..)
+            <HabitRows
+              filteredHabits={this.props.filteredHabits}
+              tabType={this.props.currentSelectedTimeType}
+              onHabitDelete={this.handleDelete}
+              onHabitEdit={this.handleEdit}
+              moveHabit={this.moveHabit}
+            />
           </Tab>
           <Tab label="yearly" onClick={this.handleChange.bind(this)}>
-            (tab content..)
+            <HabitRows
+              filteredHabits={this.props.filteredHabits}
+              tabType={this.props.currentSelectedTimeType}
+              onHabitDelete={this.handleDelete}
+              onHabitEdit={this.handleEdit}
+              moveHabit={this.moveHabit}
+            />
           </Tab>
         </Tabs>
       </div>

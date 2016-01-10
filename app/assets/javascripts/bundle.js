@@ -29021,8 +29021,7 @@
 	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      this.setState({ currentSelectedTimeType: tab });
-	      this.filterHabits();
+	      this.setState({ currentSelectedTimeType: tab }, this.filterHabits);
 	    }
 	  }, {
 	    key: 'loadHabits',
@@ -29172,20 +29171,17 @@
 	            _react2.default.createElement(_materialUi.RadioButton, {
 	              value: 'weekly',
 	              label: 'Weekly',
-	              style: { marginBottom: 16 },
-	              disabled: false
+	              style: { marginBottom: 16 }
 	            }),
 	            _react2.default.createElement(_materialUi.RadioButton, {
 	              value: 'monthly',
 	              label: 'Monthly',
-	              style: { marginBottom: 16 },
-	              disabled: true
+	              style: { marginBottom: 16 }
 	            }),
 	            _react2.default.createElement(_materialUi.RadioButton, {
 	              value: 'yearly',
 	              label: 'Yearly',
-	              style: { marginBottom: 16 },
-	              disabled: true
+	              style: { marginBottom: 16 }
 	            })
 	          ),
 	          _react2.default.createElement(_materialUi.RaisedButton, {
@@ -29206,12 +29202,6 @@
 	})(_react2.default.Component);
 
 	exports.default = HabitForm;
-	// <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
-	// value={result.ADDRESS}
-	// checked={this.state.address === result.ADDRESS}
-	// onChange={this.onAddressChanged}
-
-	// <input type="submit" value="Add Habit" />
 
 /***/ },
 /* 162 */
@@ -61219,12 +61209,24 @@
 	          _react2.default.createElement(
 	            _materialUi.Tab,
 	            { label: 'monthly', onClick: this.handleChange.bind(this) },
-	            '(tab content..)'
+	            _react2.default.createElement(_HabitRows2.default, {
+	              filteredHabits: this.props.filteredHabits,
+	              tabType: this.props.currentSelectedTimeType,
+	              onHabitDelete: this.handleDelete,
+	              onHabitEdit: this.handleEdit,
+	              moveHabit: this.moveHabit
+	            })
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.Tab,
 	            { label: 'yearly', onClick: this.handleChange.bind(this) },
-	            '(tab content..)'
+	            _react2.default.createElement(_HabitRows2.default, {
+	              filteredHabits: this.props.filteredHabits,
+	              tabType: this.props.currentSelectedTimeType,
+	              onHabitDelete: this.handleDelete,
+	              onHabitEdit: this.handleEdit,
+	              moveHabit: this.moveHabit
+	            })
 	          )
 	        )
 	      );
@@ -67501,10 +67503,7 @@
 	  function HabitRows(props) {
 	    _classCallCheck(this, HabitRows);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitRows).call(this, props));
-
-	    var tabType = _this.props.tabType;
-	    return _this;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitRows).call(this, props));
 	  }
 
 	  _createClass(HabitRows, [{

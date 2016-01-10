@@ -92,8 +92,7 @@ class HabitBox extends React.Component {
 
 
   handleOpenTab (tab) {
-    this.setState({currentSelectedTimeType: tab});
-    this.filterHabits();
+    this.setState({currentSelectedTimeType: tab}, this.filterHabits);
   }
 
 
