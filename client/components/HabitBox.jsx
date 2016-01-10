@@ -9,12 +9,15 @@ class HabitBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      habits: { daily: [], weekly: [], yearly: [] }
+      habits: [],
+      currentSelectedTimeType: '',
+      filteredHabits: []
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleHabitDelete = this.handleHabitDelete.bind(this);
     this.handleHabitEdit = this.handleHabitEdit.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
+    this.handleOpenTab = this.handleOpenTab.bind(this);
   }
 
   handleHabitSubmit (habit) {
@@ -81,14 +84,28 @@ class HabitBox extends React.Component {
     });
   }
 
+  filterHabits () {
+    var allHabits = this.state.habits
+    var filteredHabits = allHabits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
+    this.setState({filteredHabits: filteredHabits })
+  }
+
+
   handleOpenTab (tab) {
+    this.setState({currentSelectedTimeType: tab});
+    this.filterHabits();
+  }
+
+
+  loadHabits () {
     $.ajax({
       url: '/api/v1/habits',
       method: 'GET',
       dataType: 'json',
       cache: false,
       success: function(habitInfo) {
-        this.setState({habits:{daily: habitInfo.habits}});
+        this.setState({habits: habitInfo.habits});
+        this.handleOpenTab('daily');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -97,7 +114,7 @@ class HabitBox extends React.Component {
   }
 
   componentDidMount () {
-    this.handleOpenTab('daily');
+    this.loadHabits();
   }
 
   handlePositionChange (habits) {
@@ -109,7 +126,7 @@ class HabitBox extends React.Component {
       <div className="habitBox">
         <div>
           <TimeTabs
-            habits={this.state.habits.daily}
+            filteredHabits={this.state.filteredHabits}
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}

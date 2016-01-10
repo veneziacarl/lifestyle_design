@@ -12,9 +12,7 @@ import HabitRows from './HabitRows.jsx';
 class TimeTabs extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tabType: ''
-    }
+
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.moveHabit = this.moveHabit.bind(this)
@@ -22,9 +20,8 @@ class TimeTabs extends React.Component {
 
   handleChange (e) {
     e.preventDefault();
-    var tab = this.props.label;
+    var tab = e.target.textContent;
     this.props.onTabClick(tab);
-    this.setState({tabType: tab})
   }
 
   moveHabit(dragIndex, hoverIndex) {
@@ -51,16 +48,25 @@ class TimeTabs extends React.Component {
           <Tab label="daily" onClick={this.handleChange.bind(this)}>
             <div>
               <HabitRows
-                habits={this.props.habits}
-                tabType={this.state.tabType}
+                filteredHabits={this.props.filteredHabits}
+                tabType={this.props.currentSelectedTimeType}
                 onHabitDelete={this.handleDelete}
                 onHabitEdit={this.handleEdit}
                 moveHabit={this.moveHabit}
               />
             </div>
           </Tab>
+          <Tab label="weekly" onClick={this.handleChange.bind(this)}>
+            <HabitRows
+              filteredHabits={this.props.filteredHabits}
+              tabType={this.props.currentSelectedTimeType}
+              onHabitDelete={this.handleDelete}
+              onHabitEdit={this.handleEdit}
+              moveHabit={this.moveHabit}
+            />
+          </Tab>
           <Tab label="monthly" onClick={this.handleChange.bind(this)}>
-            (Tab content...)
+            (tab content..)
           </Tab>
           <Tab label="yearly" onClick={this.handleChange.bind(this)}>
             (tab content..)

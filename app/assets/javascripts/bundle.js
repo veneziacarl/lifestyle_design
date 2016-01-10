@@ -28918,12 +28918,15 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitBox).call(this, props));
 
 	    _this.state = {
-	      habits: { daily: [], weekly: [], yearly: [] }
+	      habits: [],
+	      currentSelectedTimeType: '',
+	      filteredHabits: []
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
 	    _this.handleHabitEdit = _this.handleHabitEdit.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
+	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    return _this;
 	  }
 
@@ -29005,15 +29008,33 @@
 	      });
 	    }
 	  }, {
+	    key: 'filterHabits',
+	    value: function filterHabits() {
+	      var _this2 = this;
+
+	      var allHabits = this.state.habits;
+	      var filteredHabits = allHabits.filter(function (habit) {
+	        return habit.time_type === _this2.state.currentSelectedTimeType;
+	      });
+	      this.setState({ filteredHabits: filteredHabits });
+	    }
+	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
+	      this.setState({ currentSelectedTimeType: tab });
+	      this.filterHabits();
+	    }
+	  }, {
+	    key: 'loadHabits',
+	    value: function loadHabits() {
 	      _jquery2.default.ajax({
 	        url: '/api/v1/habits',
 	        method: 'GET',
 	        dataType: 'json',
 	        cache: false,
 	        success: (function (habitInfo) {
-	          this.setState({ habits: { daily: habitInfo.habits } });
+	          this.setState({ habits: habitInfo.habits });
+	          this.handleOpenTab('daily');
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29023,7 +29044,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.handleOpenTab('daily');
+	      this.loadHabits();
 	    }
 	  }, {
 	    key: 'handlePositionChange',
@@ -29040,7 +29061,7 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_TimeTabs2.default, {
-	            habits: this.state.habits.daily,
+	            filteredHabits: this.state.filteredHabits,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
@@ -61127,9 +61148,6 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TimeTabs).call(this, props));
 
-	    _this.state = {
-	      tabType: ''
-	    };
 	    _this.handleDelete = _this.handleDelete.bind(_this);
 	    _this.handleEdit = _this.handleEdit.bind(_this);
 	    _this.moveHabit = _this.moveHabit.bind(_this);
@@ -61140,9 +61158,8 @@
 	    key: 'handleChange',
 	    value: function handleChange(e) {
 	      e.preventDefault();
-	      var tab = this.props.label;
+	      var tab = e.target.textContent;
 	      this.props.onTabClick(tab);
-	      this.setState({ tabType: tab });
 	    }
 	  }, {
 	    key: 'moveHabit',
@@ -61180,8 +61197,8 @@
 	              'div',
 	              null,
 	              _react2.default.createElement(_HabitRows2.default, {
-	                habits: this.props.habits,
-	                tabType: this.state.tabType,
+	                filteredHabits: this.props.filteredHabits,
+	                tabType: this.props.currentSelectedTimeType,
 	                onHabitDelete: this.handleDelete,
 	                onHabitEdit: this.handleEdit,
 	                moveHabit: this.moveHabit
@@ -61190,8 +61207,19 @@
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.Tab,
+	            { label: 'weekly', onClick: this.handleChange.bind(this) },
+	            _react2.default.createElement(_HabitRows2.default, {
+	              filteredHabits: this.props.filteredHabits,
+	              tabType: this.props.currentSelectedTimeType,
+	              onHabitDelete: this.handleDelete,
+	              onHabitEdit: this.handleEdit,
+	              moveHabit: this.moveHabit
+	            })
+	          ),
+	          _react2.default.createElement(
+	            _materialUi.Tab,
 	            { label: 'monthly', onClick: this.handleChange.bind(this) },
-	            '(Tab content...)'
+	            '(tab content..)'
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.Tab,
@@ -67511,7 +67539,7 @@
 	      var connectDropTarget = _props.connectDropTarget;
 	      var connectDragPreview = _props.connectDragPreview;
 
-	      var habitRows = this.props.habits.map(function (habit, i) {
+	      var habitRows = this.props.filteredHabits.map(function (habit, i) {
 	        return _react2.default.createElement(_HabitCard2.default, _extends({
 	          key: habit.id,
 	          index: i,

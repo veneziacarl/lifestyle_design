@@ -6,13 +6,7 @@ class Api::V1::HabitsController < Api::V1::BaseController
 
   def index
     habits = Habit.order(id: :desc)
-    render(
-      json: ActiveModel::ArraySerializer.new(
-        habits,
-        each_serializer: Api::V1::HabitSerializer,
-        root: 'habits',
-      )
-    )
+    render json: habits
   end
 
   def create

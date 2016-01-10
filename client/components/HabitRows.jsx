@@ -40,7 +40,7 @@ class HabitRows extends React.Component {
       connectDragPreview,
     } = this.props;
 
-    var habitRows = this.props.habits.map( (habit, i) => {
+    var habitRows = this.props.filteredHabits.map( (habit, i) => {
       return (
         <HabitCard
           key={habit.id}
