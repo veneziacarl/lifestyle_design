@@ -28,9 +28,9 @@ class HabitBox extends React.Component {
       data: habit,
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       success: function(habits) {
-        var habitsArray = this.state.habits.daily;
+        var habitsArray = this.state.habits;
         habitsArray.unshift(habits.habit);
-        this.setState({habits: {daily: habitsArray}});
+        this.setState({habits: habitsArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -38,21 +38,21 @@ class HabitBox extends React.Component {
     });
   }
 
-  handleHabitDelete (habit) {
+  handleHabitDelete (habitInfo) {
     $.ajax({
-      url: '/api/v1/habits/' + habit.id.id,
+      url: '/api/v1/habits/' + habitInfo.id,
       method: 'delete',
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
       success: function(habits) {
-        var habitsArray = this.state.habits.daily;
+        var habitsArray = this.state.habits;
         for(var i = 0; i < habitsArray.length; i++) {
-          if(habitsArray[i].id === habit.id.id) {
+          if(habitsArray[i].id === habits.habit.id) {
              habitsArray.splice(i, 1);
           }
         }
-        this.setState({habits: {daily: habitsArray}});
+        this.setState({habits: habitsArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -60,23 +60,23 @@ class HabitBox extends React.Component {
     });
   }
 
-  handleHabitEdit (habitDetails) {
+  handleHabitEdit (habitInfo) {
     $.ajax({
-      url: '/api/v1/habits/' + habitDetails.id,
+      url: '/api/v1/habits/' + habitInfo.id,
       method: 'put',
-      data: habitDetails,
+      data: habitInfo,
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
-      success: function(habitInfo) {
-        var habitsArray = this.state.habits.daily;
+      success: function(updatedHabit) {
+        var habitsArray = this.state.habits;
         for(var i = 0; i < habitsArray.length; i++) {
           var habit = habitsArray[i]
-          if(habit.id === habitInfo.habit.id) {
-            [habit.id, habit.title, habit.description, habit.time_type] = [habitInfo.habit.id, habitInfo.habit.title, habitInfo.habit.description, habitInfo.habit.time_type]
+          if(habit.id === updatedHabit.habit.id) {
+            [habit.id, habit.title, habit.description, habit.time_type] = [updatedHabit.habit.id, updatedHabit.habit.title, updatedHabit.habit.description, updatedHabit.habit.time_type]
           }
         }
-        this.setState({habits: {daily: habitsArray}});
+        this.setState({habits: habitsArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -84,17 +84,9 @@ class HabitBox extends React.Component {
     });
   }
 
-  filterHabits () {
-    var allHabits = this.state.habits
-    var filteredHabits = allHabits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
-    this.setState({filteredHabits: filteredHabits })
-  }
-
-
   handleOpenTab (tab) {
-    this.setState({currentSelectedTimeType: tab}, this.filterHabits);
+    this.setState({currentSelectedTimeType: tab});
   }
-
 
   loadHabits () {
     $.ajax({
@@ -121,11 +113,12 @@ class HabitBox extends React.Component {
   }
 
   render () {
+    const filteredHabits = this.state.habits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
     return (
       <div className="habitBox">
         <div>
           <TimeTabs
-            filteredHabits={this.state.filteredHabits}
+            filteredHabits={filteredHabits}
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}

@@ -28942,9 +28942,9 @@
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        success: (function (habits) {
-	          var habitsArray = this.state.habits.daily;
+	          var habitsArray = this.state.habits;
 	          habitsArray.unshift(habits.habit);
-	          this.setState({ habits: { daily: habitsArray } });
+	          this.setState({ habits: habitsArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -28953,9 +28953,9 @@
 	    }
 	  }, {
 	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habit) {
+	    value: function handleHabitDelete(habitInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habit.id.id,
+	        url: '/api/v1/habits/' + habitInfo.id,
 	        method: 'delete',
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
@@ -28963,13 +28963,13 @@
 	        },
 	        cache: false,
 	        success: (function (habits) {
-	          var habitsArray = this.state.habits.daily;
+	          var habitsArray = this.state.habits;
 	          for (var i = 0; i < habitsArray.length; i++) {
-	            if (habitsArray[i].id === habit.id.id) {
+	            if (habitsArray[i].id === habits.habit.id) {
 	              habitsArray.splice(i, 1);
 	            }
 	          }
-	          this.setState({ habits: { daily: habitsArray } });
+	          this.setState({ habits: habitsArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -28978,29 +28978,29 @@
 	    }
 	  }, {
 	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitDetails) {
+	    value: function handleHabitEdit(habitInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habitDetails.id,
+	        url: '/api/v1/habits/' + habitInfo.id,
 	        method: 'put',
-	        data: habitDetails,
+	        data: habitInfo,
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (habitInfo) {
-	          var habitsArray = this.state.habits.daily;
+	        success: (function (updatedHabit) {
+	          var habitsArray = this.state.habits;
 	          for (var i = 0; i < habitsArray.length; i++) {
 	            var habit = habitsArray[i];
-	            if (habit.id === habitInfo.habit.id) {
-	              var _ref = [habitInfo.habit.id, habitInfo.habit.title, habitInfo.habit.description, habitInfo.habit.time_type];
+	            if (habit.id === updatedHabit.habit.id) {
+	              var _ref = [updatedHabit.habit.id, updatedHabit.habit.title, updatedHabit.habit.description, updatedHabit.habit.time_type];
 	              habit.id = _ref[0];
 	              habit.title = _ref[1];
 	              habit.description = _ref[2];
 	              habit.time_type = _ref[3];
 	            }
 	          }
-	          this.setState({ habits: { daily: habitsArray } });
+	          this.setState({ habits: habitsArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29008,20 +29008,9 @@
 	      });
 	    }
 	  }, {
-	    key: 'filterHabits',
-	    value: function filterHabits() {
-	      var _this2 = this;
-
-	      var allHabits = this.state.habits;
-	      var filteredHabits = allHabits.filter(function (habit) {
-	        return habit.time_type === _this2.state.currentSelectedTimeType;
-	      });
-	      this.setState({ filteredHabits: filteredHabits });
-	    }
-	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      this.setState({ currentSelectedTimeType: tab }, this.filterHabits);
+	      this.setState({ currentSelectedTimeType: tab });
 	    }
 	  }, {
 	    key: 'loadHabits',
@@ -29053,6 +29042,11 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var filteredHabits = this.state.habits.filter(function (habit) {
+	        return habit.time_type === _this2.state.currentSelectedTimeType;
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'habitBox' },
@@ -29060,7 +29054,7 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_TimeTabs2.default, {
-	            filteredHabits: this.state.filteredHabits,
+	            filteredHabits: filteredHabits,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
@@ -29147,7 +29141,7 @@
 	        return;
 	      };
 	      this.props.onHabitSubmit({ title: title, description: description, time_type: time_type });
-	      this.setState({ title: '', description: '', time_type: '' });
+	      this.setState({ title: '', description: '' });
 	    }
 	  }, {
 	    key: 'render',
@@ -61163,13 +61157,32 @@
 	    }
 	  }, {
 	    key: 'handleDelete',
-	    value: function handleDelete(id) {
-	      this.props.onHabitDelete({ id: id });
+	    value: function handleDelete(habitInfo) {
+	      this.props.onHabitDelete(habitInfo);
 	    }
 	  }, {
 	    key: 'handleEdit',
-	    value: function handleEdit(updatedInfo) {
-	      this.props.onHabitEdit(updatedInfo);
+	    value: function handleEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'renderTabCategory',
+	    value: function renderTabCategory(label) {
+	      return _react2.default.createElement(
+	        _materialUi.Tab,
+	        { label: label, onClick: this.handleChange.bind(this) },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_HabitRows2.default, {
+	            filteredHabits: this.props.filteredHabits,
+	            tabType: this.props.currentSelectedTimeType,
+	            onHabitDelete: this.handleDelete,
+	            onHabitEdit: this.handleEdit,
+	            moveHabit: this.moveHabit
+	          })
+	        )
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -61180,54 +61193,10 @@
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
 	          null,
-	          _react2.default.createElement(
-	            _materialUi.Tab,
-	            { label: 'daily', onClick: this.handleChange.bind(this) },
-	            _react2.default.createElement(
-	              'div',
-	              null,
-	              _react2.default.createElement(_HabitRows2.default, {
-	                filteredHabits: this.props.filteredHabits,
-	                tabType: this.props.currentSelectedTimeType,
-	                onHabitDelete: this.handleDelete,
-	                onHabitEdit: this.handleEdit,
-	                moveHabit: this.moveHabit
-	              })
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _materialUi.Tab,
-	            { label: 'weekly', onClick: this.handleChange.bind(this) },
-	            _react2.default.createElement(_HabitRows2.default, {
-	              filteredHabits: this.props.filteredHabits,
-	              tabType: this.props.currentSelectedTimeType,
-	              onHabitDelete: this.handleDelete,
-	              onHabitEdit: this.handleEdit,
-	              moveHabit: this.moveHabit
-	            })
-	          ),
-	          _react2.default.createElement(
-	            _materialUi.Tab,
-	            { label: 'monthly', onClick: this.handleChange.bind(this) },
-	            _react2.default.createElement(_HabitRows2.default, {
-	              filteredHabits: this.props.filteredHabits,
-	              tabType: this.props.currentSelectedTimeType,
-	              onHabitDelete: this.handleDelete,
-	              onHabitEdit: this.handleEdit,
-	              moveHabit: this.moveHabit
-	            })
-	          ),
-	          _react2.default.createElement(
-	            _materialUi.Tab,
-	            { label: 'yearly', onClick: this.handleChange.bind(this) },
-	            _react2.default.createElement(_HabitRows2.default, {
-	              filteredHabits: this.props.filteredHabits,
-	              tabType: this.props.currentSelectedTimeType,
-	              onHabitDelete: this.handleDelete,
-	              onHabitEdit: this.handleEdit,
-	              moveHabit: this.moveHabit
-	            })
-	          )
+	          this.renderTabCategory('daily'),
+	          this.renderTabCategory('weekly'),
+	          this.renderTabCategory('monthly'),
+	          this.renderTabCategory('yearly')
 	        )
 	      );
 	    }
@@ -67508,13 +67477,13 @@
 
 	  _createClass(HabitRows, [{
 	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(id) {
-	      this.props.onHabitDelete({ id: id });
+	    value: function handleHabitDelete(habitInfo) {
+	      this.props.onHabitDelete(habitInfo);
 	    }
 	  }, {
 	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(updatedInfo) {
-	      this.props.onHabitEdit(updatedInfo);
+	    value: function handleHabitEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
 	    }
 	  }, {
 	    key: 'render',
@@ -68419,7 +68388,7 @@
 	                height: '20px',
 	                width: '10px'
 	              },
-	              onClick: this.props.handleDelete.bind(this, this.props.id) })
+	              onClick: this.props.handleDelete.bind(this, this.props) })
 	          )
 	        )
 	      )));

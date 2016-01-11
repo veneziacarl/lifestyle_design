@@ -27,7 +27,7 @@ class HabitForm extends React.Component {
       return;
     };
     this.props.onHabitSubmit({title: title, description: description, time_type: time_type});
-    this.setState({title: '', description: '', time_type: ''});
+    this.setState({title: '', description: ''});
   }
 
   render() {

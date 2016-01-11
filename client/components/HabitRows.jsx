@@ -14,12 +14,12 @@ class HabitRows extends React.Component {
     super(props);
   }
 
-  handleHabitDelete (id) {
-    this.props.onHabitDelete({id});
+  handleHabitDelete (habitInfo) {
+    this.props.onHabitDelete(habitInfo);
   }
 
-  handleHabitEdit (updatedInfo) {
-    this.props.onHabitEdit(updatedInfo);
+  handleHabitEdit (habitInfo) {
+    this.props.onHabitEdit(habitInfo);
   }
 
   render () {
