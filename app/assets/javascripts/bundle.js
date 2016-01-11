@@ -29037,7 +29037,7 @@
 	  }, {
 	    key: 'handlePositionChange',
 	    value: function handlePositionChange(habits) {
-	      this.setState({ habits: { daily: habits } });
+	      this.setState({ habits: habits });
 	    }
 	  }, {
 	    key: 'render',
@@ -61148,7 +61148,7 @@
 	  }, {
 	    key: 'moveHabit',
 	    value: function moveHabit(dragIndex, hoverIndex) {
-	      var habits = this.props.habits;
+	      var habits = this.props.filteredHabits;
 	      var dragHabit = habits[dragIndex];
 
 	      habits.splice(dragIndex, 1);

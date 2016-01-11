@@ -109,7 +109,7 @@ class HabitBox extends React.Component {
   }
 
   handlePositionChange (habits) {
-    this.setState({ habits: { daily: habits }});
+    this.setState({ habits: habits });
   }
 
   render () {

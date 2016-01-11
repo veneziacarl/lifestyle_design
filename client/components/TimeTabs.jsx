@@ -25,7 +25,7 @@ class TimeTabs extends React.Component {
   }
 
   moveHabit(dragIndex, hoverIndex) {
-    const habits = this.props.habits;
+    const habits = this.props.filteredHabits;
     const dragHabit = habits[dragIndex];
 
     habits.splice(dragIndex, 1)
