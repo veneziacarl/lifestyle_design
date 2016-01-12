@@ -12,15 +12,14 @@ import HabitCard from './HabitCard.jsx';
 class HabitRows extends React.Component {
   constructor(props) {
     super(props);
-    var tabType = this.props.tabType;
   }
 
-  handleHabitDelete (id) {
-    this.props.onHabitDelete({id});
+  handleHabitDelete (habitInfo) {
+    this.props.onHabitDelete(habitInfo);
   }
 
-  handleHabitEdit (updatedInfo) {
-    this.props.onHabitEdit(updatedInfo);
+  handleHabitEdit (habitInfo) {
+    this.props.onHabitEdit(habitInfo);
   }
 
   render () {
@@ -40,7 +39,7 @@ class HabitRows extends React.Component {
       connectDragPreview,
     } = this.props;
 
-    var habitRows = this.props.habits.map( (habit, i) => {
+    var habitRows = this.props.filteredHabits.map( (habit, i) => {
       return (
         <HabitCard
           key={habit.id}

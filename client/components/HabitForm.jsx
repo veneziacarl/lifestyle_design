@@ -27,7 +27,7 @@ class HabitForm extends React.Component {
       return;
     };
     this.props.onHabitSubmit({title: title, description: description, time_type: time_type});
-    this.setState({title: '', description: '', time_type: ''});
+    this.setState({title: '', description: ''});
   }
 
   render() {
@@ -46,19 +46,16 @@ class HabitForm extends React.Component {
               value="weekly"
               label="Weekly"
               style={{marginBottom:16}}
-              disabled={false}
             />
             <RadioButton
               value="monthly"
               label="Monthly"
               style={{marginBottom:16}}
-              disabled={true}
             />
             <RadioButton
               value="yearly"
               label="Yearly"
               style={{marginBottom:16}}
-              disabled={true}
             />
           </RadioButtonGroup>
           <RaisedButton
@@ -77,9 +74,3 @@ class HabitForm extends React.Component {
 }
 
 export default HabitForm;
-// <input type="text" placeholder="Habit Type" value={this.state.time_type} onChange={this.handleTypeChange.bind(this)} />
-// value={result.ADDRESS}
-// checked={this.state.address === result.ADDRESS}
-// onChange={this.onAddressChanged}
-
-// <input type="submit" value="Add Habit" />

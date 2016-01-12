@@ -12,9 +12,7 @@ import HabitRows from './HabitRows.jsx';
 class TimeTabs extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tabType: ''
-    }
+
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.moveHabit = this.moveHabit.bind(this)
@@ -22,13 +20,12 @@ class TimeTabs extends React.Component {
 
   handleChange (e) {
     e.preventDefault();
-    var tab = this.props.label;
+    var tab = e.target.textContent;
     this.props.onTabClick(tab);
-    this.setState({tabType: tab})
   }
 
   moveHabit(dragIndex, hoverIndex) {
-    const habits = this.props.habits;
+    const habits = this.props.filteredHabits;
     const dragHabit = habits[dragIndex];
 
     habits.splice(dragIndex, 1)
@@ -36,36 +33,39 @@ class TimeTabs extends React.Component {
     this.props.onPositionChange(habits)
   }
 
-  handleDelete (id) {
-    this.props.onHabitDelete({id});
+  handleDelete (habitInfo) {
+    this.props.onHabitDelete(habitInfo);
   }
 
-  handleEdit (updatedInfo) {
-    this.props.onHabitEdit(updatedInfo);
+  handleEdit (habitInfo) {
+    this.props.onHabitEdit(habitInfo);
+  }
+
+  renderTabCategory (label) {
+    return (
+      <Tab label={label} onClick={this.handleChange.bind(this)}>
+        <div>
+          <HabitRows
+            filteredHabits={this.props.filteredHabits}
+            tabType={this.props.currentSelectedTimeType}
+            onHabitDelete={this.handleDelete}
+            onHabitEdit={this.handleEdit}
+            moveHabit={this.moveHabit}
+          />
+        </div>
+      </Tab>
+    )
   }
 
   render() {
     return (
       <div className="timetabs small-12 medium-6 large-4 columns">
-        <Tabs>
-          <Tab label="daily" onClick={this.handleChange.bind(this)}>
-            <div>
-              <HabitRows
-                habits={this.props.habits}
-                tabType={this.state.tabType}
-                onHabitDelete={this.handleDelete}
-                onHabitEdit={this.handleEdit}
-                moveHabit={this.moveHabit}
-              />
-            </div>
-          </Tab>
-          <Tab label="monthly" onClick={this.handleChange.bind(this)}>
-            (Tab content...)
-          </Tab>
-          <Tab label="yearly" onClick={this.handleChange.bind(this)}>
-            (tab content..)
-          </Tab>
-        </Tabs>
+       <Tabs>
+         {this.renderTabCategory('daily')}
+         {this.renderTabCategory('weekly')}
+         {this.renderTabCategory('monthly')}
+         {this.renderTabCategory('yearly')}
+       </Tabs>
       </div>
     );
   }

@@ -115,7 +115,7 @@ class HabitCard extends Component {
                 height: '20px',
                 width: '10px'
               }}
-              onClick={this.props.handleDelete.bind(this, this.props.id)} />
+              onClick={this.props.handleDelete.bind(this, this.props)} />
           </CardActions>
         </Card>
       </div>
