@@ -9,9 +9,18 @@ import { colors } from './colors.jsx';
 import EditableText from './EditableText.jsx';
 import HabitCard from './HabitCard.jsx';
 
-class HabitRows extends React.Component {
+
+const propTypes = {
+  onMount: PropTypes.func.isRequired
+}
+
+export class HabitRows extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.props.onMount();
   }
 
   handleHabitDelete (habitInfo) {
@@ -60,4 +69,5 @@ class HabitRows extends React.Component {
   }
 }
 
+HabitRows.propTypes = propTypes;
 export default HabitRows;

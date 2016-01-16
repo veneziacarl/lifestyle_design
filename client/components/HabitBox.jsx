@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import {render} from 'react-dom';
 import $ from 'jquery';
 
 import HabitForm from './HabitForm.jsx';
 import TimeTabs from './TimeTabs.jsx';
 
-class HabitBox extends React.Component {
+
+const propTypes = {
+  onMount: PropTypes.func.isRequired
+};
+
+export class HabitBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,14 +113,23 @@ class HabitBox extends React.Component {
     this.loadHabits();
   }
 
+  onMount () {
+    this.loadHabits();
+  }
+
   handlePositionChange (habits) {
     this.setState({ habits: habits });
   }
 
+
   render () {
+    const styles = {
+      height: '100%',
+      background: '#333'
+    }
     const filteredHabits = this.state.habits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
     return (
-      <div className="habitBox">
+      <div className="habitBox" style={styles}>
         <div>
           <TimeTabs
             filteredHabits={filteredHabits}
@@ -124,6 +138,7 @@ class HabitBox extends React.Component {
             onHabitDelete={this.handleHabitDelete}
             onHabitEdit={this.handleHabitEdit}
             onPositionChange={this.handlePositionChange}
+            onMount={() => {}}
           />
         </div>
         <div>
@@ -134,4 +149,5 @@ class HabitBox extends React.Component {
   }
 };
 
+TimeTabs.propTypes = propTypes;
 export default HabitBox;

@@ -81,7 +81,7 @@ class HabitCard extends Component {
     }
 
     return connectDropTarget(connectDragSource(
-      <div>
+      <div className="habit-card">
         <Card initiallyExpanded={false} style={styles} id={this.props.id} index={this.props.index} className="small-12 columns">
           <CardHeader
             className="small-12 columns"
