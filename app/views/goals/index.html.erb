@@ -1,0 +1,9 @@
+<%= link_to 'Create New Goal', new_goal_path %>
+
+Your Goals:
+
+<% if !@goals.empty? %>
+  You have no goals to display.
+<% else %>
+  <%= render @goals %>
+<% end %>

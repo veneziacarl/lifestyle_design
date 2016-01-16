@@ -1,0 +1,13 @@
+<%= form_for [@goal] do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :comment %>
+
+  <%= f.label :description %>
+  <%= f.text_field :description %>
+
+  <%= f.hidden_field :user, value: current_user %>
+
+  <div class="actions">
+    <%= f.submit 'Add Goal', class: 'button tiny'%>
+  </div>
+<% end %>
