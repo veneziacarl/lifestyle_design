@@ -19,27 +19,28 @@ describe('(Component) TimeTabs', () => {
 
     const wrapper = shallow(<TimeTabs {...props} />);
 
-    it('renders as a <div>', () => {
+    it('renders as a <div> with classes', () => {
       expect(wrapper.type()).to.eql('div');
+      expect(wrapper.find('.timetabs')).to.have.length(1);
+      expect(wrapper.find('.small-12')).to.have.length(1);
+      expect(wrapper.find('.medium-6')).to.have.length(1);
+      expect(wrapper.find('.large-4')).to.have.length(1);
+      expect(wrapper.find('.columns')).to.have.length(1);
     });
 
-    it('has style with height 100%', () => {
-      const expectedStyles = {
-        height: '100%',
-        background: '#333'
-      }
-      expect(wrapper.prop('style')).to.eql(expectedStyles);
-    });
+
   });
 
   describe('lifecycle methods...', () => {
-    const props = {
-      onMount: () => sinon.spy(),
-      filteredHabits: [],
-      habits: []
-    }
+
 
     it('calls componentDidMount', () => {
+      const props = {
+        onMount: () => sinon.spy(),
+        filteredHabits: [],
+        habits: []
+      }
+
       spyLifecycle(TimeTabs);
 
       mount(<TimeTabs {...props} />);
@@ -50,6 +51,11 @@ describe('(Component) TimeTabs', () => {
       });
 
     it('calls onMount prop once it mounts', () => {
+      const props = {
+        onMount: () => sinon.spy(),
+        filteredHabits: [],
+        habits: []
+      }
       mount(<TimeTabs {...props} />);
 
       expect(props.onMount.calledOnce).to.be.true;
