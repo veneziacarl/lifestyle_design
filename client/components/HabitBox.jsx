@@ -112,10 +112,15 @@ class HabitBox extends React.Component {
     this.setState({ habits: habits });
   }
 
+
   render () {
+    const styles = {
+      height: '100%',
+      background: '#333'
+    }
     const filteredHabits = this.state.habits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
     return (
-      <div className="habitBox">
+      <div className="habitBox" style={styles}>
         <div>
           <TimeTabs
             filteredHabits={filteredHabits}

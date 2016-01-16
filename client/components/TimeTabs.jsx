@@ -1,13 +1,17 @@
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 import { Tabs, Tab } from 'material-ui';
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import HabitRows from './HabitRows.jsx';
 
+
+const propTypes = {
+  onMount: PropTypes.func.isRequired
+};
 
 class TimeTabs extends React.Component {
   constructor(props) {
@@ -16,6 +20,10 @@ class TimeTabs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.moveHabit = this.moveHabit.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.onMount();
   }
 
   handleChange (e) {
@@ -42,8 +50,14 @@ class TimeTabs extends React.Component {
   }
 
   renderTabCategory (label) {
+
+    const styles = {
+      height: '100%',
+      background: '#333'
+    }
+
     return (
-      <Tab label={label} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} style={styles} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitRows
             filteredHabits={this.props.filteredHabits}
@@ -71,4 +85,5 @@ class TimeTabs extends React.Component {
   }
 }
 
+TimeTabs.propTypes = propTypes;
 export default DragDropContext(HTML5Backend)(TimeTabs);
