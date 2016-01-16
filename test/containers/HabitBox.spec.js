@@ -12,7 +12,7 @@ describe('(Container) HabitBox', () => {
     const expectedStyles = {
       height: '100%',
       background: '#333'
-    }
+    };
     expect(wrapper.prop('style')).to.eql(expectedStyles);
   });
 });
