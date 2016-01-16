@@ -12,7 +12,7 @@ import HabitBox from '../../client/components/HabitBox';
 describe('(Component) TimeTabs', () => {
   describe('with shallow rendering...', () => {
     const props = {
-      onMount: () => sinon.spy(),
+      onMount: sinon.spy(),
       filteredHabits: [],
       habits: []
     }
@@ -36,7 +36,7 @@ describe('(Component) TimeTabs', () => {
 
     it('calls componentDidMount', () => {
       const props = {
-        onMount: () => sinon.spy(),
+        onMount: sinon.spy(),
         filteredHabits: [],
         habits: []
       }
@@ -52,7 +52,7 @@ describe('(Component) TimeTabs', () => {
 
     it('calls onMount prop once it mounts', () => {
       const props = {
-        onMount: () => sinon.spy(),
+        onMount: sinon.spy(),
         filteredHabits: [],
         habits: []
       }
