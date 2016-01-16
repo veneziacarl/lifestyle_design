@@ -50,14 +50,8 @@ export class TimeTabs extends React.Component {
   }
 
   renderTabCategory (label) {
-
-    const styles = {
-      height: '100%',
-      background: '#333'
-    }
-
     return (
-      <Tab label={label} style={styles} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitRows
             filteredHabits={this.props.filteredHabits}
@@ -65,6 +59,7 @@ export class TimeTabs extends React.Component {
             onHabitDelete={this.handleDelete}
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
+            onMount={() => {}}
           />
         </div>
       </Tab>

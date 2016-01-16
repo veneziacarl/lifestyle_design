@@ -28897,6 +28897,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.HabitBox = undefined;
 
 	var _react = __webpack_require__(2);
 
@@ -28924,7 +28925,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var HabitBox = (function (_React$Component) {
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
+
+	var HabitBox = exports.HabitBox = (function (_React$Component) {
 	  _inherits(HabitBox, _React$Component);
 
 	  function HabitBox(props) {
@@ -29050,6 +29055,11 @@
 	      this.loadHabits();
 	    }
 	  }, {
+	    key: 'onMount',
+	    value: function onMount() {
+	      this.loadHabits();
+	    }
+	  }, {
 	    key: 'handlePositionChange',
 	    value: function handlePositionChange(habits) {
 	      this.setState({ habits: habits });
@@ -29078,7 +29088,8 @@
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
 	            onHabitEdit: this.handleHabitEdit,
-	            onPositionChange: this.handlePositionChange
+	            onPositionChange: this.handlePositionChange,
+	            onMount: function onMount() {}
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -29095,6 +29106,7 @@
 
 	;
 
+	_TimeTabs2.default.propTypes = propTypes;
 	exports.default = HabitBox;
 
 /***/ },
@@ -61197,15 +61209,9 @@
 	  }, {
 	    key: 'renderTabCategory',
 	    value: function renderTabCategory(label) {
-
-	      var styles = {
-	        height: '100%',
-	        background: '#333'
-	      };
-
 	      return _react2.default.createElement(
 	        _materialUi.Tab,
-	        { label: label, style: styles, onClick: this.handleChange.bind(this) },
+	        { label: label, onClick: this.handleChange.bind(this) },
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -61214,7 +61220,8 @@
 	            tabType: this.props.currentSelectedTimeType,
 	            onHabitDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
-	            moveHabit: this.moveHabit
+	            moveHabit: this.moveHabit,
+	            onMount: function onMount() {}
 	          })
 	        )
 	      );
@@ -67467,6 +67474,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.HabitRows = undefined;
 
 	var _materialUi = __webpack_require__(163);
 
@@ -67502,12 +67510,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// const propTypes = {
-	//   onMount: PropTypes.func.isRequired,
-	//   isActive: PropTypes.bool
-	// }
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
 
-	var HabitRows = (function (_React$Component) {
+	var HabitRows = exports.HabitRows = (function (_React$Component) {
 	  _inherits(HabitRows, _React$Component);
 
 	  function HabitRows(props) {
@@ -67517,6 +67524,11 @@
 	  }
 
 	  _createClass(HabitRows, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.onMount();
+	    }
+	  }, {
 	    key: 'handleHabitDelete',
 	    value: function handleHabitDelete(habitInfo) {
 	      this.props.onHabitDelete(habitInfo);
@@ -67569,8 +67581,7 @@
 	  return HabitRows;
 	})(_react2.default.Component);
 
-	// HabitRows.propTypes = propTypes;
-
+	HabitRows.propTypes = propTypes;
 	exports.default = HabitRows;
 
 /***/ },
