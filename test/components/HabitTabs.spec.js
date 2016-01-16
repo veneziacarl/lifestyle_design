@@ -7,7 +7,6 @@ import {
 import TestUtils from 'react-addons-test-utils';
 
 import { TimeTabs } from '../../client/components/TimeTabs';
-import HabitBox from '../../client/components/HabitBox';
 
 describe('(Component) TimeTabs', () => {
   describe('with shallow rendering...', () => {
@@ -27,13 +26,9 @@ describe('(Component) TimeTabs', () => {
       expect(wrapper.find('.large-4')).to.have.length(1);
       expect(wrapper.find('.columns')).to.have.length(1);
     });
-
-
   });
 
   describe('lifecycle methods...', () => {
-
-
     it('calls componentDidMount', () => {
       const props = {
         onMount: sinon.spy(),
