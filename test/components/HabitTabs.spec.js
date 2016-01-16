@@ -6,7 +6,7 @@ import {
 } from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 
-import TimeTabs from '../../client/components/TimeTabs';
+import { TimeTabs } from '../../client/components/TimeTabs';
 import HabitBox from '../../client/components/HabitBox';
 
 describe('(Component) TimeTabs', () => {
