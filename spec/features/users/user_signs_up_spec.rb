@@ -12,44 +12,43 @@ feature 'user signs up', %{
   # [x] If I do not give valid information, I get an error message
   # [x] If I specify valid information, register my account and authenticate
 
-  scenario 'user navigates to sign up page' do
-    
-  end
-
-  xscenario 'user specifies valid and required information' do
+  scenario 'user specifies valid and required information' do
     visit root_path
-    click_link 'Sign Up'
 
+    expect(page).to have_content('Sign Up')
+    expect(page).to have_content('Sign In')
+
+    click_link 'Sign Up'
     fill_in 'First Name', with: 'firstname'
     fill_in 'Last Name', with: 'lastname'
     fill_in 'Email', with: 'fake@email.com'
     fill_in 'Password', with: 'password'
-    fill_in 'Password Confirmation', with: 'password'
-    click_button 'Sign Up'
+    fill_in 'Password confirmation', with: 'password'
+    click_button 'Sign up'
 
-    expect(page).to have_content('Welcome to the club!', count: 1)
+    expect(page).to have_content('Welcome! Let\'s get started.', count: 1)
     expect(page).to have_content('Sign Out')
+    expect(page).to_not have_content('Sign Up')
+    expect(page).to_not have_content('Sign In')
   end
 
-  xscenario 'required information is not supplied' do
-    visit root_path
-    click_link 'Sign Up'
+  scenario 'required information is not supplied' do
+    visit new_user_registration_path
+    click_button 'Sign up'
 
-    click_button 'Sign Up'
-    expect(page).to have_content("can't be blank")
+    expect(page).to have_content("can't be blank", count: 4)
     expect(page).to_not have_content('Sign Out')
   end
 
-  xscenario 'password does not match confirmation' do
-    visit root_path
-    click_link 'Sign Up'
+  scenario 'password does not match confirmation' do
+    visit new_user_registration_path
 
     fill_in 'First Name', with: 'firstname'
     fill_in 'Last Name', with: 'lastname'
     fill_in 'Email', with: 'fake@email.com'
     fill_in 'Password', with: 'password'
-    fill_in 'Password Confirmation', with: 'anotherpassword'
-    click_button 'Sign Up'
+    fill_in 'Password confirmation', with: 'anotherpassword'
+    click_button 'Sign up'
 
     expect(page).to have_content("doesn't match")
     expect(page).to_not have_content('Sign Out')
