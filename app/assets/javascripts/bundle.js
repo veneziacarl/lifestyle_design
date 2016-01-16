@@ -61111,6 +61111,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.TimeTabs = undefined;
 
 	var _materialUi = __webpack_require__(163);
 
@@ -61147,7 +61148,7 @@
 	  onMount: _react.PropTypes.func.isRequired
 	};
 
-	var TimeTabs = (function (_React$Component) {
+	var TimeTabs = exports.TimeTabs = (function (_React$Component) {
 	  _inherits(TimeTabs, _React$Component);
 
 	  function TimeTabs(props) {

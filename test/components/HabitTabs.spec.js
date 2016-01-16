@@ -10,39 +10,49 @@ import TimeTabs from '../../client/components/TimeTabs';
 import HabitBox from '../../client/components/HabitBox';
 
 describe('(Component) TimeTabs', () => {
-  const props = {
-    onMount: () => { sinon.spy() },
-    filteredHabits: [],
-    habits: []
-  }
-
-  const wrapper = shallow(<HabitBox {...props} />);
-
-  it('renders as a <div>', () => {
-    expect(wrapper.type()).to.eql('div');
-  });
-
-  it('has style with height 100%', () => {
-    const expectedStyles = {
-      height: '100%',
-      background: '#333'
+  describe('with shallow rendering...', () => {
+    const props = {
+      onMount: () => sinon.spy(),
+      filteredHabits: [],
+      habits: []
     }
-    expect(wrapper.prop('style')).to.eql(expectedStyles);
-  });
 
-  it('calls componentDidMount', () => {
-    spyLifecycle(TimeTabs);
+    const wrapper = shallow(<TimeTabs {...props} />);
 
-    mount(<TimeTabs {...props} />);
-
-    expect(
-        TimeTabs.prototype.componentDidMount.calledOnce
-      ).to.be.true;
+    it('renders as a <div>', () => {
+      expect(wrapper.type()).to.eql('div');
     });
 
-  it('calls onMount prop once it mounts', () => {
-    mount(<TimeTabs {...props} />);
+    it('has style with height 100%', () => {
+      const expectedStyles = {
+        height: '100%',
+        background: '#333'
+      }
+      expect(wrapper.prop('style')).to.eql(expectedStyles);
+    });
+  });
 
-    expect(TimeTabs.props.onMount.calledOnce).to.be.true;
+  describe('lifecycle methods...', () => {
+    const props = {
+      onMount: () => sinon.spy(),
+      filteredHabits: [],
+      habits: []
+    }
+
+    it('calls componentDidMount', () => {
+      spyLifecycle(TimeTabs);
+
+      mount(<TimeTabs {...props} />);
+
+      expect(
+          TimeTabs.prototype.componentDidMount.calledOnce
+        ).to.be.true;
+      });
+
+    it('calls onMount prop once it mounts', () => {
+      mount(<TimeTabs {...props} />);
+
+      expect(props.onMount.calledOnce).to.be.true;
+    });
   });
 });

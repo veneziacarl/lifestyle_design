@@ -13,7 +13,7 @@ const propTypes = {
   onMount: PropTypes.func.isRequired
 };
 
-class TimeTabs extends React.Component {
+export class TimeTabs extends React.Component {
   constructor(props) {
     super(props);
 
