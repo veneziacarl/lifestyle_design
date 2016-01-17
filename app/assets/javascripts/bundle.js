@@ -68438,7 +68438,14 @@
 	            className: 'small-12 columns',
 	            actAsExpander: false,
 	            showExpandableButton: true,
-	            avatar: _react2.default.createElement('div', null),
+	            avatar: _react2.default.createElement(
+	              _materialUi.Avatar,
+	              {
+	                color: 'orange',
+	                backgroundColor: 'green'
+	              },
+	              'G'
+	            ),
 	            title: _react2.default.createElement(_EditableText2.default, {
 	              title: this.props.title,
 	              haveButton: false,
