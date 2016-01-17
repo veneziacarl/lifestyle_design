@@ -7,7 +7,8 @@
     "start": "webpack --progress --inline --watch",
     "build": "webpack",
     "test": "mocha --compilers js:babel-register --require ./test/test_helper.js --recursive",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "babel-loader": "^6.2.0",
