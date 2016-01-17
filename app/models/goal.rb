@@ -3,5 +3,6 @@ class Goal < ActiveRecord::Base
   has_many :habits
 
   validates :title, presence: true
-  validates :active, inclusion: { in: [true, false] }
+  validates :user, presence: true
+  validates :active, presence: true, inclusion: { in: [true, false] }
 end
