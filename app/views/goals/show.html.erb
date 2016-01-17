@@ -1,0 +1,11 @@
+<%= link_to 'Back to Goals Index', goals_path %>
+
+<%= render @goal %>
+
+<hr />
+Habits that build to this goal:
+<% if @habits %>
+  <%= render @habits %>
+<% else %>
+  No habits yet.
+<% end %>

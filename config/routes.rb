@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   resources :habits
 
+  resources :goals
+
   namespace :api do
     namespace :v1 do
       resources :habits, only: [:index, :create, :show, :update, :destroy]
