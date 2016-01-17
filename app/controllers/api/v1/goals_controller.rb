@@ -14,7 +14,6 @@ class Api::V1::GoalsController < Api::V1::BaseController
   def update
   end
 
-
   private
 
   def goal_params

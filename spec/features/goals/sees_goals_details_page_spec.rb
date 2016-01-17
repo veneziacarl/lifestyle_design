@@ -10,7 +10,6 @@ feature 'see goals details page', %{
   # [x] navigates to manager page and clicks on a goal
   # [x] Sees goal attributes if provided at creation
 
-
   let! (:user) { FactoryGirl.create(:user) }
   let! (:goal) { FactoryGirl.create(:goal, user: user) }
 

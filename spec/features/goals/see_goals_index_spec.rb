@@ -25,8 +25,6 @@ feature 'see goals index page', %{
   end
 
   scenario "user sees all goals on index" do
-    oldest_goal = goals.shift
-
     visit goals_path
 
     goals.each do |goal|
