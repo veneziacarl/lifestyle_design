@@ -33,6 +33,7 @@ export class HabitForm extends React.Component {
     };
     this.props.onHabitSubmit({title: title, description: description, time_type: time_type});
     this.setState({title: '', description: ''});
+    this.handleClose()
   }
 
   handleOpen () {
@@ -45,52 +46,41 @@ export class HabitForm extends React.Component {
 
   render() {
     const actions = [
-      <div>
-        <form className="habitForm" onSubmit={this.handleSubmit.bind(this)}>
-          <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
-          <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
-          <RadioButtonGroup name="addHabit" onChange={this.handleTypeChange.bind(this)}>
-            <RadioButton
-              value="daily"
-              label="Daily"
-              style={{marginBottom:16}}
-            />
-            <RadioButton
-              value="weekly"
-              label="Weekly"
-              style={{marginBottom:16}}
-            />
-            <RadioButton
-              value="monthly"
-              label="Monthly"
-              style={{marginBottom:16}}
-            />
-            <RadioButton
-              value="yearly"
-              label="Yearly"
-              style={{marginBottom:16}}
-            />
-          </RadioButtonGroup>
-          <RaisedButton
-            secondary={true}
-            label="Add Habit"
-            style={{
-              height: '30px',
-              width: '20px'
-            }}
-            onClick={this.handleSubmit.bind(this)}
+        <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />,
+        <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />,
+        <RadioButtonGroup name="addHabit" onChange={this.handleTypeChange.bind(this)}>
+          <RadioButton
+            value="daily"
+            label="Daily"
+            style={{marginBottom:16}}
           />
-        </form>
-        <FlatButton
-          label="Cancel"
-          secondary={true}
-          onTouchTap={this.handleClose} />,
-        <FlatButton
-          label="Submit"
-          primary={true}
-          keyboardFocused={true}
-          onTouchTap={this.handleClose} />,
-      </div>
+          <RadioButton
+            value="weekly"
+            label="Weekly"
+            style={{marginBottom:16}}
+          />
+          <RadioButton
+            value="monthly"
+            label="Monthly"
+            style={{marginBottom:16}}
+          />
+          <RadioButton
+            value="yearly"
+            label="Yearly"
+            style={{marginBottom:16}}
+          />
+        </RadioButtonGroup>,
+      <FlatButton
+        label="Cancel"
+        secondary={true}
+        onClick={this.handleClose.bind(this)}
+      />,
+      <FlatButton
+        label="Add Habit"
+        primary={true}
+        keyboardFocused={true}
+        onClick={this.handleSubmit.bind(this)}
+      />
     ];
 
     return (

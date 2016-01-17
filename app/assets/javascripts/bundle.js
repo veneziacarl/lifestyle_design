@@ -29179,6 +29179,7 @@
 	      };
 	      this.props.onHabitSubmit({ title: title, description: description, time_type: time_type });
 	      this.setState({ title: '', description: '' });
+	      this.handleClose();
 	    }
 	  }, {
 	    key: 'handleOpen',
@@ -29193,60 +29194,39 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var actions = [_react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'form',
-	          { className: 'habitForm', onSubmit: this.handleSubmit.bind(this) },
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
-	          _react2.default.createElement(
-	            _materialUi.RadioButtonGroup,
-	            { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'daily',
-	              label: 'Daily',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'weekly',
-	              label: 'Weekly',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'monthly',
-	              label: 'Monthly',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'yearly',
-	              label: 'Yearly',
-	              style: { marginBottom: 16 }
-	            })
-	          ),
-	          _react2.default.createElement(_materialUi.RaisedButton, {
-	            secondary: true,
-	            label: 'Add Habit',
-	            style: {
-	              height: '30px',
-	              width: '20px'
-	            },
-	            onClick: this.handleSubmit.bind(this)
-	          })
-	        ),
-	        _react2.default.createElement(_materialUi.FlatButton, {
-	          label: 'Cancel',
-	          secondary: true,
-	          onTouchTap: this.handleClose }),
-	        ',',
-	        _react2.default.createElement(_materialUi.FlatButton, {
-	          label: 'Submit',
-	          primary: true,
-	          keyboardFocused: true,
-	          onTouchTap: this.handleClose }),
-	        ','
-	      )];
+	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
+	        _materialUi.RadioButtonGroup,
+	        { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'daily',
+	          label: 'Daily',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'weekly',
+	          label: 'Weekly',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'monthly',
+	          label: 'Monthly',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'yearly',
+	          label: 'Yearly',
+	          style: { marginBottom: 16 }
+	        })
+	      ), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Cancel',
+	        secondary: true,
+	        onClick: this.handleClose.bind(this)
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Add Habit',
+	        primary: true,
+	        keyboardFocused: true,
+	        onClick: this.handleSubmit.bind(this)
+	      })];
 
 	      return _react2.default.createElement(
 	        'div',
