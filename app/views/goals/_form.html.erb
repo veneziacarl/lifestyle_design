@@ -1,11 +1,20 @@
 <%= form_for [@goal] do |f| %>
+  <% if @goal.errors.any? %>
+    <div id="error_explanation">
+      <h4><%= pluralize(@goal.errors.count, "error") %>: please correct the following and try again.</h4>
+      <ul>
+        <% @goal.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <%= f.label :title %>
-  <%= f.text_field :comment %>
+  <%= f.text_field :title %>
 
   <%= f.label :description %>
   <%= f.text_field :description %>
-
-  <%= f.hidden_field :user, value: current_user %>
 
   <div class="actions">
     <%= f.submit 'Add Goal', class: 'button tiny'%>
