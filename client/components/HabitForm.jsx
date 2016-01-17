@@ -1,10 +1,15 @@
 import React from 'react';
-import { RadioButton, RadioButtonGroup, RaisedButton } from 'material-ui';
+import { RadioButton, RadioButtonGroup, RaisedButton, FlatButton, Dialog } from 'material-ui';
 
-class HabitForm extends React.Component {
+export class HabitForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {title: '', description: '', time_type: ''};
+    this.state = {
+      title: '',
+      description: '',
+      time_type: '',
+      open: false
+    };
   }
 
   handleTitleChange (e) {
@@ -30,9 +35,17 @@ class HabitForm extends React.Component {
     this.setState({title: '', description: ''});
   }
 
+  handleOpen () {
+    this.setState({open: true});
+  }
+
+  handleClose () {
+    this.setState({open: false});
+  }
+
   render() {
-    return (
-      <div className="habitForm small-12 medium-6 large-4 columns">
+    const actions = [
+      <div>
         <form className="habitForm" onSubmit={this.handleSubmit.bind(this)}>
           <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
           <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />
@@ -68,6 +81,30 @@ class HabitForm extends React.Component {
             onClick={this.handleSubmit.bind(this)}
           />
         </form>
+        <FlatButton
+          label="Cancel"
+          secondary={true}
+          onTouchTap={this.handleClose} />,
+        <FlatButton
+          label="Submit"
+          primary={true}
+          keyboardFocused={true}
+          onTouchTap={this.handleClose} />,
+      </div>
+    ];
+
+    return (
+      <div className="habitForm small-12 medium-6 large-4 columns">
+        <RaisedButton label="Create New" onTouchTap={this.handleOpen.bind(this)} />
+        <Dialog
+          title="Create New Habit Or Goal"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose.bind(this)}
+        >
+          <p>This is filler text in the dialog popover</p>
+        </Dialog>
       </div>
     );
   }
