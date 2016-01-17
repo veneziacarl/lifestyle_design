@@ -13,7 +13,6 @@
 /tmp
 /node_modules
 .DS_store
-Gemfile.lock
 /app/assets/javascripts/bundle.js
 /coverage
 .env
