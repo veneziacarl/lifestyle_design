@@ -1,4 +1,4 @@
-class Schedule < ActiveRecord:Base
+class Schedule < ActiveRecord::Base
   belongs_to :habit
 
   validates :habit, presence: true
@@ -11,8 +11,6 @@ class Schedule < ActiveRecord:Base
   validate :date_is_valid_datetime
 
   def date_is_valid_datetime
-    if ((DateTime.parse(date) rescue ArgumentError) == ArgumentError)
-      errors.add(:date, 'must be a valid datetime')
-    end
+    errors.add(:date, 'must be a valid datetime') unless date.is_a?(ActiveSupport::TimeWithZone)
   end
 end

@@ -109,10 +109,6 @@ export class HabitBox extends React.Component {
     });
   }
 
-  componentDidMount () {
-    this.loadHabits();
-  }
-
   onMount () {
     this.loadHabits();
   }
@@ -120,7 +116,6 @@ export class HabitBox extends React.Component {
   handlePositionChange (habits) {
     this.setState({ habits: habits });
   }
-
 
   render () {
     const styles = {

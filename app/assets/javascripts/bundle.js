@@ -29050,11 +29050,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.loadHabits();
-	    }
-	  }, {
 	    key: 'onMount',
 	    value: function onMount() {
 	      this.loadHabits();
