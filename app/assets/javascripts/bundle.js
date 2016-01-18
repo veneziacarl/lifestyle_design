@@ -28938,19 +28938,35 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitBox).call(this, props));
 
 	    _this.state = {
-	      habits: [],
-	      currentSelectedTimeType: '',
-	      filteredHabits: []
+	      schedules: [],
+	      currentSelectedTab: '',
+	      filteredHabits: [],
+	      date: new Date()
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
 	    _this.handleHabitEdit = _this.handleHabitEdit.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
+	    _this.addDays = _this.addDays.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HabitBox, [{
+	    key: 'addDays',
+	    value: function addDays(days) {
+	      var new_date = new Date(this.state.date);
+	      new_date.setDate(new_date.getDate() + days);
+	      return new_date;
+	    }
+	  }, {
+	    key: 'createDay',
+	    value: function createDay(schedule) {
+	      var date = new Date(schedule.date);
+	      var day = date.getDay();
+	      return day;
+	    }
+	  }, {
 	    key: 'handleHabitSubmit',
 	    value: function handleHabitSubmit(habit) {
 	      _jquery2.default.ajax({
@@ -29030,19 +29046,24 @@
 	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      this.setState({ currentSelectedTimeType: tab });
+	      if (tab == 'today') {
+	        var today_tab = this.state.date.getDay();
+	        this.setState({ currentSelectedTab: today_tab });
+	      } else {
+	        this.setState({ currentSelectedTab: tab });
+	      };
 	    }
 	  }, {
 	    key: 'loadHabits',
 	    value: function loadHabits() {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits',
+	        url: '/api/v1/schedules',
 	        method: 'GET',
 	        dataType: 'json',
 	        cache: false,
-	        success: (function (habitInfo) {
-	          this.setState({ habits: habitInfo.habits });
-	          this.handleOpenTab('daily');
+	        success: (function (info) {
+	          this.setState({ schedules: info.schedules });
+	          this.handleOpenTab('today');
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29051,7 +29072,10 @@
 	    }
 	  }, {
 	    key: 'onMount',
-	    value: function onMount() {
+	    value: function onMount() {}
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
 	      this.loadHabits();
 	    }
 	  }, {
@@ -29068,8 +29092,8 @@
 	        height: '100%',
 	        background: '#333'
 	      };
-	      var filteredHabits = this.state.habits.filter(function (habit) {
-	        return habit.time_type === _this2.state.currentSelectedTimeType;
+	      var filteredSchedules = this.state.schedules.filter(function (schedule) {
+	        return _this2.createDay(schedule) === _this2.state.currentSelectedTab;
 	      });
 	      return _react2.default.createElement(
 	        'div',
@@ -29078,13 +29102,14 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_TimeTabs2.default, {
-	            filteredHabits: filteredHabits,
+	            filteredSchedules: filteredSchedules,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
 	            onHabitEdit: this.handleHabitEdit,
 	            onPositionChange: this.handlePositionChange,
-	            onMount: function onMount() {}
+	            onMount: function onMount() {},
+	            addDays: this.addDays
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -61212,7 +61237,7 @@
 	  }, {
 	    key: 'moveHabit',
 	    value: function moveHabit(dragIndex, hoverIndex) {
-	      var habits = this.props.filteredHabits;
+	      var habits = this.props.filteredSchedules;
 	      var dragHabit = habits[dragIndex];
 
 	      habits.splice(dragIndex, 1);
@@ -61231,16 +61256,16 @@
 	    }
 	  }, {
 	    key: 'renderTabCategory',
-	    value: function renderTabCategory(label) {
+	    value: function renderTabCategory(label, day) {
 	      return _react2.default.createElement(
 	        _materialUi.Tab,
-	        { label: label, onClick: this.handleChange.bind(this) },
+	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
 	        _react2.default.createElement(
 	          'div',
 	          null,
 	          _react2.default.createElement(_HabitRows2.default, {
-	            filteredHabits: this.props.filteredHabits,
-	            tabType: this.props.currentSelectedTimeType,
+	            filteredSchedules: this.props.filteredSchedules,
+	            tab: this.props.currentSelectedTab,
 	            onHabitDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
 	            moveHabit: this.moveHabit,
@@ -61258,10 +61283,13 @@
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
 	          null,
-	          this.renderTabCategory('daily'),
-	          this.renderTabCategory('weekly'),
-	          this.renderTabCategory('monthly'),
-	          this.renderTabCategory('yearly')
+	          this.renderTabCategory('M', 1),
+	          this.renderTabCategory('T', 2),
+	          this.renderTabCategory('W', 3),
+	          this.renderTabCategory('Th', 4),
+	          this.renderTabCategory('F', 5),
+	          this.renderTabCategory('Sa', 6),
+	          this.renderTabCategory('Sn', 7)
 	        )
 	      );
 	    }
@@ -67583,14 +67611,14 @@
 	      var connectDropTarget = _props.connectDropTarget;
 	      var connectDragPreview = _props.connectDragPreview;
 
-	      var habitRows = this.props.filteredHabits.map(function (habit, i) {
+	      var habitRows = this.props.filteredSchedules.map(function (schedule, i) {
 	        return _react2.default.createElement(_HabitCard2.default, _extends({
-	          key: habit.id,
+	          key: schedule.id,
 	          index: i,
 	          moveHabit: _this2.props.moveHabit.bind(_this2),
 	          handleDelete: _this2.handleHabitDelete.bind(_this2),
 	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, habit));
+	        }, schedule.habit));
 	      });
 
 	      return _react2.default.createElement(

@@ -19,7 +19,7 @@ export class TimeTabs extends React.Component {
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.moveHabit = this.moveHabit.bind(this)
+    this.moveHabit = this.moveHabit.bind(this);
   }
 
   componentDidMount() {
@@ -33,7 +33,7 @@ export class TimeTabs extends React.Component {
   }
 
   moveHabit(dragIndex, hoverIndex) {
-    const habits = this.props.filteredHabits;
+    const habits = this.props.filteredSchedules;
     const dragHabit = habits[dragIndex];
 
     habits.splice(dragIndex, 1)
@@ -49,13 +49,13 @@ export class TimeTabs extends React.Component {
     this.props.onHabitEdit(habitInfo);
   }
 
-  renderTabCategory (label) {
+  renderTabCategory (label, day) {
     return (
-      <Tab label={label} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} day={day} passed={false} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitRows
-            filteredHabits={this.props.filteredHabits}
-            tabType={this.props.currentSelectedTimeType}
+            filteredSchedules={this.props.filteredSchedules}
+            tab={this.props.currentSelectedTab}
             onHabitDelete={this.handleDelete}
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
@@ -70,10 +70,13 @@ export class TimeTabs extends React.Component {
     return (
       <div className="timetabs small-12 medium-6 large-4 columns">
        <Tabs>
-         {this.renderTabCategory('daily')}
-         {this.renderTabCategory('weekly')}
-         {this.renderTabCategory('monthly')}
-         {this.renderTabCategory('yearly')}
+         {this.renderTabCategory('M', 1)}
+         {this.renderTabCategory('T', 2)}
+         {this.renderTabCategory('W', 3)}
+         {this.renderTabCategory('Th', 4)}
+         {this.renderTabCategory('F', 5)}
+         {this.renderTabCategory('Sa', 6)}
+         {this.renderTabCategory('Sn', 7)}
        </Tabs>
       </div>
     );

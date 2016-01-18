@@ -48,15 +48,15 @@ export class HabitRows extends React.Component {
       connectDragPreview,
     } = this.props;
 
-    var habitRows = this.props.filteredHabits.map( (habit, i) => {
+    var habitRows = this.props.filteredSchedules.map( (schedule, i) => {
       return (
         <HabitCard
-          key={habit.id}
+          key={schedule.id}
           index={i}
           moveHabit={this.props.moveHabit.bind(this)}
           handleDelete={this.handleHabitDelete.bind(this)}
           handleEdit={this.handleHabitEdit.bind(this)}
-          {...habit}
+          {...schedule.habit}
         />
       );
     })

@@ -8,5 +8,4 @@ class HabitsController < ApplicationController
   def habit_params
     params.require(:habit).permit(:title, :description, :time_type)
   end
-
 end

@@ -4,7 +4,7 @@ class Schedule < ActiveRecord::Base
   validates :habit, presence: true
   validates :status, presence: true,
     inclusion: { in: ["do", "dont", "completed", "missed"] }
-  validates :type, presence: true,
+  validates :frequency, presence: true,
     inclusion: { in: ["day"] }
   validates :repeat, presence: true, inclusion: { in: [true, false] }
   validates :date, presence: true

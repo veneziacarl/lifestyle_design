@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118003240) do
+ActiveRecord::Schema.define(version: 20160118193851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20160118003240) do
     t.integer  "habit_id",                  null: false
     t.datetime "date",                      null: false
     t.string   "status",     default: "do", null: false
-    t.string   "type",                      null: false
+    t.string   "frequency",                 null: false
     t.boolean  "repeat",     default: true, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
