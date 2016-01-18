@@ -28,7 +28,7 @@ export class TimeTabs extends React.Component {
 
   handleChange (e) {
     e.preventDefault();
-    var tab = e.target.textContent;
+    var tab = e.target.tabIndex + 1;
     this.props.onTabClick(tab);
   }
 

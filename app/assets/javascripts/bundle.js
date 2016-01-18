@@ -61231,7 +61231,7 @@
 	    key: 'handleChange',
 	    value: function handleChange(e) {
 	      e.preventDefault();
-	      var tab = e.target.textContent;
+	      var tab = e.target.tabIndex + 1;
 	      this.props.onTabClick(tab);
 	    }
 	  }, {
