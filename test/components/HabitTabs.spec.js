@@ -1,10 +1,10 @@
 import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import {
   describeWithDOM,
   mount,
   spyLifecycle
 } from 'enzyme';
-import TestUtils from 'react-addons-test-utils';
 
 import { HabitTabs } from '../../client/components/HabitTabs';
 
