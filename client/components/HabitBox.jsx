@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import $ from 'jquery';
 
 import HabitForm from './HabitForm.jsx';
-import TimeTabs from './TimeTabs.jsx';
+import HabitTabs from './HabitTabs.jsx';
 
 
 const propTypes = {
@@ -16,7 +16,6 @@ export class HabitBox extends React.Component {
     this.state = {
       schedules: [],
       currentSelectedTab: '',
-      filteredHabits: [],
       date: new Date
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
@@ -148,7 +147,7 @@ export class HabitBox extends React.Component {
     return (
       <div className="habitBox" style={styles}>
         <div>
-          <TimeTabs
+          <HabitTabs
             filteredSchedules={filteredSchedules}
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
@@ -167,5 +166,5 @@ export class HabitBox extends React.Component {
   }
 };
 
-TimeTabs.propTypes = propTypes;
+HabitTabs.propTypes = propTypes;
 export default HabitBox;

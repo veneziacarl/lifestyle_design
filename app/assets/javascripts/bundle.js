@@ -28913,9 +28913,9 @@
 
 	var _HabitForm2 = _interopRequireDefault(_HabitForm);
 
-	var _TimeTabs = __webpack_require__(369);
+	var _HabitTabs = __webpack_require__(501);
 
-	var _TimeTabs2 = _interopRequireDefault(_TimeTabs);
+	var _HabitTabs2 = _interopRequireDefault(_HabitTabs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28940,7 +28940,6 @@
 	    _this.state = {
 	      schedules: [],
 	      currentSelectedTab: '',
-	      filteredHabits: [],
 	      date: new Date()
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
@@ -29101,7 +29100,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_TimeTabs2.default, {
+	          _react2.default.createElement(_HabitTabs2.default, {
 	            filteredSchedules: filteredSchedules,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
@@ -29126,7 +29125,7 @@
 
 	;
 
-	_TimeTabs2.default.propTypes = propTypes;
+	_HabitTabs2.default.propTypes = propTypes;
 	exports.default = HabitBox;
 
 /***/ },
@@ -61161,147 +61160,7 @@
 	};
 
 /***/ },
-/* 369 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.TimeTabs = undefined;
-
-	var _materialUi = __webpack_require__(163);
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _jquery = __webpack_require__(160);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _reactDnd = __webpack_require__(370);
-
-	var _reactDndHtml5Backend = __webpack_require__(447);
-
-	var _reactDndHtml5Backend2 = _interopRequireDefault(_reactDndHtml5Backend);
-
-	var _HabitRows = __webpack_require__(478);
-
-	var _HabitRows2 = _interopRequireDefault(_HabitRows);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var injectTapEventPlugin = __webpack_require__(497);
-	injectTapEventPlugin();
-
-	var propTypes = {
-	  onMount: _react.PropTypes.func.isRequired
-	};
-
-	var TimeTabs = exports.TimeTabs = (function (_React$Component) {
-	  _inherits(TimeTabs, _React$Component);
-
-	  function TimeTabs(props) {
-	    _classCallCheck(this, TimeTabs);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TimeTabs).call(this, props));
-
-	    _this.handleDelete = _this.handleDelete.bind(_this);
-	    _this.handleEdit = _this.handleEdit.bind(_this);
-	    _this.moveHabit = _this.moveHabit.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(TimeTabs, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.onMount();
-	    }
-	  }, {
-	    key: 'handleChange',
-	    value: function handleChange(e) {
-	      e.preventDefault();
-	      var tab = e.target.tabIndex + 1;
-	      this.props.onTabClick(tab);
-	    }
-	  }, {
-	    key: 'moveHabit',
-	    value: function moveHabit(dragIndex, hoverIndex) {
-	      var habits = this.props.filteredSchedules;
-	      var dragHabit = habits[dragIndex];
-
-	      habits.splice(dragIndex, 1);
-	      habits.splice(hoverIndex, 0, dragHabit);
-	      this.props.onPositionChange(habits);
-	    }
-	  }, {
-	    key: 'handleDelete',
-	    value: function handleDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
-	    }
-	  }, {
-	    key: 'handleEdit',
-	    value: function handleEdit(habitInfo) {
-	      this.props.onHabitEdit(habitInfo);
-	    }
-	  }, {
-	    key: 'renderTabCategory',
-	    value: function renderTabCategory(label, day) {
-	      return _react2.default.createElement(
-	        _materialUi.Tab,
-	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_HabitRows2.default, {
-	            filteredSchedules: this.props.filteredSchedules,
-	            tab: this.props.currentSelectedTab,
-	            onHabitDelete: this.handleDelete,
-	            onHabitEdit: this.handleEdit,
-	            moveHabit: this.moveHabit,
-	            onMount: function onMount() {}
-	          })
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'timetabs small-12 medium-6 large-4 columns' },
-	        _react2.default.createElement(
-	          _materialUi.Tabs,
-	          null,
-	          this.renderTabCategory('M', 1),
-	          this.renderTabCategory('T', 2),
-	          this.renderTabCategory('W', 3),
-	          this.renderTabCategory('Th', 4),
-	          this.renderTabCategory('F', 5),
-	          this.renderTabCategory('Sa', 6),
-	          this.renderTabCategory('Sn', 7)
-	        )
-	      );
-	    }
-	  }]);
-
-	  return TimeTabs;
-	})(_react2.default.Component);
-
-	TimeTabs.propTypes = propTypes;
-	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(TimeTabs);
-
-/***/ },
+/* 369 */,
 /* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68786,6 +68645,147 @@
 	};
 
 	module.exports = keyOf;
+
+/***/ },
+/* 501 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.HabitTabs = undefined;
+
+	var _materialUi = __webpack_require__(163);
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _jquery = __webpack_require__(160);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _reactDnd = __webpack_require__(370);
+
+	var _reactDndHtml5Backend = __webpack_require__(447);
+
+	var _reactDndHtml5Backend2 = _interopRequireDefault(_reactDndHtml5Backend);
+
+	var _HabitRows = __webpack_require__(478);
+
+	var _HabitRows2 = _interopRequireDefault(_HabitRows);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var injectTapEventPlugin = __webpack_require__(497);
+	injectTapEventPlugin();
+
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
+
+	var HabitTabs = exports.HabitTabs = (function (_React$Component) {
+	  _inherits(HabitTabs, _React$Component);
+
+	  function HabitTabs(props) {
+	    _classCallCheck(this, HabitTabs);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitTabs).call(this, props));
+
+	    _this.handleDelete = _this.handleDelete.bind(_this);
+	    _this.handleEdit = _this.handleEdit.bind(_this);
+	    _this.moveHabit = _this.moveHabit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(HabitTabs, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.onMount();
+	    }
+	  }, {
+	    key: 'handleChange',
+	    value: function handleChange(e) {
+	      e.preventDefault();
+	      var tab = e.target.tabIndex + 1;
+	      this.props.onTabClick(tab);
+	    }
+	  }, {
+	    key: 'moveHabit',
+	    value: function moveHabit(dragIndex, hoverIndex) {
+	      var habits = this.props.filteredSchedules;
+	      var dragHabit = habits[dragIndex];
+
+	      habits.splice(dragIndex, 1);
+	      habits.splice(hoverIndex, 0, dragHabit);
+	      this.props.onPositionChange(habits);
+	    }
+	  }, {
+	    key: 'handleDelete',
+	    value: function handleDelete(habitInfo) {
+	      this.props.onHabitDelete(habitInfo);
+	    }
+	  }, {
+	    key: 'handleEdit',
+	    value: function handleEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'renderTabCategory',
+	    value: function renderTabCategory(label, day) {
+	      return _react2.default.createElement(
+	        _materialUi.Tab,
+	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_HabitRows2.default, {
+	            filteredSchedules: this.props.filteredSchedules,
+	            tab: this.props.currentSelectedTab,
+	            onHabitDelete: this.handleDelete,
+	            onHabitEdit: this.handleEdit,
+	            moveHabit: this.moveHabit,
+	            onMount: function onMount() {}
+	          })
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'habittabs small-12 medium-6 large-4 columns' },
+	        _react2.default.createElement(
+	          _materialUi.Tabs,
+	          null,
+	          this.renderTabCategory('M', 1),
+	          this.renderTabCategory('T', 2),
+	          this.renderTabCategory('W', 3),
+	          this.renderTabCategory('Th', 4),
+	          this.renderTabCategory('F', 5),
+	          this.renderTabCategory('Sa', 6),
+	          this.renderTabCategory('Sn', 7)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HabitTabs;
+	})(_react2.default.Component);
+
+	HabitTabs.propTypes = propTypes;
+	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(HabitTabs);
 
 /***/ }
 /******/ ]);

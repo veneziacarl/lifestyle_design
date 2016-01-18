@@ -6,9 +6,9 @@ import {
 } from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 
-import { TimeTabs } from '../../client/components/TimeTabs';
+import { HabitTabs } from '../../client/components/HabitTabs';
 
-describe('(Component) TimeTabs', () => {
+describe('(Component) HabitTabs', () => {
   describe('with shallow rendering...', () => {
     const props = {
       onMount: sinon.spy(),
@@ -16,11 +16,11 @@ describe('(Component) TimeTabs', () => {
       habits: []
     }
 
-    const wrapper = shallow(<TimeTabs {...props} />);
+    const wrapper = shallow(<HabitTabs {...props} />);
 
     it('renders as a <div> with classes', () => {
       expect(wrapper.type()).to.eql('div');
-      expect(wrapper.find('.timetabs')).to.have.length(1);
+      expect(wrapper.find('.habittabs')).to.have.length(1);
       expect(wrapper.find('.small-12')).to.have.length(1);
       expect(wrapper.find('.medium-6')).to.have.length(1);
       expect(wrapper.find('.large-4')).to.have.length(1);
@@ -32,26 +32,24 @@ describe('(Component) TimeTabs', () => {
     it('calls componentDidMount', () => {
       const props = {
         onMount: sinon.spy(),
-        filteredHabits: [],
-        habits: []
+        filteredSchedules: []
       }
 
-      spyLifecycle(TimeTabs);
+      spyLifecycle(HabitTabs);
 
-      mount(<TimeTabs {...props} />);
+      mount(<HabitTabs {...props} />);
 
       expect(
-          TimeTabs.prototype.componentDidMount.calledOnce
+          HabitTabs.prototype.componentDidMount.calledOnce
         ).to.be.true;
       });
 
     it('calls onMount prop once it mounts', () => {
       const props = {
         onMount: sinon.spy(),
-        filteredHabits: [],
-        habits: []
+        filteredSchedules: []
       }
-      mount(<TimeTabs {...props} />);
+      mount(<HabitTabs {...props} />);
 
       expect(props.onMount.calledOnce).to.be.true;
     });

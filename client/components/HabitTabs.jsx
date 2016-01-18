@@ -13,7 +13,7 @@ const propTypes = {
   onMount: PropTypes.func.isRequired
 };
 
-export class TimeTabs extends React.Component {
+export class HabitTabs extends React.Component {
   constructor(props) {
     super(props);
 
@@ -68,7 +68,7 @@ export class TimeTabs extends React.Component {
 
   render() {
     return (
-      <div className="timetabs small-12 medium-6 large-4 columns">
+      <div className="habittabs small-12 medium-6 large-4 columns">
        <Tabs>
          {this.renderTabCategory('M', 1)}
          {this.renderTabCategory('T', 2)}
@@ -83,5 +83,5 @@ export class TimeTabs extends React.Component {
   }
 }
 
-TimeTabs.propTypes = propTypes;
-export default DragDropContext(HTML5Backend)(TimeTabs);
+HabitTabs.propTypes = propTypes;
+export default DragDropContext(HTML5Backend)(HabitTabs);

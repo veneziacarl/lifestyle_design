@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Habit, type: :model do
+RSpec.describe Goal, type: :model do
   it { should have_valid(:title).when('title', 'aNother TitlE') }
   it { should_not have_valid(:title).when(nil, '') }
 
