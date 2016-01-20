@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioButton, RadioButtonGroup, RaisedButton, FlatButton, Dialog, Checkbox, Toggle } from 'material-ui';
+import { RadioButton, RadioButtonGroup, RaisedButton, FlatButton, Dialog, Checkbox, Toggle, SelectField, MenuItem } from 'material-ui';
 
 export class HabitForm extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ export class HabitForm extends React.Component {
       frequency: 'day',
       status: '',
       repeat: '',
-      goal: '',
+      goal: 'choose the related goal',
       open: false
     };
   }
@@ -25,6 +25,7 @@ export class HabitForm extends React.Component {
   }
 
   handleGoalChange (e) {
+    debugger;
     this.setState({goal: e.target.value});
   }
 
@@ -56,15 +57,15 @@ export class HabitForm extends React.Component {
     var frequency = this.state.frequency;
     var status = this.state.status;
     var repeat = this.state.repeat;
-    var goal = this.state.goal;
-    if (title == "" || dates.length == 0 || goal == "") {
+    var goal = this.state.goal.trim();
+    if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
       alert("Title, goal, and schedule are required as input");
       return;
     }
     for(var i = 0; i < dates.length; i++) {
-      this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat});
+      this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal});
     }
-    this.setState({title: '', description: '', dates: [], status: '', repeat: ''});
+    this.setState({title: '', description: '', dates: [], status: '', repeat: '', goal: ''});
     this.handleClose();
   }
 
@@ -87,10 +88,20 @@ export class HabitForm extends React.Component {
     );
   }
 
+
   render() {
+    const goals = this.props.filteredSchedules.map ( (schedule, i) => {
+      return (
+        <MenuItem value={schedule.habitInfo.habit.goal.id} primaryText={schedule.habitInfo.habit.goal.title} key={i} />
+      );
+    })
     const actions = [
         <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />,
         <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />,
+        <SelectField value={this.state.goal} onChange={this.handleGoalChange.bind(this)}>
+          <MenuItem value="choose the related goal" primaryText="choose the related goal"/>
+          {goals}
+        </SelectField>,
         <div>
           {this.renderDayOption('M', 1)}
           {this.renderDayOption('T', 2)}

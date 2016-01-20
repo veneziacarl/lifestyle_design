@@ -174,7 +174,7 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitForm onHabitSubmit={this.handleHabitSubmit} findDayInWeek={this.findDayInWeek} />
+          <HabitForm onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
         </div>
       </div>
     );
