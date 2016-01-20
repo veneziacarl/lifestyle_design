@@ -68,7 +68,7 @@ export class HabitTabs extends React.Component {
   render() {
     return (
       <div className="habittabs small-12 medium-6 large-4 columns">
-       <Tabs>
+       <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
          {this.renderTabCategory('M', 1)}
          {this.renderTabCategory('T', 2)}
          {this.renderTabCategory('W', 3)}

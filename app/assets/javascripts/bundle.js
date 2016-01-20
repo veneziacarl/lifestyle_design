@@ -28939,7 +28939,7 @@
 
 	    _this.state = {
 	      schedules: [],
-	      currentSelectedTab: '',
+	      currentSelectedTab: new Date().getDay() - 1,
 	      date: new Date()
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
@@ -29045,12 +29045,14 @@
 	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      if (tab == 'today') {
-	        var today_tab = this.state.date.getDay();
-	        this.setState({ currentSelectedTab: today_tab });
-	      } else {
-	        this.setState({ currentSelectedTab: tab });
-	      };
+	      var tabInt = parseInt(tab);
+	      this.setState({ currentSelectedTab: tabInt });
+	    }
+	  }, {
+	    key: 'setTodayTab',
+	    value: function setTodayTab() {
+	      var today_tab = this.state.date.getDay();
+	      this.handleOpenTab(today_tab);
 	    }
 	  }, {
 	    key: 'loadHabits',
@@ -29062,7 +29064,6 @@
 	        cache: false,
 	        success: (function (info) {
 	          this.setState({ schedules: info.schedules });
-	          this.handleOpenTab('today');
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29075,6 +29076,7 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      this.setTodayTab();
 	      this.loadHabits();
 	    }
 	  }, {
@@ -29102,13 +29104,13 @@
 	          null,
 	          _react2.default.createElement(_HabitTabs2.default, {
 	            filteredSchedules: filteredSchedules,
-	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
 	            onHabitEdit: this.handleHabitEdit,
 	            onPositionChange: this.handlePositionChange,
 	            onMount: function onMount() {},
-	            addDays: this.addDays
+	            addDays: this.addDays,
+	            initialSelectedIndex: this.state.currentSelectedTab
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -61188,7 +61190,7 @@
 
 	var _reactDndHtml5Backend2 = _interopRequireDefault(_reactDndHtml5Backend);
 
-	var _HabitList = __webpack_require__(501);
+	var _HabitList = __webpack_require__(478);
 
 	var _HabitList2 = _interopRequireDefault(_HabitList);
 
@@ -61280,7 +61282,7 @@
 	        { className: 'habittabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
-	          null,
+	          { initialSelectedIndex: this.props.initialSelectedIndex },
 	          this.renderTabCategory('M', 1),
 	          this.renderTabCategory('T', 2),
 	          this.renderTabCategory('W', 3),
@@ -67511,7 +67513,119 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 478 */,
+/* 478 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.HabitList = undefined;
+
+	var _materialUi = __webpack_require__(163);
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(159);
+
+	var _reactDnd = __webpack_require__(370);
+
+	var _flow = __webpack_require__(479);
+
+	var _flow2 = _interopRequireDefault(_flow);
+
+	var _ItemTypes = __webpack_require__(493);
+
+	var _colors = __webpack_require__(494);
+
+	var _EditableText = __webpack_require__(495);
+
+	var _EditableText2 = _interopRequireDefault(_EditableText);
+
+	var _HabitCard = __webpack_require__(496);
+
+	var _HabitCard2 = _interopRequireDefault(_HabitCard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
+
+	var HabitList = exports.HabitList = (function (_React$Component) {
+	  _inherits(HabitList, _React$Component);
+
+	  function HabitList(props) {
+	    _classCallCheck(this, HabitList);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitList).call(this, props));
+	  }
+
+	  _createClass(HabitList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.onMount();
+	    }
+	  }, {
+	    key: 'handleHabitDelete',
+	    value: function handleHabitDelete(habitInfo) {
+	      this.props.onHabitDelete(habitInfo);
+	    }
+	  }, {
+	    key: 'handleHabitEdit',
+	    value: function handleHabitEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var id = _props.id;
+	      var isDragging = _props.isDragging;
+	      var connectDragSource = _props.connectDragSource;
+	      var connectDropTarget = _props.connectDropTarget;
+	      var connectDragPreview = _props.connectDragPreview;
+
+	      var habitList = this.props.filteredSchedules.map(function (schedule, i) {
+	        return _react2.default.createElement(_HabitCard2.default, _extends({
+	          key: schedule.id,
+	          index: i,
+	          moveHabit: _this2.props.moveHabit.bind(_this2),
+	          handleDelete: _this2.handleHabitDelete.bind(_this2),
+	          handleEdit: _this2.handleHabitEdit.bind(_this2)
+	        }, schedule.habit));
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        habitList
+	      );
+	    }
+	  }]);
+
+	  return HabitList;
+	})(_react2.default.Component);
+
+	HabitList.propTypes = propTypes;
+	exports.default = HabitList;
+
+/***/ },
 /* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68662,119 +68776,6 @@
 	};
 
 	module.exports = keyOf;
-
-/***/ },
-/* 501 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.HabitList = undefined;
-
-	var _materialUi = __webpack_require__(163);
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(159);
-
-	var _reactDnd = __webpack_require__(370);
-
-	var _flow = __webpack_require__(479);
-
-	var _flow2 = _interopRequireDefault(_flow);
-
-	var _ItemTypes = __webpack_require__(493);
-
-	var _colors = __webpack_require__(494);
-
-	var _EditableText = __webpack_require__(495);
-
-	var _EditableText2 = _interopRequireDefault(_EditableText);
-
-	var _HabitCard = __webpack_require__(496);
-
-	var _HabitCard2 = _interopRequireDefault(_HabitCard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var propTypes = {
-	  onMount: _react.PropTypes.func.isRequired
-	};
-
-	var HabitList = exports.HabitList = (function (_React$Component) {
-	  _inherits(HabitList, _React$Component);
-
-	  function HabitList(props) {
-	    _classCallCheck(this, HabitList);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitList).call(this, props));
-	  }
-
-	  _createClass(HabitList, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.onMount();
-	    }
-	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
-	    }
-	  }, {
-	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitInfo) {
-	      this.props.onHabitEdit(habitInfo);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var id = _props.id;
-	      var isDragging = _props.isDragging;
-	      var connectDragSource = _props.connectDragSource;
-	      var connectDropTarget = _props.connectDropTarget;
-	      var connectDragPreview = _props.connectDragPreview;
-
-	      var habitList = this.props.filteredSchedules.map(function (schedule, i) {
-	        return _react2.default.createElement(_HabitCard2.default, _extends({
-	          key: schedule.id,
-	          index: i,
-	          moveHabit: _this2.props.moveHabit.bind(_this2),
-	          handleDelete: _this2.handleHabitDelete.bind(_this2),
-	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, schedule.habit));
-	      });
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        habitList
-	      );
-	    }
-	  }]);
-
-	  return HabitList;
-	})(_react2.default.Component);
-
-	HabitList.propTypes = propTypes;
-	exports.default = HabitList;
 
 /***/ }
 /******/ ]);

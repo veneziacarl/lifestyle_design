@@ -15,7 +15,7 @@ export class HabitBox extends React.Component {
     super(props);
     this.state = {
       schedules: [],
-      currentSelectedTab: '',
+      currentSelectedTab: ((new Date).getDay() - 1),
       date: new Date
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
@@ -103,12 +103,13 @@ export class HabitBox extends React.Component {
   }
 
   handleOpenTab (tab) {
-    if (tab == 'today') {
-      var today_tab = this.state.date.getDay()
-      this.setState({ currentSelectedTab: today_tab })
-    } else {
-      this.setState({ currentSelectedTab: tab });
-    };
+    var tabInt = parseInt(tab)
+    this.setState({ currentSelectedTab: tabInt });
+  }
+
+  setTodayTab () {
+    var today_tab = this.state.date.getDay()
+    this.handleOpenTab(today_tab)
   }
 
   loadHabits () {
@@ -119,7 +120,6 @@ export class HabitBox extends React.Component {
       cache: false,
       success: function(info) {
         this.setState({ schedules: info.schedules });
-        this.handleOpenTab('today');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -131,6 +131,7 @@ export class HabitBox extends React.Component {
   }
 
   componentDidMount () {
+    this.setTodayTab();
     this.loadHabits();
   }
 
@@ -149,13 +150,13 @@ export class HabitBox extends React.Component {
         <div>
           <HabitTabs
             filteredSchedules={filteredSchedules}
-            labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}
             onHabitEdit={this.handleHabitEdit}
             onPositionChange={this.handlePositionChange}
             onMount={() => {}}
             addDays={this.addDays}
+            initialSelectedIndex={this.state.currentSelectedTab}
           />
         </div>
         <div>
