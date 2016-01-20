@@ -6,7 +6,7 @@ class Schedule < ActiveRecord::Base
     inclusion: { in: ["do", "dont", "completed", "missed"] }
   validates :frequency, presence: true,
     inclusion: { in: ["day"] }
-  validates :repeat, presence: true, inclusion: { in: [true, false] }
+  validates :repeat, inclusion: { in: [true, false] }
   validates :date, presence: true
   validate :date_is_valid_datetime
 

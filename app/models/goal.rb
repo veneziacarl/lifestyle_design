@@ -4,5 +4,5 @@ class Goal < ActiveRecord::Base
 
   validates :user, presence: true
   validates :title, presence: true, uniqueness: true
-  validates :active, presence: true, inclusion: { in: [true, false] }
+  validates :active, inclusion: { in: [true, false] }
 end
