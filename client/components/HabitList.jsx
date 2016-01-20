@@ -48,7 +48,7 @@ export class HabitList extends React.Component {
           moveHabit={this.props.moveHabit.bind(this)}
           handleDelete={this.handleHabitDelete.bind(this)}
           handleEdit={this.handleHabitEdit.bind(this)}
-          {...schedule.habit}
+          {...schedule.habitInfo.habit}
         />
       );
     })

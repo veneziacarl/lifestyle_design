@@ -28982,12 +28982,12 @@
 	    }
 	  }, {
 	    key: 'handleHabitSubmit',
-	    value: function handleHabitSubmit(schedules) {
+	    value: function handleHabitSubmit(schedule) {
 	      _jquery2.default.ajax({
 	        url: '/api/v1/schedules',
 	        dataType: 'json',
 	        type: 'POST',
-	        data: schedules,
+	        data: schedule,
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
@@ -29187,6 +29187,7 @@
 	      frequency: 'day',
 	      status: '',
 	      repeat: '',
+	      goal: '',
 	      open: false
 	    };
 	    return _this;
@@ -29201,6 +29202,11 @@
 	    key: 'handleDescriptionChange',
 	    value: function handleDescriptionChange(e) {
 	      this.setState({ description: e.target.value });
+	    }
+	  }, {
+	    key: 'handleGoalChange',
+	    value: function handleGoalChange(e) {
+	      this.setState({ goal: e.target.value });
 	    }
 	  }, {
 	    key: 'handleDateChange',
@@ -29234,11 +29240,14 @@
 	      var frequency = this.state.frequency;
 	      var status = this.state.status;
 	      var repeat = this.state.repeat;
-	      if (title == "" || dates.length == 0) {
-	        alert("Title and days are required");
+	      var goal = this.state.goal;
+	      if (title == "" || dates.length == 0 || goal == "") {
+	        alert("Title, goal, and schedule are required as input");
 	        return;
 	      }
-	      this.props.onHabitSubmit({ title: title, description: description, dates: dates, frequency: frequency, status: status, repeat: repeat });
+	      for (var i = 0; i < dates.length; i++) {
+	        this.props.onHabitSubmit({ title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat });
+	      }
 	      this.setState({ title: '', description: '', dates: [], status: '', repeat: '' });
 	      this.handleClose();
 	    }
@@ -67651,7 +67660,7 @@
 	          moveHabit: _this2.props.moveHabit.bind(_this2),
 	          handleDelete: _this2.handleHabitDelete.bind(_this2),
 	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, schedule.habit));
+	        }, schedule.habitInfo.habit));
 	      });
 
 	      return _react2.default.createElement(

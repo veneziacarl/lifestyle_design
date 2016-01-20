@@ -11,6 +11,7 @@ export class HabitForm extends React.Component {
       frequency: 'day',
       status: '',
       repeat: '',
+      goal: '',
       open: false
     };
   }
@@ -21,6 +22,10 @@ export class HabitForm extends React.Component {
 
   handleDescriptionChange (e) {
     this.setState({description: e.target.value});
+  }
+
+  handleGoalChange (e) {
+    this.setState({goal: e.target.value});
   }
 
   handleDateChange (e) {
@@ -47,17 +52,20 @@ export class HabitForm extends React.Component {
   handleSubmit (e) {
     var title = this.state.title.trim();
     var description = this.state.description.trim();
-    var dates = this.state.dates
-    var frequency = this.state.frequency
-    var status = this.state.status
-    var repeat = this.state.repeat
-    if (title == "" || dates.length == 0) {
-      alert("Title and days are required");
+    var dates = this.state.dates;
+    var frequency = this.state.frequency;
+    var status = this.state.status;
+    var repeat = this.state.repeat;
+    var goal = this.state.goal;
+    if (title == "" || dates.length == 0 || goal == "") {
+      alert("Title, goal, and schedule are required as input");
       return;
     }
-    this.props.onHabitSubmit({title: title, description: description, dates: dates, frequency: frequency, status: status, repeat: repeat});
+    for(var i = 0; i < dates.length; i++) {
+      this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat});
+    }
     this.setState({title: '', description: '', dates: [], status: '', repeat: ''});
-    this.handleClose()
+    this.handleClose();
   }
 
   handleOpen () {
