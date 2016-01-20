@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160116224347) do
+ActiveRecord::Schema.define(version: 20160118193851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,12 +28,28 @@ ActiveRecord::Schema.define(version: 20160116224347) do
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
 
   create_table "habits", force: :cascade do |t|
-    t.string   "title",       null: false
-    t.string   "description", null: false
-    t.string   "time_type",   null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "title",                      null: false
+    t.string   "description"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "goal_id",                    null: false
+    t.boolean  "active",      default: true, null: false
   end
+
+  add_index "habits", ["goal_id"], name: "index_habits_on_goal_id", using: :btree
+
+  create_table "schedules", force: :cascade do |t|
+    t.integer  "habit_id",                  null: false
+    t.datetime "date",                      null: false
+    t.string   "status",     default: "do", null: false
+    t.string   "frequency",                 null: false
+    t.boolean  "repeat",     default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "schedules", ["date"], name: "index_schedules_on_date", using: :btree
+  add_index "schedules", ["habit_id"], name: "index_schedules_on_habit_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                          null: false

@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import $ from 'jquery';
 
 import HabitForm from './HabitForm.jsx';
-import TimeTabs from './TimeTabs.jsx';
+import HabitTabs from './HabitTabs.jsx';
 
 
 const propTypes = {
@@ -14,15 +14,28 @@ export class HabitBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      habits: [],
-      currentSelectedTimeType: '',
-      filteredHabits: []
+      schedules: [],
+      currentSelectedTab: '',
+      date: new Date
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleHabitDelete = this.handleHabitDelete.bind(this);
     this.handleHabitEdit = this.handleHabitEdit.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
+    this.addDays = this.addDays.bind(this);
+  }
+
+  addDays (days) {
+    var new_date = new Date(this.state.date);
+    new_date.setDate(new_date.getDate() + days);
+    return new_date;
+  }
+
+  createDay (schedule) {
+    var date = new Date(schedule.date)
+    var day = date.getDay()
+    return day
   }
 
   handleHabitSubmit (habit) {
@@ -90,18 +103,23 @@ export class HabitBox extends React.Component {
   }
 
   handleOpenTab (tab) {
-    this.setState({currentSelectedTimeType: tab});
+    if (tab == 'today') {
+      var today_tab = this.state.date.getDay()
+      this.setState({ currentSelectedTab: today_tab })
+    } else {
+      this.setState({ currentSelectedTab: tab });
+    };
   }
 
   loadHabits () {
     $.ajax({
-      url: '/api/v1/habits',
+      url: '/api/v1/schedules',
       method: 'GET',
       dataType: 'json',
       cache: false,
-      success: function(habitInfo) {
-        this.setState({habits: habitInfo.habits});
-        this.handleOpenTab('daily');
+      success: function(info) {
+        this.setState({ schedules: info.schedules });
+        this.handleOpenTab('today');
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -109,36 +127,35 @@ export class HabitBox extends React.Component {
     });
   }
 
+  onMount () {
+  }
+
   componentDidMount () {
     this.loadHabits();
   }
 
-  onMount () {
-    this.loadHabits();
+  handlePositionChange (schedules) {
+    this.setState({ schedules: schedules });
   }
-
-  handlePositionChange (habits) {
-    this.setState({ habits: habits });
-  }
-
 
   render () {
     const styles = {
       height: '100%',
       background: '#333'
     }
-    const filteredHabits = this.state.habits.filter(habit => habit.time_type === this.state.currentSelectedTimeType)
+    const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
       <div className="habitBox" style={styles}>
         <div>
-          <TimeTabs
-            filteredHabits={filteredHabits}
+          <HabitTabs
+            filteredSchedules={filteredSchedules}
             labels={this.state.labels}
             onTabClick={this.handleOpenTab}
             onHabitDelete={this.handleHabitDelete}
             onHabitEdit={this.handleHabitEdit}
             onPositionChange={this.handlePositionChange}
             onMount={() => {}}
+            addDays={this.addDays}
           />
         </div>
         <div>
@@ -149,5 +166,5 @@ export class HabitBox extends React.Component {
   }
 };
 
-TimeTabs.propTypes = propTypes;
+HabitTabs.propTypes = propTypes;
 export default HabitBox;

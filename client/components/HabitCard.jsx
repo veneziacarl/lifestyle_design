@@ -1,4 +1,4 @@
-import { Card, CardActions, CardExpandable, CardHeader, CardMedia, CardText, FlatButton, RaisedButton } from 'material-ui';
+import { Card, CardActions, CardExpandable, CardHeader, CardMedia, CardText, FlatButton, RaisedButton, Avatar } from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
@@ -87,7 +87,14 @@ class HabitCard extends Component {
             className="small-12 columns"
             actAsExpander={false}
             showExpandableButton={true}
-            avatar={<div></div>}
+            avatar={
+              <Avatar
+                color="orange"
+                backgroundColor="green"
+              >
+                G
+              </Avatar>
+            }
             title={<EditableText
               title={this.props.title}
               haveButton={false}

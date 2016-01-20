@@ -28913,9 +28913,9 @@
 
 	var _HabitForm2 = _interopRequireDefault(_HabitForm);
 
-	var _TimeTabs = __webpack_require__(369);
+	var _HabitTabs = __webpack_require__(369);
 
-	var _TimeTabs2 = _interopRequireDefault(_TimeTabs);
+	var _HabitTabs2 = _interopRequireDefault(_HabitTabs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28938,19 +28938,34 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitBox).call(this, props));
 
 	    _this.state = {
-	      habits: [],
-	      currentSelectedTimeType: '',
-	      filteredHabits: []
+	      schedules: [],
+	      currentSelectedTab: '',
+	      date: new Date()
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
 	    _this.handleHabitEdit = _this.handleHabitEdit.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
+	    _this.addDays = _this.addDays.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HabitBox, [{
+	    key: 'addDays',
+	    value: function addDays(days) {
+	      var new_date = new Date(this.state.date);
+	      new_date.setDate(new_date.getDate() + days);
+	      return new_date;
+	    }
+	  }, {
+	    key: 'createDay',
+	    value: function createDay(schedule) {
+	      var date = new Date(schedule.date);
+	      var day = date.getDay();
+	      return day;
+	    }
+	  }, {
 	    key: 'handleHabitSubmit',
 	    value: function handleHabitSubmit(habit) {
 	      _jquery2.default.ajax({
@@ -29030,19 +29045,24 @@
 	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      this.setState({ currentSelectedTimeType: tab });
+	      if (tab == 'today') {
+	        var today_tab = this.state.date.getDay();
+	        this.setState({ currentSelectedTab: today_tab });
+	      } else {
+	        this.setState({ currentSelectedTab: tab });
+	      };
 	    }
 	  }, {
 	    key: 'loadHabits',
 	    value: function loadHabits() {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits',
+	        url: '/api/v1/schedules',
 	        method: 'GET',
 	        dataType: 'json',
 	        cache: false,
-	        success: (function (habitInfo) {
-	          this.setState({ habits: habitInfo.habits });
-	          this.handleOpenTab('daily');
+	        success: (function (info) {
+	          this.setState({ schedules: info.schedules });
+	          this.handleOpenTab('today');
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29050,19 +29070,17 @@
 	      });
 	    }
 	  }, {
+	    key: 'onMount',
+	    value: function onMount() {}
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.loadHabits();
 	    }
 	  }, {
-	    key: 'onMount',
-	    value: function onMount() {
-	      this.loadHabits();
-	    }
-	  }, {
 	    key: 'handlePositionChange',
-	    value: function handlePositionChange(habits) {
-	      this.setState({ habits: habits });
+	    value: function handlePositionChange(schedules) {
+	      this.setState({ schedules: schedules });
 	    }
 	  }, {
 	    key: 'render',
@@ -29073,8 +29091,8 @@
 	        height: '100%',
 	        background: '#333'
 	      };
-	      var filteredHabits = this.state.habits.filter(function (habit) {
-	        return habit.time_type === _this2.state.currentSelectedTimeType;
+	      var filteredSchedules = this.state.schedules.filter(function (schedule) {
+	        return _this2.createDay(schedule) === _this2.state.currentSelectedTab;
 	      });
 	      return _react2.default.createElement(
 	        'div',
@@ -29082,14 +29100,15 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_TimeTabs2.default, {
-	            filteredHabits: filteredHabits,
+	          _react2.default.createElement(_HabitTabs2.default, {
+	            filteredSchedules: filteredSchedules,
 	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
 	            onHabitDelete: this.handleHabitDelete,
 	            onHabitEdit: this.handleHabitEdit,
 	            onPositionChange: this.handlePositionChange,
-	            onMount: function onMount() {}
+	            onMount: function onMount() {},
+	            addDays: this.addDays
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -29106,7 +29125,7 @@
 
 	;
 
-	_TimeTabs2.default.propTypes = propTypes;
+	_HabitTabs2.default.propTypes = propTypes;
 	exports.default = HabitBox;
 
 /***/ },
@@ -29120,6 +29139,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.HabitForm = undefined;
 
 	var _react = __webpack_require__(2);
 
@@ -29135,7 +29155,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var HabitForm = (function (_React$Component) {
+	var HabitForm = exports.HabitForm = (function (_React$Component) {
 	  _inherits(HabitForm, _React$Component);
 
 	  function HabitForm(props) {
@@ -29143,7 +29163,12 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitForm).call(this, props));
 
-	    _this.state = { title: '', description: '', time_type: '' };
+	    _this.state = {
+	      title: '',
+	      description: '',
+	      time_type: '',
+	      open: false
+	    };
 	    return _this;
 	  }
 
@@ -29173,51 +29198,73 @@
 	      };
 	      this.props.onHabitSubmit({ title: title, description: description, time_type: time_type });
 	      this.setState({ title: '', description: '' });
+	      this.handleClose();
+	    }
+	  }, {
+	    key: 'handleOpen',
+	    value: function handleOpen() {
+	      this.setState({ open: true });
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
+	        _materialUi.RadioButtonGroup,
+	        { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'daily',
+	          label: 'Daily',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'weekly',
+	          label: 'Weekly',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'monthly',
+	          label: 'Monthly',
+	          style: { marginBottom: 16 }
+	        }),
+	        _react2.default.createElement(_materialUi.RadioButton, {
+	          value: 'yearly',
+	          label: 'Yearly',
+	          style: { marginBottom: 16 }
+	        })
+	      ), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Cancel',
+	        secondary: true,
+	        onClick: this.handleClose.bind(this)
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Add Habit',
+	        primary: true,
+	        keyboardFocused: true,
+	        onClick: this.handleSubmit.bind(this)
+	      })];
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'habitForm small-12 medium-6 large-4 columns' },
+	        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
 	        _react2.default.createElement(
-	          'form',
-	          { className: 'habitForm', onSubmit: this.handleSubmit.bind(this) },
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
+	          _materialUi.Dialog,
+	          {
+	            title: 'Create New Habit Or Goal',
+	            actions: actions,
+	            modal: false,
+	            open: this.state.open,
+	            onRequestClose: this.handleClose.bind(this)
+	          },
 	          _react2.default.createElement(
-	            _materialUi.RadioButtonGroup,
-	            { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'daily',
-	              label: 'Daily',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'weekly',
-	              label: 'Weekly',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'monthly',
-	              label: 'Monthly',
-	              style: { marginBottom: 16 }
-	            }),
-	            _react2.default.createElement(_materialUi.RadioButton, {
-	              value: 'yearly',
-	              label: 'Yearly',
-	              style: { marginBottom: 16 }
-	            })
-	          ),
-	          _react2.default.createElement(_materialUi.RaisedButton, {
-	            secondary: true,
-	            label: 'Add Habit',
-	            style: {
-	              height: '30px',
-	              width: '20px'
-	            },
-	            onClick: this.handleSubmit.bind(this)
-	          })
+	            'p',
+	            null,
+	            'This is filler text in the dialog popover'
+	          )
 	        )
 	      );
 	    }
@@ -61123,7 +61170,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.TimeTabs = undefined;
+	exports.HabitTabs = undefined;
 
 	var _materialUi = __webpack_require__(163);
 
@@ -61141,9 +61188,9 @@
 
 	var _reactDndHtml5Backend2 = _interopRequireDefault(_reactDndHtml5Backend);
 
-	var _HabitRows = __webpack_require__(478);
+	var _HabitList = __webpack_require__(501);
 
-	var _HabitRows2 = _interopRequireDefault(_HabitRows);
+	var _HabitList2 = _interopRequireDefault(_HabitList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61160,13 +61207,13 @@
 	  onMount: _react.PropTypes.func.isRequired
 	};
 
-	var TimeTabs = exports.TimeTabs = (function (_React$Component) {
-	  _inherits(TimeTabs, _React$Component);
+	var HabitTabs = exports.HabitTabs = (function (_React$Component) {
+	  _inherits(HabitTabs, _React$Component);
 
-	  function TimeTabs(props) {
-	    _classCallCheck(this, TimeTabs);
+	  function HabitTabs(props) {
+	    _classCallCheck(this, HabitTabs);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TimeTabs).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitTabs).call(this, props));
 
 	    _this.handleDelete = _this.handleDelete.bind(_this);
 	    _this.handleEdit = _this.handleEdit.bind(_this);
@@ -61174,7 +61221,7 @@
 	    return _this;
 	  }
 
-	  _createClass(TimeTabs, [{
+	  _createClass(HabitTabs, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.props.onMount();
@@ -61183,15 +61230,14 @@
 	    key: 'handleChange',
 	    value: function handleChange(e) {
 	      e.preventDefault();
-	      var tab = e.target.textContent;
+	      var tab = e.target.tabIndex + 1;
 	      this.props.onTabClick(tab);
 	    }
 	  }, {
 	    key: 'moveHabit',
 	    value: function moveHabit(dragIndex, hoverIndex) {
-	      var habits = this.props.filteredHabits;
+	      var habits = this.props.filteredSchedules;
 	      var dragHabit = habits[dragIndex];
-
 	      habits.splice(dragIndex, 1);
 	      habits.splice(hoverIndex, 0, dragHabit);
 	      this.props.onPositionChange(habits);
@@ -61208,16 +61254,16 @@
 	    }
 	  }, {
 	    key: 'renderTabCategory',
-	    value: function renderTabCategory(label) {
+	    value: function renderTabCategory(label, day) {
 	      return _react2.default.createElement(
 	        _materialUi.Tab,
-	        { label: label, onClick: this.handleChange.bind(this) },
+	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_HabitRows2.default, {
-	            filteredHabits: this.props.filteredHabits,
-	            tabType: this.props.currentSelectedTimeType,
+	          _react2.default.createElement(_HabitList2.default, {
+	            filteredSchedules: this.props.filteredSchedules,
+	            tab: this.props.currentSelectedTab,
 	            onHabitDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
 	            moveHabit: this.moveHabit,
@@ -61231,24 +61277,27 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'timetabs small-12 medium-6 large-4 columns' },
+	        { className: 'habittabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
 	          null,
-	          this.renderTabCategory('daily'),
-	          this.renderTabCategory('weekly'),
-	          this.renderTabCategory('monthly'),
-	          this.renderTabCategory('yearly')
+	          this.renderTabCategory('M', 1),
+	          this.renderTabCategory('T', 2),
+	          this.renderTabCategory('W', 3),
+	          this.renderTabCategory('Th', 4),
+	          this.renderTabCategory('F', 5),
+	          this.renderTabCategory('Sa', 6),
+	          this.renderTabCategory('Sn', 7)
 	        )
 	      );
 	    }
 	  }]);
 
-	  return TimeTabs;
+	  return HabitTabs;
 	})(_react2.default.Component);
 
-	TimeTabs.propTypes = propTypes;
-	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(TimeTabs);
+	HabitTabs.propTypes = propTypes;
+	exports.default = (0, _reactDnd.DragDropContext)(_reactDndHtml5Backend2.default)(HabitTabs);
 
 /***/ },
 /* 370 */
@@ -67462,129 +67511,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 478 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.HabitRows = undefined;
-
-	var _materialUi = __webpack_require__(163);
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(159);
-
-	var _reactDnd = __webpack_require__(370);
-
-	var _flow = __webpack_require__(479);
-
-	var _flow2 = _interopRequireDefault(_flow);
-
-	var _ItemTypes = __webpack_require__(493);
-
-	var _colors = __webpack_require__(494);
-
-	var _EditableText = __webpack_require__(495);
-
-	var _EditableText2 = _interopRequireDefault(_EditableText);
-
-	var _HabitCard = __webpack_require__(496);
-
-	var _HabitCard2 = _interopRequireDefault(_HabitCard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var propTypes = {
-	  onMount: _react.PropTypes.func.isRequired
-	};
-
-	var HabitRows = exports.HabitRows = (function (_React$Component) {
-	  _inherits(HabitRows, _React$Component);
-
-	  function HabitRows(props) {
-	    _classCallCheck(this, HabitRows);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitRows).call(this, props));
-	  }
-
-	  _createClass(HabitRows, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.onMount();
-	    }
-	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
-	    }
-	  }, {
-	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitInfo) {
-	      this.props.onHabitEdit(habitInfo);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var Row = function Row(_ref) {
-	        var children = _ref.children;
-
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          children
-	        );
-	      };
-
-	      var _props = this.props;
-	      var id = _props.id;
-	      var isDragging = _props.isDragging;
-	      var connectDragSource = _props.connectDragSource;
-	      var connectDropTarget = _props.connectDropTarget;
-	      var connectDragPreview = _props.connectDragPreview;
-
-	      var habitRows = this.props.filteredHabits.map(function (habit, i) {
-	        return _react2.default.createElement(_HabitCard2.default, _extends({
-	          key: habit.id,
-	          index: i,
-	          moveHabit: _this2.props.moveHabit.bind(_this2),
-	          handleDelete: _this2.handleHabitDelete.bind(_this2),
-	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, habit));
-	      });
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        habitRows
-	      );
-	    }
-	  }]);
-
-	  return HabitRows;
-	})(_react2.default.Component);
-
-	HabitRows.propTypes = propTypes;
-	exports.default = HabitRows;
-
-/***/ },
+/* 478 */,
 /* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68410,7 +68337,14 @@
 	            className: 'small-12 columns',
 	            actAsExpander: false,
 	            showExpandableButton: true,
-	            avatar: _react2.default.createElement('div', null),
+	            avatar: _react2.default.createElement(
+	              _materialUi.Avatar,
+	              {
+	                color: 'orange',
+	                backgroundColor: 'green'
+	              },
+	              'G'
+	            ),
 	            title: _react2.default.createElement(_EditableText2.default, {
 	              title: this.props.title,
 	              haveButton: false,
@@ -68728,6 +68662,119 @@
 	};
 
 	module.exports = keyOf;
+
+/***/ },
+/* 501 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.HabitList = undefined;
+
+	var _materialUi = __webpack_require__(163);
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(159);
+
+	var _reactDnd = __webpack_require__(370);
+
+	var _flow = __webpack_require__(479);
+
+	var _flow2 = _interopRequireDefault(_flow);
+
+	var _ItemTypes = __webpack_require__(493);
+
+	var _colors = __webpack_require__(494);
+
+	var _EditableText = __webpack_require__(495);
+
+	var _EditableText2 = _interopRequireDefault(_EditableText);
+
+	var _HabitCard = __webpack_require__(496);
+
+	var _HabitCard2 = _interopRequireDefault(_HabitCard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
+
+	var HabitList = exports.HabitList = (function (_React$Component) {
+	  _inherits(HabitList, _React$Component);
+
+	  function HabitList(props) {
+	    _classCallCheck(this, HabitList);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitList).call(this, props));
+	  }
+
+	  _createClass(HabitList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.onMount();
+	    }
+	  }, {
+	    key: 'handleHabitDelete',
+	    value: function handleHabitDelete(habitInfo) {
+	      this.props.onHabitDelete(habitInfo);
+	    }
+	  }, {
+	    key: 'handleHabitEdit',
+	    value: function handleHabitEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var id = _props.id;
+	      var isDragging = _props.isDragging;
+	      var connectDragSource = _props.connectDragSource;
+	      var connectDropTarget = _props.connectDropTarget;
+	      var connectDragPreview = _props.connectDragPreview;
+
+	      var habitList = this.props.filteredSchedules.map(function (schedule, i) {
+	        return _react2.default.createElement(_HabitCard2.default, _extends({
+	          key: schedule.id,
+	          index: i,
+	          moveHabit: _this2.props.moveHabit.bind(_this2),
+	          handleDelete: _this2.handleHabitDelete.bind(_this2),
+	          handleEdit: _this2.handleHabitEdit.bind(_this2)
+	        }, schedule.habit));
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        habitList
+	      );
+	    }
+	  }]);
+
+	  return HabitList;
+	})(_react2.default.Component);
+
+	HabitList.propTypes = propTypes;
+	exports.default = HabitList;
 
 /***/ }
 /******/ ]);

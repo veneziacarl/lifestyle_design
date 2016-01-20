@@ -6,20 +6,20 @@ import $ from 'jquery';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import HabitRows from './HabitRows.jsx';
+import HabitList from './HabitList.jsx';
 
 
 const propTypes = {
   onMount: PropTypes.func.isRequired
 };
 
-export class TimeTabs extends React.Component {
+export class HabitTabs extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.moveHabit = this.moveHabit.bind(this)
+    this.moveHabit = this.moveHabit.bind(this);
   }
 
   componentDidMount() {
@@ -28,14 +28,13 @@ export class TimeTabs extends React.Component {
 
   handleChange (e) {
     e.preventDefault();
-    var tab = e.target.textContent;
+    var tab = e.target.tabIndex + 1;
     this.props.onTabClick(tab);
   }
 
   moveHabit(dragIndex, hoverIndex) {
-    const habits = this.props.filteredHabits;
+    const habits = this.props.filteredSchedules;
     const dragHabit = habits[dragIndex];
-
     habits.splice(dragIndex, 1)
     habits.splice(hoverIndex, 0, dragHabit)
     this.props.onPositionChange(habits)
@@ -49,13 +48,13 @@ export class TimeTabs extends React.Component {
     this.props.onHabitEdit(habitInfo);
   }
 
-  renderTabCategory (label) {
+  renderTabCategory (label, day) {
     return (
-      <Tab label={label} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} day={day} passed={false} onClick={this.handleChange.bind(this)}>
         <div>
-          <HabitRows
-            filteredHabits={this.props.filteredHabits}
-            tabType={this.props.currentSelectedTimeType}
+          <HabitList
+            filteredSchedules={this.props.filteredSchedules}
+            tab={this.props.currentSelectedTab}
             onHabitDelete={this.handleDelete}
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
@@ -68,17 +67,20 @@ export class TimeTabs extends React.Component {
 
   render() {
     return (
-      <div className="timetabs small-12 medium-6 large-4 columns">
+      <div className="habittabs small-12 medium-6 large-4 columns">
        <Tabs>
-         {this.renderTabCategory('daily')}
-         {this.renderTabCategory('weekly')}
-         {this.renderTabCategory('monthly')}
-         {this.renderTabCategory('yearly')}
+         {this.renderTabCategory('M', 1)}
+         {this.renderTabCategory('T', 2)}
+         {this.renderTabCategory('W', 3)}
+         {this.renderTabCategory('Th', 4)}
+         {this.renderTabCategory('F', 5)}
+         {this.renderTabCategory('Sa', 6)}
+         {this.renderTabCategory('Sn', 7)}
        </Tabs>
       </div>
     );
   }
 }
 
-TimeTabs.propTypes = propTypes;
-export default DragDropContext(HTML5Backend)(TimeTabs);
+HabitTabs.propTypes = propTypes;
+export default DragDropContext(HTML5Backend)(HabitTabs);

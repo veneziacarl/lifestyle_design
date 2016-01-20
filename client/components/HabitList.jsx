@@ -14,7 +14,7 @@ const propTypes = {
   onMount: PropTypes.func.isRequired
 }
 
-export class HabitRows extends React.Component {
+export class HabitList extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -32,14 +32,6 @@ export class HabitRows extends React.Component {
   }
 
   render () {
-    const Row = ({ children }) => {
-      return (
-        <div>
-          {children}
-        </div>
-      )
-    }
-
     const {
       id,
       isDragging,
@@ -48,26 +40,26 @@ export class HabitRows extends React.Component {
       connectDragPreview,
     } = this.props;
 
-    var habitRows = this.props.filteredHabits.map( (habit, i) => {
+    var habitList = this.props.filteredSchedules.map( (schedule, i) => {
       return (
         <HabitCard
-          key={habit.id}
+          key={schedule.id}
           index={i}
           moveHabit={this.props.moveHabit.bind(this)}
           handleDelete={this.handleHabitDelete.bind(this)}
           handleEdit={this.handleHabitEdit.bind(this)}
-          {...habit}
+          {...schedule.habit}
         />
       );
     })
 
     return (
       <div>
-        {habitRows}
+        {habitList}
       </div>
     );
   }
 }
 
-HabitRows.propTypes = propTypes;
-export default HabitRows;
+HabitList.propTypes = propTypes;
+export default HabitList;
