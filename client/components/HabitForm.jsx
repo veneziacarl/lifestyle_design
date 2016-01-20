@@ -9,8 +9,8 @@ export class HabitForm extends React.Component {
       description: '',
       dates: [],
       frequency: 'day',
-      status: '',
-      repeat: '',
+      status: 'do',
+      repeat: true,
       goal: 'choose the related goal',
       open: false
     };
@@ -64,7 +64,7 @@ export class HabitForm extends React.Component {
     for(var i = 0; i < dates.length; i++) {
       this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal});
     }
-    this.setState({title: '', description: '', dates: [], status: '', repeat: '', goal: ''});
+    this.setState({title: '', description: '', dates: [], status: 'do', repeat: true, goal: ''});
     this.handleClose();
   }
 
@@ -91,7 +91,7 @@ export class HabitForm extends React.Component {
   render() {
     const goals = this.props.filteredSchedules.map ( (schedule, i) => {
       return (
-        <MenuItem value={schedule.habitInfo.habit.goal.id} primaryText={schedule.habitInfo.habit.goal.title} key={i} />
+        <MenuItem value={schedule.habitInfo.habit.goal.title} primaryText={schedule.habitInfo.habit.goal.title} key={i} />
       );
     })
     const actions = [
@@ -108,7 +108,7 @@ export class HabitForm extends React.Component {
           {this.renderDayOption('Th', 4)}
           {this.renderDayOption('F', 5)}
           {this.renderDayOption('Sa', 6)}
-          {this.renderDayOption('Sn', 7)}
+          {this.renderDayOption('S', 7)}
         </div>,
         <Checkbox
           name="repeat"

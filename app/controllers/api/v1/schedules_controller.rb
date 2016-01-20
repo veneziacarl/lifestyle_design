@@ -14,13 +14,21 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def create
-    @habit = Habit.new(habit_params)
+    @goal = Goal.where(title: schedule_params[:goal]).first
+    @habit = Habit.new(
+      title: schedule_params[:title],
+      description: schedule_params[:description], goal: @goal
+    )
     if @habit.save
-      @schedule = Schedule.new(schedule_params, habit: @habit)
-      binding.pry
+      @schedule = Schedule.new(
+        date: schedule_params[:date],
+        status: schedule_params[:status], repeat: to_boolean(schedule_params[:repeat]),
+        frequency: schedule_params[:frequency], habit: @habit
+      )
       if @schedule.save
         render(json: Api::V1::ScheduleSerializer.new(@schedule))
       else
+        binding.pry
         render_unavailable
       end
     else
@@ -36,11 +44,11 @@ class Api::V1::SchedulesController < Api::V1::BaseController
 
   private
 
-  def schedule_params
-    params.permit(:id, :date, :status, :type, :repeat, :frequency)
+  def to_boolean(str)
+    str == 'true'
   end
 
-  def habit_params
-    params.permit(:title, :description)
+  def schedule_params
+    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal)
   end
 end

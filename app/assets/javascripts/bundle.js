@@ -29185,8 +29185,8 @@
 	      description: '',
 	      dates: [],
 	      frequency: 'day',
-	      status: '',
-	      repeat: '',
+	      status: 'do',
+	      repeat: true,
 	      goal: 'choose the related goal',
 	      open: false
 	    };
@@ -29248,7 +29248,7 @@
 	      for (var i = 0; i < dates.length; i++) {
 	        this.props.onHabitSubmit({ title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal });
 	      }
-	      this.setState({ title: '', description: '', dates: [], status: '', repeat: '', goal: '' });
+	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: '' });
 	      this.handleClose();
 	    }
 	  }, {
@@ -29275,7 +29275,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var goals = this.props.filteredSchedules.map(function (schedule, i) {
-	        return _react2.default.createElement(_materialUi.MenuItem, { value: schedule.habitInfo.habit.goal.id, primaryText: schedule.habitInfo.habit.goal.title, key: i });
+	        return _react2.default.createElement(_materialUi.MenuItem, { value: schedule.habitInfo.habit.goal.title, primaryText: schedule.habitInfo.habit.goal.title, key: i });
 	      });
 	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
 	        _materialUi.SelectField,
@@ -29291,7 +29291,7 @@
 	        this.renderDayOption('Th', 4),
 	        this.renderDayOption('F', 5),
 	        this.renderDayOption('Sa', 6),
-	        this.renderDayOption('Sn', 7)
+	        this.renderDayOption('S', 7)
 	      ), _react2.default.createElement(_materialUi.Checkbox, {
 	        name: 'repeat',
 	        value: 'repeat',
@@ -61349,7 +61349,7 @@
 	          this.renderTabCategory('Th', 4),
 	          this.renderTabCategory('F', 5),
 	          this.renderTabCategory('Sa', 6),
-	          this.renderTabCategory('Sn', 7)
+	          this.renderTabCategory('S', 7)
 	        )
 	      );
 	    }
