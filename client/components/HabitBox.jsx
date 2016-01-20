@@ -134,8 +134,8 @@ export class HabitBox extends React.Component {
     this.loadHabits();
   }
 
-  handlePositionChange (habits) {
-    this.setState({ habits: habits });
+  handlePositionChange (schedules) {
+    this.setState({ schedules: schedules });
   }
 
   render () {

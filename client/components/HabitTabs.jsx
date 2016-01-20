@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import HabitRows from './HabitRows.jsx';
+import HabitList from './HabitList.jsx';
 
 
 const propTypes = {
@@ -35,7 +35,6 @@ export class HabitTabs extends React.Component {
   moveHabit(dragIndex, hoverIndex) {
     const habits = this.props.filteredSchedules;
     const dragHabit = habits[dragIndex];
-
     habits.splice(dragIndex, 1)
     habits.splice(hoverIndex, 0, dragHabit)
     this.props.onPositionChange(habits)
@@ -53,7 +52,7 @@ export class HabitTabs extends React.Component {
     return (
       <Tab label={label} day={day} passed={false} onClick={this.handleChange.bind(this)}>
         <div>
-          <HabitRows
+          <HabitList
             filteredSchedules={this.props.filteredSchedules}
             tab={this.props.currentSelectedTab}
             onHabitDelete={this.handleDelete}
