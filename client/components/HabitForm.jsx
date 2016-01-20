@@ -25,8 +25,7 @@ export class HabitForm extends React.Component {
   }
 
   handleGoalChange (e) {
-    debugger;
-    this.setState({goal: e.target.value});
+    this.setState({goal: e.target.innerHTML});
   }
 
   handleDateChange (e) {
