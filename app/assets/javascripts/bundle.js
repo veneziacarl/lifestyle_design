@@ -28948,13 +28948,14 @@
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
+	    _this.findDayInWeek = _this.findDayInWeek.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HabitBox, [{
 	    key: 'addDays',
-	    value: function addDays(days) {
-	      var new_date = new Date(this.state.date);
+	    value: function addDays(date, days) {
+	      var new_date = new Date(date);
 	      new_date.setDate(new_date.getDate() + days);
 	      return new_date;
 	    }
@@ -28966,20 +28967,34 @@
 	      return day;
 	    }
 	  }, {
+	    key: 'findDayInWeek',
+	    value: function findDayInWeek(day) {
+	      var today = new Date(this.state.date);
+	      if (day >= today.getDay()) {
+	        var monday = today.setDate(today.getDate() - today.getDay() + 1);
+	        var foundDay = this.addDays(monday, day - 1);
+	        return foundDay.toString();
+	      } else if (day < today.getDay()) {
+	        var monday = today.setDate(today.getDate() - today.getDay() + 1);
+	        var foundDay = this.addDays(monday, day + 6);
+	        return foundDay.toString();
+	      }
+	    }
+	  }, {
 	    key: 'handleHabitSubmit',
-	    value: function handleHabitSubmit(habit) {
+	    value: function handleHabitSubmit(schedules) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits',
+	        url: '/api/v1/schedules',
 	        dataType: 'json',
 	        type: 'POST',
-	        data: habit,
+	        data: schedules,
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
-	        success: (function (habits) {
-	          var habitsArray = this.state.habits;
-	          habitsArray.unshift(habits.habit);
-	          this.setState({ habits: habitsArray });
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          schedulesArray.unshift(info.schedule);
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29116,7 +29131,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit })
+	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit, findDayInWeek: this.findDayInWeek })
 	        )
 	      );
 	    }
@@ -29168,7 +29183,10 @@
 	    _this.state = {
 	      title: '',
 	      description: '',
-	      time_type: '',
+	      dates: [],
+	      frequency: 'day',
+	      status: '',
+	      repeat: '',
 	      open: false
 	    };
 	    return _this;
@@ -29185,21 +29203,43 @@
 	      this.setState({ description: e.target.value });
 	    }
 	  }, {
-	    key: 'handleTypeChange',
-	    value: function handleTypeChange(e) {
-	      this.setState({ time_type: e.target.value });
+	    key: 'handleDateChange',
+	    value: function handleDateChange(e) {
+	      var dates = this.state.dates;
+	      if (dates.length > 0) {
+	        for (var i = 0; i < dates.length; i++) {
+	          var date = dates[i];
+	          if (new Date(date).getDate() == new Date(e.target.value).getDate()) {
+	            dates.splice(i, 1);
+	          }
+	        }
+	      }
+	      // the `false` used here for the target's react internal component means that the toggle is true
+	      if (e.target._reactInternalComponent._currentElement.props.switched == false) {
+	        dates.push(e.target.value);
+	      }
+	      this.setState({ dates: dates });
+	    }
+	  }, {
+	    key: 'handleRepeat',
+	    value: function handleRepeat(e) {
+	      this.setState({ repeat: e.target.checked });
 	    }
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit(e) {
 	      var title = this.state.title.trim();
 	      var description = this.state.description.trim();
-	      var time_type = this.state.time_type.trim();
-	      if (!title || !description || !time_type) {
+	      var dates = this.state.dates;
+	      var frequency = this.state.frequency;
+	      var status = this.state.status;
+	      var repeat = this.state.repeat;
+	      if (title == "" || dates.length == 0) {
+	        alert("Title and days are required");
 	        return;
-	      };
-	      this.props.onHabitSubmit({ title: title, description: description, time_type: time_type });
-	      this.setState({ title: '', description: '' });
+	      }
+	      this.props.onHabitSubmit({ title: title, description: description, dates: dates, frequency: frequency, status: status, repeat: repeat });
+	      this.setState({ title: '', description: '', dates: [], status: '', repeat: '' });
 	      this.handleClose();
 	    }
 	  }, {
@@ -29213,32 +29253,35 @@
 	      this.setState({ open: false });
 	    }
 	  }, {
+	    key: 'renderDayOption',
+	    value: function renderDayOption(label, day) {
+	      return _react2.default.createElement(_materialUi.Toggle, {
+	        value: this.props.findDayInWeek(day),
+	        label: label,
+	        style: { marginBottom: 16 },
+	        onToggle: this.handleDateChange.bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
-	        _materialUi.RadioButtonGroup,
-	        { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'daily',
-	          label: 'Daily',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'weekly',
-	          label: 'Weekly',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'monthly',
-	          label: 'Monthly',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'yearly',
-	          label: 'Yearly',
-	          style: { marginBottom: 16 }
-	        })
-	      ), _react2.default.createElement(_materialUi.FlatButton, {
+	        'div',
+	        null,
+	        this.renderDayOption('M', 1),
+	        this.renderDayOption('T', 2),
+	        this.renderDayOption('W', 3),
+	        this.renderDayOption('Th', 4),
+	        this.renderDayOption('F', 5),
+	        this.renderDayOption('Sa', 6),
+	        this.renderDayOption('Sn', 7)
+	      ), _react2.default.createElement(_materialUi.Checkbox, {
+	        name: 'repeat',
+	        value: 'repeat',
+	        label: 'Repeat This Schedule Weekly?',
+	        defaultChecked: true,
+	        onCheck: this.handleRepeat.bind(this)
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
 	        label: 'Cancel',
 	        secondary: true,
 	        onClick: this.handleClose.bind(this)
@@ -68453,10 +68496,7 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              {
-	                color: 'orange',
-	                backgroundColor: 'green'
-	              },
+	              { color: 'orange', backgroundColor: 'green' },
 	              'G'
 	            ),
 	            title: _react2.default.createElement(_EditableText2.default, {

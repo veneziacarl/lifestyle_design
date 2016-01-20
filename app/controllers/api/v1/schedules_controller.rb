@@ -14,6 +14,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def create
+    binding.pry
   end
 
   def destroy
@@ -25,6 +26,6 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   private
 
   def schedule_params
-    params.permit(:id, :date, :status, :type, :repeat)
+    params.permit(:id, :date, :status, :type, :repeat, :title, :description, :dates, :frequency)
   end
 end

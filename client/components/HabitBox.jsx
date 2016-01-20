@@ -24,31 +24,45 @@ export class HabitBox extends React.Component {
     this.handlePositionChange = this.handlePositionChange.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
     this.addDays = this.addDays.bind(this);
+    this.findDayInWeek = this.findDayInWeek.bind(this);
   }
 
-  addDays (days) {
-    var new_date = new Date(this.state.date);
+  addDays (date, days) {
+    var new_date = new Date(date);
     new_date.setDate(new_date.getDate() + days);
     return new_date;
   }
 
   createDay (schedule) {
-    var date = new Date(schedule.date)
-    var day = date.getDay()
-    return day
+    var date = new Date(schedule.date);
+    var day = date.getDay();
+    return day;
   }
 
-  handleHabitSubmit (habit) {
+  findDayInWeek (day) {
+    var today = new Date(this.state.date);
+    if (day >= today.getDay()) {
+      var monday = today.setDate(today.getDate() - today.getDay() + 1);
+      var foundDay = this.addDays(monday, (day - 1));
+      return foundDay.toString();
+    } else if (day < today.getDay()) {
+      var monday = today.setDate(today.getDate() - today.getDay() + 1);
+      var foundDay = this.addDays(monday, (day + 6));
+      return foundDay.toString();
+    }
+  }
+
+  handleHabitSubmit (schedules) {
     $.ajax({
-      url: '/api/v1/habits',
+      url: '/api/v1/schedules',
       dataType: 'json',
       type: 'POST',
-      data: habit,
+      data: schedules,
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-      success: function(habits) {
-        var habitsArray = this.state.habits;
-        habitsArray.unshift(habits.habit);
-        this.setState({habits: habitsArray});
+      success: function(info) {
+        var schedulesArray = this.state.schedules;
+        schedulesArray.unshift(info.schedule);
+        this.setState({schedules: schedulesArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -160,7 +174,7 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitForm onHabitSubmit={this.handleHabitSubmit} />
+          <HabitForm onHabitSubmit={this.handleHabitSubmit} findDayInWeek={this.findDayInWeek} />
         </div>
       </div>
     );

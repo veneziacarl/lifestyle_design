@@ -88,10 +88,7 @@ class HabitCard extends Component {
             actAsExpander={false}
             showExpandableButton={true}
             avatar={
-              <Avatar
-                color="orange"
-                backgroundColor="green"
-              >
+              <Avatar color="orange" backgroundColor="green">
                 G
               </Avatar>
             }
