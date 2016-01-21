@@ -63,8 +63,12 @@ export class HabitList extends React.Component {
       );
     })
 
+    const styles = {
+      height: '80%'
+    }
+
     return (
-      <div>
+      <div style={styles}>
         {habitList}
       </div>
     );

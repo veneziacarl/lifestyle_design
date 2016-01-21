@@ -67764,9 +67764,13 @@
 	        }, schedule));
 	      });
 
+	      var styles = {
+	        height: '80%'
+	      };
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: styles },
 	        habitList
 	      );
 	    }
