@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120193736) do
+ActiveRecord::Schema.define(version: 20160121031710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20160120193736) do
     t.boolean  "repeat",     default: true, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.text     "note"
   end
 
   add_index "schedules", ["date"], name: "index_schedules_on_date", using: :btree

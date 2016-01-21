@@ -21,7 +21,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
     )
     if @habit.save
       @schedule = Schedule.new(
-        date: schedule_params[:date],
+        date: schedule_params[:date], note: schedule_params[:note],
         status: schedule_params[:status], repeat: to_boolean(schedule_params[:repeat]),
         frequency: schedule_params[:frequency], habit: @habit
       )
@@ -54,7 +54,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def schedule_params
-    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal)
+    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal, :note)
   end
 
   def update_info(schedule, info)
