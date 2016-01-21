@@ -67686,7 +67686,7 @@
 	          moveHabit: _this2.props.moveHabit.bind(_this2),
 	          handleDelete: _this2.handleScheduleDelete.bind(_this2),
 	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, schedule.habitInfo.habit));
+	        }, schedule));
 	      });
 
 	      return _react2.default.createElement(
@@ -68274,10 +68274,10 @@
 
 	    _this.state = {
 	      title: _this.props.title,
-	      description: _this.props.description,
+	      note: _this.props.note ? _this.props.note : "hey testing this out",
 	      editing: false,
 	      initialTitle: _this.props.title,
-	      initialDescription: _this.props.description
+	      initialNote: _this.props.note ? _this.props.note : "this is a note"
 	    };
 	    return _this;
 	  }
@@ -68293,14 +68293,14 @@
 	      this.setState({ title: event.target.value });
 	    }
 	  }, {
-	    key: 'handleDescriptionChange',
-	    value: function handleDescriptionChange(event) {
-	      this.setState({ description: event.target.value });
+	    key: 'handleNoteChange',
+	    value: function handleNoteChange(event) {
+	      this.setState({ note: event.target.value });
 	    }
 	  }, {
-	    key: 'handleDescriptionSubmit',
-	    value: function handleDescriptionSubmit(event) {
-	      this.props.handleEdit({ id: this.props.id, description: this.state.description });
+	    key: 'handleNoteSubmit',
+	    value: function handleNoteSubmit(event) {
+	      this.props.handleEdit({ id: this.props.id, note: this.state.note });
 	      this.setState({ editing: false });
 	    }
 	  }, {
@@ -68312,7 +68312,7 @@
 	  }, {
 	    key: 'handleCancel',
 	    value: function handleCancel(event) {
-	      this.setState({ description: this.state.initialDescription });
+	      this.setState({ note: this.state.initialNote });
 	      this.setState({ editing: false });
 	    }
 	  }, {
@@ -68335,15 +68335,15 @@
 	            onClick: this.handleCancel.bind(this)
 	          })
 	        );
-	      } else if (this.state.editing && this.state.description) {
+	      } else if (this.state.editing && this.state.note) {
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'editableDescription' },
-	          _react2.default.createElement('textarea', { value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
+	          { className: 'editableNote' },
+	          _react2.default.createElement('textarea', { value: this.state.note, onChange: this.handleNoteChange.bind(this) }),
 	          _react2.default.createElement(RaisedButton, {
 	            label: 'Submit',
 	            secondary: true,
-	            onClick: this.handleDescriptionSubmit.bind(this)
+	            onClick: this.handleNoteSubmit.bind(this)
 	          }),
 	          _react2.default.createElement(RaisedButton, {
 	            label: 'Cancel',
@@ -68352,7 +68352,7 @@
 	          })
 	        );
 	      } else if (this.props.haveButton) {
-	        var text = this.state.title ? this.state.title : this.state.description;
+	        var text = this.state.title ? this.state.title : this.state.note;
 	        return _react2.default.createElement(
 	          'div',
 	          null,
@@ -68380,7 +68380,7 @@
 	          )
 	        );
 	      } else {
-	        var text = this.state.title ? this.state.title : this.state.description;
+	        var text = this.state.title ? this.state.title : this.state.note;
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'small-10 columns' },
@@ -68526,7 +68526,7 @@
 	        { className: 'habit-card' },
 	        _react2.default.createElement(
 	          _materialUi.Card,
-	          { initiallyExpanded: false, style: styles, id: this.props.id, index: this.props.index, className: 'small-12 columns' },
+	          { initiallyExpanded: false, style: styles, id: this.props.habitInfo.habit.id, index: this.props.habitInfo.habit.index, className: 'small-12 columns' },
 	          _react2.default.createElement(_materialUi.CardHeader, {
 	            className: 'small-12 columns',
 	            actAsExpander: false,
@@ -68537,9 +68537,9 @@
 	              'G'
 	            ),
 	            title: _react2.default.createElement(_EditableText2.default, {
-	              title: this.props.title,
+	              title: this.props.habitInfo.habit.title,
 	              haveButton: false,
-	              id: this.props.id,
+	              id: this.props.habitInfo.habit.id,
 	              handleEdit: this.props.handleEdit.bind(this)
 	            })
 	          }),
@@ -68548,7 +68548,7 @@
 	            { expandable: true },
 	            _react2.default.createElement(_EditableText2.default, {
 	              className: 'small-12 columns',
-	              description: this.props.description,
+	              note: this.props.note,
 	              id: this.props.id,
 	              handleEdit: this.props.handleEdit.bind(this),
 	              multiline: true,

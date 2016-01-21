@@ -82,7 +82,7 @@ class HabitCard extends Component {
 
     return connectDropTarget(connectDragSource(
       <div className="habit-card">
-        <Card initiallyExpanded={false} style={styles} id={this.props.id} index={this.props.index} className="small-12 columns">
+        <Card initiallyExpanded={false} style={styles} id={this.props.habitInfo.habit.id} index={this.props.habitInfo.habit.index} className="small-12 columns">
           <CardHeader
             className="small-12 columns"
             actAsExpander={false}
@@ -93,16 +93,16 @@ class HabitCard extends Component {
               </Avatar>
             }
             title={<EditableText
-              title={this.props.title}
+              title={this.props.habitInfo.habit.title}
               haveButton={false}
-              id={this.props.id}
+              id={this.props.habitInfo.habit.id}
               handleEdit={this.props.handleEdit.bind(this)}
             />}
           />
           <CardText expandable={true}>
             <EditableText
               className="small-12 columns"
-              description={this.props.description}
+              note={this.props.note}
               id={this.props.id}
               handleEdit={this.props.handleEdit.bind(this)}
               multiline={true}
