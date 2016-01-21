@@ -95,16 +95,6 @@ class HabitCard extends Component {
             title={this.props.habitInfo.habit.title}
             id={this.props.habitInfo.habit.id}
           >
-          <FlatButton
-            label="Add Habit"
-            primary={true}
-            onClick={this.props.handleEdit}
-          />
-          <FlatButton
-            label="Add Habit"
-            primary={true}
-            onClick={this.props.handleEdit}
-          />
           </CardHeader>
           <CardText expandable={true}>
             <EditableText
@@ -118,9 +108,19 @@ class HabitCard extends Component {
               maxLength={200}
             />
           </CardText>
-          <CardActions expandable={true} className="small-1 columns">
+          <CardActions expandable={true}>
+            <FlatButton
+              label="completed"
+              primary={true}
+              onClick={this.props.handleComplete.bind(this, this.props.id)}
+              />
+            <FlatButton
+              label="missed"
+              secondary={true}
+              onClick={this.props.handleMiss.bind(this, this.props.id)}
+            />
             <RaisedButton
-              label="Delete"
+              label="delete"
               primary={true}
               style={{
                 height: '20px',

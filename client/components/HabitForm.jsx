@@ -125,7 +125,6 @@ export class HabitForm extends React.Component {
       <FlatButton
         label="Add Habit"
         primary={true}
-        keyboardFocused={true}
         onClick={this.handleSubmit.bind(this)}
       />
     ];

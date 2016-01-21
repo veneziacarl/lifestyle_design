@@ -3,7 +3,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def index
-    schedules = Schedule.order(id: :desc)
+    schedules = Schedule.where(status: "do").order(id: :desc)
     render(
       json: ActiveModel::ArraySerializer.new(
         schedules,
@@ -47,6 +47,20 @@ class Api::V1::SchedulesController < Api::V1::BaseController
     render(json: Api::V1::ScheduleSerializer.new(updated_schedule))
   end
 
+  def completed
+    schedule = Schedule.find(params[:id])
+    schedule.status = "completed"
+    updated_schedule = update_info(schedule, schedule_params)
+    render(json: Api::V1::ScheduleSerializer.new(updated_schedule))
+  end
+
+  def missed
+    schedule = Schedule.find(params[:id])
+    schedule.status = "missed"
+    updated_schedule = update_info(schedule, schedule_params)
+    render(json: Api::V1::ScheduleSerializer.new(updated_schedule))
+  end
+
   private
 
   def to_boolean(str)
@@ -54,7 +68,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def schedule_params
-    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal, :note)
+    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal, :note, :updatedStatus)
   end
 
   def update_info(schedule, info)

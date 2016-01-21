@@ -20,6 +20,8 @@ export class HabitTabs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.moveHabit = this.moveHabit.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
+    this.handleMiss = this.handleMiss.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +50,14 @@ export class HabitTabs extends React.Component {
     this.props.onHabitEdit(habitInfo);
   }
 
+  handleComplete (scheduleInfo) {
+    this.props.onScheduleComplete(scheduleInfo);
+  }
+
+  handleMiss (scheduleInfo) {
+    this.props.onScheduleMiss(scheduleInfo);
+  }
+
   renderTabCategory (label, day) {
     return (
       <Tab label={label} day={day} passed={false} onClick={this.handleChange.bind(this)}>
@@ -59,6 +69,8 @@ export class HabitTabs extends React.Component {
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
             onMount={() => {}}
+            onScheduleComplete={this.handleComplete}
+            onScheduleMiss={this.handleMiss}
           />
         </div>
       </Tab>

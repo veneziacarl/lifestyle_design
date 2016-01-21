@@ -31,6 +31,14 @@ export class HabitList extends React.Component {
     this.props.onHabitEdit(habitInfo);
   }
 
+  handleComplete (scheduleInfo) {
+    this.props.onScheduleComplete(scheduleInfo);
+  }
+
+  handleMiss (scheduleInfo) {
+    this.props.onScheduleMiss(scheduleInfo);
+  }
+
   render () {
     const {
       id,
@@ -48,6 +56,8 @@ export class HabitList extends React.Component {
           moveHabit={this.props.moveHabit.bind(this)}
           handleDelete={this.handleScheduleDelete.bind(this)}
           handleEdit={this.handleHabitEdit.bind(this)}
+          handleComplete={this.handleComplete.bind(this)}
+          handleMiss={this.handleMiss.bind(this)}
           {...schedule}
         />
       );

@@ -49,23 +49,15 @@ class EditableText extends React.Component {
       )
     } else {
       return (
-        <div className="small-10 columns">
-          <div className="small-10 columns">
+        <div >
             <p onDoubleClick={this.toggleEditingTrue.bind(this)} >
               {this.state.note}
             </p>
-          </div>
-          <div className="small-2 columns">
             <RaisedButton
               id="edit"
               label={this.props.note ? "Edit Note" : "New Note"}
-              style={{
-                height: '20px',
-                width: '10px'
-              }}
               onClick={this.toggleEditingTrue.bind(this)}
             />
-          </div>
         </div>
       )
     }

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :habits, only: [:index, :create, :show, :update, :destroy]
       resources :schedules, only: [:index, :create, :show, :update, :destroy]
       resources :goals, only: [:index]
+      put '/completed/:id' => 'schedules#completed', as: :completed
+      put '/missed/:id' => 'schedules#missed', as: :missed
     end
   end
 

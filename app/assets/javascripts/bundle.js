@@ -28947,6 +28947,8 @@
 	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
 	    _this.handleScheduleUpdate = _this.handleScheduleUpdate.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
+	    _this.handleScheduleComplete = _this.handleScheduleComplete.bind(_this);
+	    _this.handleScheduleMiss = _this.handleScheduleMiss.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
 	    _this.findDayInWeek = _this.findDayInWeek.bind(_this);
@@ -29054,6 +29056,58 @@
 	      });
 	    }
 	  }, {
+	    key: 'handleScheduleComplete',
+	    value: function handleScheduleComplete(scheduleId) {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/completed/' + scheduleId,
+	        method: 'put',
+	        data: scheduleId,
+	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
+	        cache: false,
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
+	            }
+	          }
+	          this.setState({ schedules: schedulesArray });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
+	    key: 'handleScheduleMiss',
+	    value: function handleScheduleMiss(scheduleId) {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/missed/' + scheduleId,
+	        method: 'put',
+	        data: scheduleId,
+	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
+	        cache: false,
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
+	            }
+	          }
+	          this.setState({ schedules: schedulesArray });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
 	      var tabInt = parseInt(tab);
@@ -29118,8 +29172,7 @@
 	      var _this2 = this;
 
 	      var styles = {
-	        height: '100%',
-	        background: '#333'
+	        height: '100%'
 	      };
 	      var filteredSchedules = this.state.schedules.filter(function (schedule) {
 	        return _this2.createDay(schedule) === _this2.state.currentSelectedTab;
@@ -29138,7 +29191,9 @@
 	            onPositionChange: this.handlePositionChange,
 	            onMount: function onMount() {},
 	            addDays: this.addDays,
-	            initialSelectedIndex: this.state.currentSelectedTab
+	            initialSelectedIndex: this.state.currentSelectedTab,
+	            onScheduleComplete: this.handleScheduleComplete,
+	            onScheduleMiss: this.handleScheduleMiss
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -29318,7 +29373,6 @@
 	      }), _react2.default.createElement(_materialUi.FlatButton, {
 	        label: 'Add Habit',
 	        primary: true,
-	        keyboardFocused: true,
 	        onClick: this.handleSubmit.bind(this)
 	      })];
 
@@ -61293,6 +61347,8 @@
 	    _this.handleDelete = _this.handleDelete.bind(_this);
 	    _this.handleEdit = _this.handleEdit.bind(_this);
 	    _this.moveHabit = _this.moveHabit.bind(_this);
+	    _this.handleComplete = _this.handleComplete.bind(_this);
+	    _this.handleMiss = _this.handleMiss.bind(_this);
 	    return _this;
 	  }
 
@@ -61328,6 +61384,16 @@
 	      this.props.onHabitEdit(habitInfo);
 	    }
 	  }, {
+	    key: 'handleComplete',
+	    value: function handleComplete(scheduleInfo) {
+	      this.props.onScheduleComplete(scheduleInfo);
+	    }
+	  }, {
+	    key: 'handleMiss',
+	    value: function handleMiss(scheduleInfo) {
+	      this.props.onScheduleMiss(scheduleInfo);
+	    }
+	  }, {
 	    key: 'renderTabCategory',
 	    value: function renderTabCategory(label, day) {
 	      return _react2.default.createElement(
@@ -61342,7 +61408,9 @@
 	            onScheduleDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
 	            moveHabit: this.moveHabit,
-	            onMount: function onMount() {}
+	            onMount: function onMount() {},
+	            onScheduleComplete: this.handleComplete,
+	            onScheduleMiss: this.handleMiss
 	          })
 	        )
 	      );
@@ -67663,6 +67731,16 @@
 	      this.props.onHabitEdit(habitInfo);
 	    }
 	  }, {
+	    key: 'handleComplete',
+	    value: function handleComplete(scheduleInfo) {
+	      this.props.onScheduleComplete(scheduleInfo);
+	    }
+	  }, {
+	    key: 'handleMiss',
+	    value: function handleMiss(scheduleInfo) {
+	      this.props.onScheduleMiss(scheduleInfo);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -67680,7 +67758,9 @@
 	          index: i,
 	          moveHabit: _this2.props.moveHabit.bind(_this2),
 	          handleDelete: _this2.handleScheduleDelete.bind(_this2),
-	          handleEdit: _this2.handleHabitEdit.bind(_this2)
+	          handleEdit: _this2.handleHabitEdit.bind(_this2),
+	          handleComplete: _this2.handleComplete.bind(_this2),
+	          handleMiss: _this2.handleMiss.bind(_this2)
 	        }, schedule));
 	      });
 
@@ -68320,29 +68400,17 @@
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'small-10 columns' },
+	          null,
 	          _react2.default.createElement(
-	            'div',
-	            { className: 'small-10 columns' },
-	            _react2.default.createElement(
-	              'p',
-	              { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	              this.state.note
-	            )
+	            'p',
+	            { onDoubleClick: this.toggleEditingTrue.bind(this) },
+	            this.state.note
 	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'small-2 columns' },
-	            _react2.default.createElement(RaisedButton, {
-	              id: 'edit',
-	              label: this.props.note ? "Edit Note" : "New Note",
-	              style: {
-	                height: '20px',
-	                width: '10px'
-	              },
-	              onClick: this.toggleEditingTrue.bind(this)
-	            })
-	          )
+	          _react2.default.createElement(RaisedButton, {
+	            id: 'edit',
+	            label: this.props.note ? "Edit Note" : "New Note",
+	            onClick: this.toggleEditingTrue.bind(this)
+	          })
 	        );
 	      }
 	    }
@@ -68481,31 +68549,18 @@
 	        _react2.default.createElement(
 	          _materialUi.Card,
 	          { initiallyExpanded: false, style: styles, id: this.props.habitInfo.habit.id, index: this.props.habitInfo.habit.index, className: 'small-12 columns' },
-	          _react2.default.createElement(
-	            _materialUi.CardHeader,
-	            {
-	              className: 'small-12 columns',
-	              actAsExpander: false,
-	              showExpandableButton: true,
-	              avatar: _react2.default.createElement(
-	                _materialUi.Avatar,
-	                { color: 'orange', backgroundColor: 'green' },
-	                'G'
-	              ),
-	              title: this.props.habitInfo.habit.title,
-	              id: this.props.habitInfo.habit.id
-	            },
-	            _react2.default.createElement(_materialUi.FlatButton, {
-	              label: 'Add Habit',
-	              primary: true,
-	              onClick: this.props.handleEdit
-	            }),
-	            _react2.default.createElement(_materialUi.FlatButton, {
-	              label: 'Add Habit',
-	              primary: true,
-	              onClick: this.props.handleEdit
-	            })
-	          ),
+	          _react2.default.createElement(_materialUi.CardHeader, {
+	            className: 'small-12 columns',
+	            actAsExpander: false,
+	            showExpandableButton: true,
+	            avatar: _react2.default.createElement(
+	              _materialUi.Avatar,
+	              { color: 'orange', backgroundColor: 'green' },
+	              'G'
+	            ),
+	            title: this.props.habitInfo.habit.title,
+	            id: this.props.habitInfo.habit.id
+	          }),
 	          _react2.default.createElement(
 	            _materialUi.CardText,
 	            { expandable: true },
@@ -68522,9 +68577,19 @@
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.CardActions,
-	            { expandable: true, className: 'small-1 columns' },
+	            { expandable: true },
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'completed',
+	              primary: true,
+	              onClick: this.props.handleComplete.bind(this, this.props.id)
+	            }),
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'missed',
+	              secondary: true,
+	              onClick: this.props.handleMiss.bind(this, this.props.id)
+	            }),
 	            _react2.default.createElement(_materialUi.RaisedButton, {
-	              label: 'Delete',
+	              label: 'delete',
 	              primary: true,
 	              style: {
 	                height: '20px',

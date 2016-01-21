@@ -23,6 +23,8 @@ export class HabitBox extends React.Component {
     this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
     this.handleScheduleUpdate = this.handleScheduleUpdate.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
+    this.handleScheduleComplete = this.handleScheduleComplete.bind(this);
+    this.handleScheduleMiss = this.handleScheduleMiss.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
     this.addDays = this.addDays.bind(this);
     this.findDayInWeek = this.findDayInWeek.bind(this);
@@ -116,6 +118,52 @@ export class HabitBox extends React.Component {
     });
   }
 
+  handleScheduleComplete (scheduleId) {
+    $.ajax({
+      url: '/api/v1/completed/' + scheduleId,
+      method: 'put',
+      data: scheduleId,
+      dataType: "json",
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      cache: false,
+      success: function(info) {
+        var schedulesArray = this.state.schedules;
+        for(var i = 0; i < schedulesArray.length; i++) {
+          if(schedulesArray[i].id === info.schedule.id) {
+             schedulesArray.splice(i, 1);
+          }
+        }
+        this.setState({schedules: schedulesArray});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props, status, err.toString());
+      }.bind(this)
+    });
+  }
+
+  handleScheduleMiss (scheduleId) {
+    $.ajax({
+      url: '/api/v1/missed/' + scheduleId,
+      method: 'put',
+      data: scheduleId,
+      dataType: "json",
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+      cache: false,
+      success: function(info) {
+        var schedulesArray = this.state.schedules;
+        for(var i = 0; i < schedulesArray.length; i++) {
+          if(schedulesArray[i].id === info.schedule.id) {
+             schedulesArray.splice(i, 1);
+          }
+        }
+        this.setState({schedules: schedulesArray});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props, status, err.toString());
+      }.bind(this)
+    });
+  }
+
   handleOpenTab (tab) {
     var tabInt = parseInt(tab)
     this.setState({ currentSelectedTab: tabInt });
@@ -171,8 +219,7 @@ export class HabitBox extends React.Component {
 
   render () {
     const styles = {
-      height: '100%',
-      background: '#333'
+      height: '100%'
     }
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
@@ -187,10 +234,11 @@ export class HabitBox extends React.Component {
             onMount={() => {}}
             addDays={this.addDays}
             initialSelectedIndex={this.state.currentSelectedTab}
+            onScheduleComplete={this.handleScheduleComplete}
+            onScheduleMiss={this.handleScheduleMiss}
           />
         </div>
         <div>
-
           <HabitForm goals={this.state.goals} onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
         </div>
       </div>
