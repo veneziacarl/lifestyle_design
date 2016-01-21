@@ -23,8 +23,8 @@ export class HabitList extends React.Component {
     this.props.onMount();
   }
 
-  handleHabitDelete (habitInfo) {
-    this.props.onHabitDelete(habitInfo);
+  handleScheduleDelete (scheduleInfo) {
+    this.props.onScheduleDelete(scheduleInfo);
   }
 
   handleHabitEdit (habitInfo) {
@@ -46,7 +46,7 @@ export class HabitList extends React.Component {
           key={schedule.id}
           index={i}
           moveHabit={this.props.moveHabit.bind(this)}
-          handleDelete={this.handleHabitDelete.bind(this)}
+          handleDelete={this.handleScheduleDelete.bind(this)}
           handleEdit={this.handleHabitEdit.bind(this)}
           {...schedule.habitInfo.habit}
         />

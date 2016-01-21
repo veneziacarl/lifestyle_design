@@ -20,8 +20,8 @@ export class HabitBox extends React.Component {
       goals: []
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
-    this.handleHabitDelete = this.handleHabitDelete.bind(this);
-    this.handleHabitEdit = this.handleHabitEdit.bind(this);
+    this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
+    this.handleScheduleUpdate = this.handleScheduleUpdate.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
     this.addDays = this.addDays.bind(this);
@@ -71,21 +71,21 @@ export class HabitBox extends React.Component {
     });
   }
 
-  handleHabitDelete (habitInfo) {
+  handleScheduleDelete (scheduleInfo) {
     $.ajax({
-      url: '/api/v1/habits/' + habitInfo.id,
+      url: '/api/v1/schedules/' + scheduleInfo.id,
       method: 'delete',
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
-      success: function(habits) {
-        var habitsArray = this.state.habits;
-        for(var i = 0; i < habitsArray.length; i++) {
-          if(habitsArray[i].id === habits.habit.id) {
-             habitsArray.splice(i, 1);
+      success: function(info) {
+        var schedulesArray = this.state.schedules;
+        for(var i = 0; i < schedulesArray.length; i++) {
+          if(schedulesArray[i].id === info.schedule.id) {
+             schedulesArray.splice(i, 1);
           }
         }
-        this.setState({habits: habitsArray});
+        this.setState({schedules: schedulesArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -93,23 +93,23 @@ export class HabitBox extends React.Component {
     });
   }
 
-  handleHabitEdit (habitInfo) {
+  handleScheduleUpdate (scheduleInfo) {
     $.ajax({
-      url: '/api/v1/habits/' + habitInfo.id,
+      url: '/api/v1/schedules/' + scheduleInfo.id,
       method: 'put',
-      data: habitInfo,
+      data: scheduleInfo,
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
-      success: function(updatedHabit) {
-        var habitsArray = this.state.habits;
-        for(var i = 0; i < habitsArray.length; i++) {
-          var habit = habitsArray[i]
-          if(habit.id === updatedHabit.habit.id) {
-            [habit.id, habit.title, habit.description, habit.time_type] = [updatedHabit.habit.id, updatedHabit.habit.title, updatedHabit.habit.description, updatedHabit.habit.time_type]
+      success: function(updatedSchedule) {
+        var schedulesArray = this.state.schedules;
+        for(var i = 0; i < schedulesArray.length; i++) {
+          var schedule = schedulesArray[i]
+          if(schedule.id === updatedSchedule.schedule.id) {
+            [schedule.id, schedule.title, schedule.description, schedule.time_type] = [updatedSchedule.schedule.id, updatedSchedule.schedule.title, updatedSchedule.schedule.description, updatedSchedule.schedule.time_type]
           }
         }
-        this.setState({habits: habitsArray});
+        this.setState({schedules: schedulesArray});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -182,8 +182,8 @@ export class HabitBox extends React.Component {
           <HabitTabs
             filteredSchedules={filteredSchedules}
             onTabClick={this.handleOpenTab}
-            onHabitDelete={this.handleHabitDelete}
-            onHabitEdit={this.handleHabitEdit}
+            onScheduleDelete={this.handleScheduleDelete}
+            onHabitEdit={this.handleScheduleUpdate}
             onPositionChange={this.handlePositionChange}
             onMount={() => {}}
             addDays={this.addDays}

@@ -40,8 +40,8 @@ export class HabitTabs extends React.Component {
     this.props.onPositionChange(habits)
   }
 
-  handleDelete (habitInfo) {
-    this.props.onHabitDelete(habitInfo);
+  handleDelete (scheduleInfo) {
+    this.props.onScheduleDelete(scheduleInfo);
   }
 
   handleEdit (habitInfo) {
@@ -55,7 +55,7 @@ export class HabitTabs extends React.Component {
           <HabitList
             filteredSchedules={this.props.filteredSchedules}
             tab={this.props.currentSelectedTab}
-            onHabitDelete={this.handleDelete}
+            onScheduleDelete={this.handleDelete}
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
             onMount={() => {}}

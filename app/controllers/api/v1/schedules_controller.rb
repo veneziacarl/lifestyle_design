@@ -36,9 +36,15 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def destroy
+    schedule = Schedule.find(params[:id])
+    Schedule.destroy(schedule.id)
+    render(json: Api::V1::ScheduleSerializer.new(schedule))
   end
 
   def update
+    schedule = Schedule.find(params[:id])
+    updated_schedule = update_info(schedule, schedule_params)
+    render(json: Api::V1::ScheduleSerializer.new(updated_schedule))
   end
 
   private
@@ -49,5 +55,16 @@ class Api::V1::SchedulesController < Api::V1::BaseController
 
   def schedule_params
     params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal)
+  end
+
+  def update_info(schedule, info)
+    if schedule.update(info)
+      flash[:notice] = "Schedule Successfully Updated"
+      flash[:color]= "valid"
+    else
+      flash[:notice] = "Form is invalid"
+      flash[:color]= "invalid"
+    end
+    schedule
   end
 end

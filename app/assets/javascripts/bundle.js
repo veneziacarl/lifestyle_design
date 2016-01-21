@@ -28944,8 +28944,8 @@
 	      goals: []
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
-	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
-	    _this.handleHabitEdit = _this.handleHabitEdit.bind(_this);
+	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
+	    _this.handleScheduleUpdate = _this.handleScheduleUpdate.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
@@ -29003,24 +29003,24 @@
 	      });
 	    }
 	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
+	    key: 'handleScheduleDelete',
+	    value: function handleScheduleDelete(scheduleInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habitInfo.id,
+	        url: '/api/v1/schedules/' + scheduleInfo.id,
 	        method: 'delete',
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (habits) {
-	          var habitsArray = this.state.habits;
-	          for (var i = 0; i < habitsArray.length; i++) {
-	            if (habitsArray[i].id === habits.habit.id) {
-	              habitsArray.splice(i, 1);
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
 	            }
 	          }
-	          this.setState({ habits: habitsArray });
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29028,30 +29028,30 @@
 	      });
 	    }
 	  }, {
-	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitInfo) {
+	    key: 'handleScheduleUpdate',
+	    value: function handleScheduleUpdate(scheduleInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habitInfo.id,
+	        url: '/api/v1/schedules/' + scheduleInfo.id,
 	        method: 'put',
-	        data: habitInfo,
+	        data: scheduleInfo,
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (updatedHabit) {
-	          var habitsArray = this.state.habits;
-	          for (var i = 0; i < habitsArray.length; i++) {
-	            var habit = habitsArray[i];
-	            if (habit.id === updatedHabit.habit.id) {
-	              var _ref = [updatedHabit.habit.id, updatedHabit.habit.title, updatedHabit.habit.description, updatedHabit.habit.time_type];
-	              habit.id = _ref[0];
-	              habit.title = _ref[1];
-	              habit.description = _ref[2];
-	              habit.time_type = _ref[3];
+	        success: (function (updatedSchedule) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            var schedule = schedulesArray[i];
+	            if (schedule.id === updatedSchedule.schedule.id) {
+	              var _ref = [updatedSchedule.schedule.id, updatedSchedule.schedule.title, updatedSchedule.schedule.description, updatedSchedule.schedule.time_type];
+	              schedule.id = _ref[0];
+	              schedule.title = _ref[1];
+	              schedule.description = _ref[2];
+	              schedule.time_type = _ref[3];
 	            }
 	          }
-	          this.setState({ habits: habitsArray });
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29138,8 +29138,8 @@
 	          _react2.default.createElement(_HabitTabs2.default, {
 	            filteredSchedules: filteredSchedules,
 	            onTabClick: this.handleOpenTab,
-	            onHabitDelete: this.handleHabitDelete,
-	            onHabitEdit: this.handleHabitEdit,
+	            onScheduleDelete: this.handleScheduleDelete,
+	            onHabitEdit: this.handleScheduleUpdate,
 	            onPositionChange: this.handlePositionChange,
 	            onMount: function onMount() {},
 	            addDays: this.addDays,
@@ -61324,8 +61324,8 @@
 	    }
 	  }, {
 	    key: 'handleDelete',
-	    value: function handleDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
+	    value: function handleDelete(scheduleInfo) {
+	      this.props.onScheduleDelete(scheduleInfo);
 	    }
 	  }, {
 	    key: 'handleEdit',
@@ -61344,7 +61344,7 @@
 	          _react2.default.createElement(_HabitList2.default, {
 	            filteredSchedules: this.props.filteredSchedules,
 	            tab: this.props.currentSelectedTab,
-	            onHabitDelete: this.handleDelete,
+	            onScheduleDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
 	            moveHabit: this.moveHabit,
 	            onMount: function onMount() {}
@@ -67658,9 +67658,9 @@
 	      this.props.onMount();
 	    }
 	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
+	    key: 'handleScheduleDelete',
+	    value: function handleScheduleDelete(scheduleInfo) {
+	      this.props.onScheduleDelete(scheduleInfo);
 	    }
 	  }, {
 	    key: 'handleHabitEdit',
@@ -67684,7 +67684,7 @@
 	          key: schedule.id,
 	          index: i,
 	          moveHabit: _this2.props.moveHabit.bind(_this2),
-	          handleDelete: _this2.handleHabitDelete.bind(_this2),
+	          handleDelete: _this2.handleScheduleDelete.bind(_this2),
 	          handleEdit: _this2.handleHabitEdit.bind(_this2)
 	        }, schedule.habitInfo.habit));
 	      });
@@ -68322,10 +68322,11 @@
 	        return _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement('textarea', { value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
+	          _react2.default.createElement('textarea', { value: this.state.title, className: 'titleText', onChange: this.handleTitleChange.bind(this) }),
 	          _react2.default.createElement(RaisedButton, {
 	            label: 'Submit',
 	            secondary: true,
+	            className: 'submit',
 	            onClick: this.handleTitleSubmit.bind(this)
 	          }),
 	          _react2.default.createElement(RaisedButton, {
@@ -68368,6 +68369,7 @@
 	            'div',
 	            { className: 'small-2 columns' },
 	            _react2.default.createElement(RaisedButton, {
+	              id: 'edit',
 	              label: 'Edit',
 	              style: {
 	                height: '20px',

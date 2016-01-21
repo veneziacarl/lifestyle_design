@@ -50,5 +50,4 @@ class Api::V1::HabitsController < Api::V1::BaseController
     end
     habit
   end
-
 end

@@ -44,10 +44,11 @@ class EditableText extends React.Component {
     if (this.state.editing && this.state.title) {
       return (
         <div>
-          <textarea value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+          <textarea value={this.state.title} className="titleText" onChange={this.handleTitleChange.bind(this)} />
           <RaisedButton
             label="Submit"
             secondary={true}
+            className="submit"
             onClick={this.handleTitleSubmit.bind(this)}
           />
           <RaisedButton
@@ -84,6 +85,7 @@ class EditableText extends React.Component {
           </div>
           <div className="small-2 columns">
             <RaisedButton
+              id="edit"
               label="Edit"
               style={{
                 height: '20px',
