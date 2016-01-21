@@ -4,5 +4,5 @@ class Habit < ActiveRecord::Base
 
   validates :goal, presence: true
   validates :title, presence: true
-  validates :active, presence: true, inclusion: { in: [true, false] }
+  validates :active, inclusion: { in: [true, false] }
 end

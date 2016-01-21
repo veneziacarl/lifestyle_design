@@ -20,6 +20,8 @@ export class HabitTabs extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.moveHabit = this.moveHabit.bind(this);
+    this.handleComplete = this.handleComplete.bind(this);
+    this.handleMiss = this.handleMiss.bind(this);
   }
 
   componentDidMount() {
@@ -40,12 +42,20 @@ export class HabitTabs extends React.Component {
     this.props.onPositionChange(habits)
   }
 
-  handleDelete (habitInfo) {
-    this.props.onHabitDelete(habitInfo);
+  handleDelete (scheduleInfo) {
+    this.props.onScheduleDelete(scheduleInfo);
   }
 
   handleEdit (habitInfo) {
     this.props.onHabitEdit(habitInfo);
+  }
+
+  handleComplete (scheduleInfo) {
+    this.props.onScheduleComplete(scheduleInfo);
+  }
+
+  handleMiss (scheduleInfo) {
+    this.props.onScheduleMiss(scheduleInfo);
   }
 
   renderTabCategory (label, day) {
@@ -55,10 +65,12 @@ export class HabitTabs extends React.Component {
           <HabitList
             filteredSchedules={this.props.filteredSchedules}
             tab={this.props.currentSelectedTab}
-            onHabitDelete={this.handleDelete}
+            onScheduleDelete={this.handleDelete}
             onHabitEdit={this.handleEdit}
             moveHabit={this.moveHabit}
             onMount={() => {}}
+            onScheduleComplete={this.handleComplete}
+            onScheduleMiss={this.handleMiss}
           />
         </div>
       </Tab>
@@ -68,14 +80,14 @@ export class HabitTabs extends React.Component {
   render() {
     return (
       <div className="habittabs small-12 medium-6 large-4 columns">
-       <Tabs>
+       <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
          {this.renderTabCategory('M', 1)}
          {this.renderTabCategory('T', 2)}
          {this.renderTabCategory('W', 3)}
          {this.renderTabCategory('Th', 4)}
          {this.renderTabCategory('F', 5)}
          {this.renderTabCategory('Sa', 6)}
-         {this.renderTabCategory('Sn', 7)}
+         {this.renderTabCategory('S', 7)}
        </Tabs>
       </div>
     );

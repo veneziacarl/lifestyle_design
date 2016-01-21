@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
       :first_name, :last_name, :email, :password,
       :password_confirmation
     ]
-    
+
     if params[:action] == 'update'
       update_params(registration_params)
     elsif params[:action] == 'create'
@@ -29,5 +29,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) do |u|
       u.permit(registration_params)
     end
+  end
+
+  def render_unavailable
+    render :nothing => true, :status => 503
   end
 end

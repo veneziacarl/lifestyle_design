@@ -3,6 +3,8 @@ class Api::V1::GoalsController < Api::V1::BaseController
   end
 
   def index
+    @goals = Goal.order(id: :desc)
+    render json: @goals
   end
 
   def create

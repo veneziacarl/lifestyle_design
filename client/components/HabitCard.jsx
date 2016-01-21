@@ -82,30 +82,24 @@ class HabitCard extends Component {
 
     return connectDropTarget(connectDragSource(
       <div className="habit-card">
-        <Card initiallyExpanded={false} style={styles} id={this.props.id} index={this.props.index} className="small-12 columns">
+        <Card initiallyExpanded={false} style={styles} id={this.props.habitInfo.habit.id} index={this.props.habitInfo.habit.index} className="small-12 columns">
           <CardHeader
             className="small-12 columns"
             actAsExpander={false}
             showExpandableButton={true}
             avatar={
-              <Avatar
-                color="orange"
-                backgroundColor="green"
-              >
+              <Avatar color="orange" backgroundColor="green">
                 G
               </Avatar>
             }
-            title={<EditableText
-              title={this.props.title}
-              haveButton={false}
-              id={this.props.id}
-              handleEdit={this.props.handleEdit.bind(this)}
-            />}
-          />
+            title={this.props.habitInfo.habit.title}
+            id={this.props.habitInfo.habit.id}
+          >
+          </CardHeader>
           <CardText expandable={true}>
             <EditableText
               className="small-12 columns"
-              description={this.props.description}
+              note={this.props.note}
               id={this.props.id}
               handleEdit={this.props.handleEdit.bind(this)}
               multiline={true}
@@ -114,9 +108,19 @@ class HabitCard extends Component {
               maxLength={200}
             />
           </CardText>
-          <CardActions expandable={true} className="small-1 columns">
+          <CardActions expandable={true}>
+            <FlatButton
+              label="completed"
+              primary={true}
+              onClick={this.props.handleComplete.bind(this, this.props.id)}
+              />
+            <FlatButton
+              label="missed"
+              secondary={true}
+              onClick={this.props.handleMiss.bind(this, this.props.id)}
+            />
             <RaisedButton
-              label="Delete"
+              label="delete"
               primary={true}
               style={{
                 height: '20px',

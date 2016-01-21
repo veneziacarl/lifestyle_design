@@ -10,7 +10,9 @@ require 'factory_girl_rails'
 require 'valid_attribute'
 require 'spec_helper'
 require 'pry-rails'
+require 'capybara/poltergeist'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Capybara.javascript_driver = :poltergeist
 # Capybara.register_driver :poltergeist do |app|
 #   Capybara::Poltergeist::Driver.new(app, js_errors: false)
 # end

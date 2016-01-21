@@ -13,7 +13,7 @@ global.document = jsdom.jsdom(html, {
 });
 
 global.window = document.defaultView;
-window.navigator = { userAgent: 'Chrome/49.0.2454.85' };
+// window.navigator = { userAgent: 'Chrome/49.0.2454.85' };
 global.navigator = window.navigator;
 
 global.expect = expect;

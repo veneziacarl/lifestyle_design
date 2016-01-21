@@ -28939,22 +28939,26 @@
 
 	    _this.state = {
 	      schedules: [],
-	      currentSelectedTab: '',
-	      date: new Date()
+	      currentSelectedTab: new Date().getDay() - 1,
+	      date: new Date(),
+	      goals: []
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
-	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
-	    _this.handleHabitEdit = _this.handleHabitEdit.bind(_this);
+	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
+	    _this.handleScheduleUpdate = _this.handleScheduleUpdate.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
+	    _this.handleScheduleComplete = _this.handleScheduleComplete.bind(_this);
+	    _this.handleScheduleMiss = _this.handleScheduleMiss.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
+	    _this.findDayInWeek = _this.findDayInWeek.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HabitBox, [{
 	    key: 'addDays',
-	    value: function addDays(days) {
-	      var new_date = new Date(this.state.date);
+	    value: function addDays(date, days) {
+	      var new_date = new Date(date);
 	      new_date.setDate(new_date.getDate() + days);
 	      return new_date;
 	    }
@@ -28966,20 +28970,34 @@
 	      return day;
 	    }
 	  }, {
+	    key: 'findDayInWeek',
+	    value: function findDayInWeek(day) {
+	      var today = new Date(this.state.date);
+	      if (day >= today.getDay()) {
+	        var monday = today.setDate(today.getDate() - today.getDay() + 1);
+	        var foundDay = this.addDays(monday, day - 1);
+	        return foundDay.toString();
+	      } else if (day < today.getDay()) {
+	        var monday = today.setDate(today.getDate() - today.getDay() + 1);
+	        var foundDay = this.addDays(monday, day + 6);
+	        return foundDay.toString();
+	      }
+	    }
+	  }, {
 	    key: 'handleHabitSubmit',
-	    value: function handleHabitSubmit(habit) {
+	    value: function handleHabitSubmit(schedule) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits',
+	        url: '/api/v1/schedules',
 	        dataType: 'json',
 	        type: 'POST',
-	        data: habit,
+	        data: schedule,
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
-	        success: (function (habits) {
-	          var habitsArray = this.state.habits;
-	          habitsArray.unshift(habits.habit);
-	          this.setState({ habits: habitsArray });
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          schedulesArray.unshift(info.schedule);
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -28987,24 +29005,24 @@
 	      });
 	    }
 	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
+	    key: 'handleScheduleDelete',
+	    value: function handleScheduleDelete(scheduleInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habitInfo.id,
+	        url: '/api/v1/schedules/' + scheduleInfo.id,
 	        method: 'delete',
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (habits) {
-	          var habitsArray = this.state.habits;
-	          for (var i = 0; i < habitsArray.length; i++) {
-	            if (habitsArray[i].id === habits.habit.id) {
-	              habitsArray.splice(i, 1);
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
 	            }
 	          }
-	          this.setState({ habits: habitsArray });
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29012,30 +29030,77 @@
 	      });
 	    }
 	  }, {
-	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitInfo) {
+	    key: 'handleScheduleUpdate',
+	    value: function handleScheduleUpdate(scheduleInfo) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/habits/' + habitInfo.id,
+	        url: '/api/v1/schedules/' + scheduleInfo.id,
 	        method: 'put',
-	        data: habitInfo,
+	        data: scheduleInfo,
 	        dataType: "json",
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (updatedHabit) {
-	          var habitsArray = this.state.habits;
-	          for (var i = 0; i < habitsArray.length; i++) {
-	            var habit = habitsArray[i];
-	            if (habit.id === updatedHabit.habit.id) {
-	              var _ref = [updatedHabit.habit.id, updatedHabit.habit.title, updatedHabit.habit.description, updatedHabit.habit.time_type];
-	              habit.id = _ref[0];
-	              habit.title = _ref[1];
-	              habit.description = _ref[2];
-	              habit.time_type = _ref[3];
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1, info.schedule);
 	            }
 	          }
-	          this.setState({ habits: habitsArray });
+	          this.setState({ schedules: schedulesArray });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
+	    key: 'handleScheduleComplete',
+	    value: function handleScheduleComplete(scheduleId) {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/completed/' + scheduleId,
+	        method: 'put',
+	        data: scheduleId,
+	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
+	        cache: false,
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
+	            }
+	          }
+	          this.setState({ schedules: schedulesArray });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
+	    key: 'handleScheduleMiss',
+	    value: function handleScheduleMiss(scheduleId) {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/missed/' + scheduleId,
+	        method: 'put',
+	        data: scheduleId,
+	        dataType: "json",
+	        beforeSend: function beforeSend(xhr) {
+	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
+	        },
+	        cache: false,
+	        success: (function (info) {
+	          var schedulesArray = this.state.schedules;
+	          for (var i = 0; i < schedulesArray.length; i++) {
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1);
+	            }
+	          }
+	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29045,12 +29110,14 @@
 	  }, {
 	    key: 'handleOpenTab',
 	    value: function handleOpenTab(tab) {
-	      if (tab == 'today') {
-	        var today_tab = this.state.date.getDay();
-	        this.setState({ currentSelectedTab: today_tab });
-	      } else {
-	        this.setState({ currentSelectedTab: tab });
-	      };
+	      var tabInt = parseInt(tab);
+	      this.setState({ currentSelectedTab: tabInt });
+	    }
+	  }, {
+	    key: 'setTodayTab',
+	    value: function setTodayTab() {
+	      var today_tab = this.state.date.getDay();
+	      this.handleOpenTab(today_tab);
 	    }
 	  }, {
 	    key: 'loadHabits',
@@ -29062,7 +29129,22 @@
 	        cache: false,
 	        success: (function (info) {
 	          this.setState({ schedules: info.schedules });
-	          this.handleOpenTab('today');
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
+	    key: 'loadGoals',
+	    value: function loadGoals() {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/goals',
+	        method: 'GET',
+	        dataType: 'json',
+	        cache: false,
+	        success: (function (info) {
+	          this.setState({ goals: info.goals });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29075,6 +29157,8 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      this.setTodayTab();
+	      this.loadGoals();
 	      this.loadHabits();
 	    }
 	  }, {
@@ -29088,8 +29172,7 @@
 	      var _this2 = this;
 
 	      var styles = {
-	        height: '100%',
-	        background: '#333'
+	        height: '100%'
 	      };
 	      var filteredSchedules = this.state.schedules.filter(function (schedule) {
 	        return _this2.createDay(schedule) === _this2.state.currentSelectedTab;
@@ -29102,19 +29185,21 @@
 	          null,
 	          _react2.default.createElement(_HabitTabs2.default, {
 	            filteredSchedules: filteredSchedules,
-	            labels: this.state.labels,
 	            onTabClick: this.handleOpenTab,
-	            onHabitDelete: this.handleHabitDelete,
-	            onHabitEdit: this.handleHabitEdit,
+	            onScheduleDelete: this.handleScheduleDelete,
+	            onHabitEdit: this.handleScheduleUpdate,
 	            onPositionChange: this.handlePositionChange,
 	            onMount: function onMount() {},
-	            addDays: this.addDays
+	            addDays: this.addDays,
+	            initialSelectedIndex: this.state.currentSelectedTab,
+	            onScheduleComplete: this.handleScheduleComplete,
+	            onScheduleMiss: this.handleScheduleMiss
 	          })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit })
+	          _react2.default.createElement(_HabitForm2.default, { goals: this.state.goals, onHabitSubmit: this.handleHabitSubmit, filteredSchedules: filteredSchedules, findDayInWeek: this.findDayInWeek })
 	        )
 	      );
 	    }
@@ -29166,7 +29251,11 @@
 	    _this.state = {
 	      title: '',
 	      description: '',
-	      time_type: '',
+	      dates: [],
+	      frequency: 'day',
+	      status: 'do',
+	      repeat: true,
+	      goal: 'choose the related goal',
 	      open: false
 	    };
 	    return _this;
@@ -29183,21 +29272,51 @@
 	      this.setState({ description: e.target.value });
 	    }
 	  }, {
-	    key: 'handleTypeChange',
-	    value: function handleTypeChange(e) {
-	      this.setState({ time_type: e.target.value });
+	    key: 'handleGoalChange',
+	    value: function handleGoalChange(e) {
+	      this.setState({ goal: e.target.innerHTML });
+	    }
+	  }, {
+	    key: 'handleDateChange',
+	    value: function handleDateChange(e) {
+	      var dates = this.state.dates;
+	      if (dates.length > 0) {
+	        for (var i = 0; i < dates.length; i++) {
+	          var date = dates[i];
+	          if (new Date(date).getDate() == new Date(e.target.value).getDate()) {
+	            dates.splice(i, 1);
+	          }
+	        }
+	      }
+	      // the `false` used here for the target's react internal component means that the toggle is true
+	      if (e.target._reactInternalComponent._currentElement.props.switched == false) {
+	        dates.push(e.target.value);
+	      }
+	      this.setState({ dates: dates });
+	    }
+	  }, {
+	    key: 'handleRepeat',
+	    value: function handleRepeat(e) {
+	      this.setState({ repeat: e.target.checked });
 	    }
 	  }, {
 	    key: 'handleSubmit',
 	    value: function handleSubmit(e) {
 	      var title = this.state.title.trim();
 	      var description = this.state.description.trim();
-	      var time_type = this.state.time_type.trim();
-	      if (!title || !description || !time_type) {
+	      var dates = this.state.dates;
+	      var frequency = this.state.frequency;
+	      var status = this.state.status;
+	      var repeat = this.state.repeat;
+	      var goal = this.state.goal.trim();
+	      if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
+	        alert("Title, goal, and schedule are required as input");
 	        return;
-	      };
-	      this.props.onHabitSubmit({ title: title, description: description, time_type: time_type });
-	      this.setState({ title: '', description: '' });
+	      }
+	      for (var i = 0; i < dates.length; i++) {
+	        this.props.onHabitSubmit({ title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal });
+	      }
+	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal' });
 	      this.handleClose();
 	    }
 	  }, {
@@ -29211,39 +29330,49 @@
 	      this.setState({ open: false });
 	    }
 	  }, {
+	    key: 'renderDayOption',
+	    value: function renderDayOption(label, day) {
+	      return _react2.default.createElement(_materialUi.Toggle, {
+	        value: this.props.findDayInWeek(day),
+	        label: label,
+	        style: { marginBottom: 16 },
+	        onToggle: this.handleDateChange.bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
-	        _materialUi.RadioButtonGroup,
-	        { name: 'addHabit', onChange: this.handleTypeChange.bind(this) },
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'daily',
-	          label: 'Daily',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'weekly',
-	          label: 'Weekly',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'monthly',
-	          label: 'Monthly',
-	          style: { marginBottom: 16 }
-	        }),
-	        _react2.default.createElement(_materialUi.RadioButton, {
-	          value: 'yearly',
-	          label: 'Yearly',
-	          style: { marginBottom: 16 }
-	        })
-	      ), _react2.default.createElement(_materialUi.FlatButton, {
+	      var goals = this.props.goals.map(function (goal, i) {
+	        return _react2.default.createElement(_materialUi.MenuItem, { value: goal.title, primaryText: goal.title, key: i });
+	      });
+	      var actions = [_react2.default.createElement('input', { type: 'text', name: 'title', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', name: 'description', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
+	        _materialUi.SelectField,
+	        { id: 'goal', value: this.state.goal, onChange: this.handleGoalChange.bind(this) },
+	        _react2.default.createElement(_materialUi.MenuItem, { value: 'choose the related goal', primaryText: 'choose the related goal' }),
+	        goals
+	      ), _react2.default.createElement(
+	        'div',
+	        null,
+	        this.renderDayOption('M', 1),
+	        this.renderDayOption('T', 2),
+	        this.renderDayOption('W', 3),
+	        this.renderDayOption('Th', 4),
+	        this.renderDayOption('F', 5),
+	        this.renderDayOption('Sa', 6),
+	        this.renderDayOption('S', 7)
+	      ), _react2.default.createElement(_materialUi.Checkbox, {
+	        name: 'repeat',
+	        value: 'repeat',
+	        label: 'Repeat This Schedule Weekly?',
+	        defaultChecked: true,
+	        onCheck: this.handleRepeat.bind(this)
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
 	        label: 'Cancel',
 	        secondary: true,
 	        onClick: this.handleClose.bind(this)
 	      }), _react2.default.createElement(_materialUi.FlatButton, {
 	        label: 'Add Habit',
 	        primary: true,
-	        keyboardFocused: true,
 	        onClick: this.handleSubmit.bind(this)
 	      })];
 
@@ -61188,7 +61317,7 @@
 
 	var _reactDndHtml5Backend2 = _interopRequireDefault(_reactDndHtml5Backend);
 
-	var _HabitList = __webpack_require__(501);
+	var _HabitList = __webpack_require__(478);
 
 	var _HabitList2 = _interopRequireDefault(_HabitList);
 
@@ -61218,6 +61347,8 @@
 	    _this.handleDelete = _this.handleDelete.bind(_this);
 	    _this.handleEdit = _this.handleEdit.bind(_this);
 	    _this.moveHabit = _this.moveHabit.bind(_this);
+	    _this.handleComplete = _this.handleComplete.bind(_this);
+	    _this.handleMiss = _this.handleMiss.bind(_this);
 	    return _this;
 	  }
 
@@ -61244,13 +61375,23 @@
 	    }
 	  }, {
 	    key: 'handleDelete',
-	    value: function handleDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
+	    value: function handleDelete(scheduleInfo) {
+	      this.props.onScheduleDelete(scheduleInfo);
 	    }
 	  }, {
 	    key: 'handleEdit',
 	    value: function handleEdit(habitInfo) {
 	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'handleComplete',
+	    value: function handleComplete(scheduleInfo) {
+	      this.props.onScheduleComplete(scheduleInfo);
+	    }
+	  }, {
+	    key: 'handleMiss',
+	    value: function handleMiss(scheduleInfo) {
+	      this.props.onScheduleMiss(scheduleInfo);
 	    }
 	  }, {
 	    key: 'renderTabCategory',
@@ -61264,10 +61405,12 @@
 	          _react2.default.createElement(_HabitList2.default, {
 	            filteredSchedules: this.props.filteredSchedules,
 	            tab: this.props.currentSelectedTab,
-	            onHabitDelete: this.handleDelete,
+	            onScheduleDelete: this.handleDelete,
 	            onHabitEdit: this.handleEdit,
 	            moveHabit: this.moveHabit,
-	            onMount: function onMount() {}
+	            onMount: function onMount() {},
+	            onScheduleComplete: this.handleComplete,
+	            onScheduleMiss: this.handleMiss
 	          })
 	        )
 	      );
@@ -61280,14 +61423,14 @@
 	        { className: 'habittabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
-	          null,
+	          { initialSelectedIndex: this.props.initialSelectedIndex },
 	          this.renderTabCategory('M', 1),
 	          this.renderTabCategory('T', 2),
 	          this.renderTabCategory('W', 3),
 	          this.renderTabCategory('Th', 4),
 	          this.renderTabCategory('F', 5),
 	          this.renderTabCategory('Sa', 6),
-	          this.renderTabCategory('Sn', 7)
+	          this.renderTabCategory('S', 7)
 	        )
 	      );
 	    }
@@ -67511,7 +67654,135 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 478 */,
+/* 478 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.HabitList = undefined;
+
+	var _materialUi = __webpack_require__(163);
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(159);
+
+	var _reactDnd = __webpack_require__(370);
+
+	var _flow = __webpack_require__(479);
+
+	var _flow2 = _interopRequireDefault(_flow);
+
+	var _ItemTypes = __webpack_require__(493);
+
+	var _colors = __webpack_require__(494);
+
+	var _EditableText = __webpack_require__(495);
+
+	var _EditableText2 = _interopRequireDefault(_EditableText);
+
+	var _HabitCard = __webpack_require__(496);
+
+	var _HabitCard2 = _interopRequireDefault(_HabitCard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes = {
+	  onMount: _react.PropTypes.func.isRequired
+	};
+
+	var HabitList = exports.HabitList = (function (_React$Component) {
+	  _inherits(HabitList, _React$Component);
+
+	  function HabitList(props) {
+	    _classCallCheck(this, HabitList);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitList).call(this, props));
+	  }
+
+	  _createClass(HabitList, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.onMount();
+	    }
+	  }, {
+	    key: 'handleScheduleDelete',
+	    value: function handleScheduleDelete(scheduleInfo) {
+	      this.props.onScheduleDelete(scheduleInfo);
+	    }
+	  }, {
+	    key: 'handleHabitEdit',
+	    value: function handleHabitEdit(habitInfo) {
+	      this.props.onHabitEdit(habitInfo);
+	    }
+	  }, {
+	    key: 'handleComplete',
+	    value: function handleComplete(scheduleInfo) {
+	      this.props.onScheduleComplete(scheduleInfo);
+	    }
+	  }, {
+	    key: 'handleMiss',
+	    value: function handleMiss(scheduleInfo) {
+	      this.props.onScheduleMiss(scheduleInfo);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var id = _props.id;
+	      var isDragging = _props.isDragging;
+	      var connectDragSource = _props.connectDragSource;
+	      var connectDropTarget = _props.connectDropTarget;
+	      var connectDragPreview = _props.connectDragPreview;
+
+	      var habitList = this.props.filteredSchedules.map(function (schedule, i) {
+	        return _react2.default.createElement(_HabitCard2.default, _extends({
+	          key: schedule.id,
+	          index: i,
+	          moveHabit: _this2.props.moveHabit.bind(_this2),
+	          handleDelete: _this2.handleScheduleDelete.bind(_this2),
+	          handleEdit: _this2.handleHabitEdit.bind(_this2),
+	          handleComplete: _this2.handleComplete.bind(_this2),
+	          handleMiss: _this2.handleMiss.bind(_this2)
+	        }, schedule));
+	      });
+
+	      var styles = {
+	        height: '80%'
+	      };
+
+	      return _react2.default.createElement(
+	        'div',
+	        { style: styles },
+	        habitList
+	      );
+	    }
+	  }]);
+
+	  return HabitList;
+	})(_react2.default.Component);
+
+	HabitList.propTypes = propTypes;
+	exports.default = HabitList;
+
+/***/ },
 /* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68081,11 +68352,9 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EditableText).call(this, props));
 
 	    _this.state = {
-	      title: _this.props.title,
-	      description: _this.props.description,
+	      note: _this.props.note,
 	      editing: false,
-	      initialTitle: _this.props.title,
-	      initialDescription: _this.props.description
+	      initialNote: _this.props.note
 	    };
 	    return _this;
 	  }
@@ -68093,108 +68362,59 @@
 	  _createClass(EditableText, [{
 	    key: 'toggleEditingTrue',
 	    value: function toggleEditingTrue(event) {
+	      this.state.note ? this.state.note : this.setState({ note: " " });
 	      this.setState({ editing: true });
 	    }
 	  }, {
-	    key: 'handleTitleChange',
-	    value: function handleTitleChange(event) {
-	      this.setState({ title: event.target.value });
+	    key: 'handleNoteChange',
+	    value: function handleNoteChange(event) {
+	      this.setState({ note: event.target.value });
 	    }
 	  }, {
-	    key: 'handleDescriptionChange',
-	    value: function handleDescriptionChange(event) {
-	      this.setState({ description: event.target.value });
-	    }
-	  }, {
-	    key: 'handleDescriptionSubmit',
-	    value: function handleDescriptionSubmit(event) {
-	      this.props.handleEdit({ id: this.props.id, description: this.state.description });
-	      this.setState({ editing: false });
-	    }
-	  }, {
-	    key: 'handleTitleSubmit',
-	    value: function handleTitleSubmit(event) {
-	      this.props.handleEdit({ id: this.props.id, title: this.state.title });
+	    key: 'handleNoteSubmit',
+	    value: function handleNoteSubmit(event) {
+	      this.props.handleEdit({ id: this.props.id, note: this.state.note });
 	      this.setState({ editing: false });
 	    }
 	  }, {
 	    key: 'handleCancel',
 	    value: function handleCancel(event) {
-	      this.setState({ description: this.state.initialDescription });
+	      this.setState({ note: this.state.initialNote });
 	      this.setState({ editing: false });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (this.state.editing && this.state.title) {
+	      if (this.state.editing && this.state.note) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement('textarea', { value: this.state.title, onChange: this.handleTitleChange.bind(this) }),
+	          { className: 'editableNote' },
+	          _react2.default.createElement('textarea', { value: this.state.note, onChange: this.handleNoteChange.bind(this) }),
 	          _react2.default.createElement(RaisedButton, {
 	            label: 'Submit',
 	            secondary: true,
-	            onClick: this.handleTitleSubmit.bind(this)
+	            onClick: this.handleNoteSubmit.bind(this)
 	          }),
 	          _react2.default.createElement(RaisedButton, {
 	            label: 'Cancel',
 	            primary: true,
 	            onClick: this.handleCancel.bind(this)
 	          })
-	        );
-	      } else if (this.state.editing && this.state.description) {
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'editableDescription' },
-	          _react2.default.createElement('textarea', { value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }),
-	          _react2.default.createElement(RaisedButton, {
-	            label: 'Submit',
-	            secondary: true,
-	            onClick: this.handleDescriptionSubmit.bind(this)
-	          }),
-	          _react2.default.createElement(RaisedButton, {
-	            label: 'Cancel',
-	            primary: true,
-	            onClick: this.handleCancel.bind(this)
-	          })
-	        );
-	      } else if (this.props.haveButton) {
-	        var text = this.state.title ? this.state.title : this.state.description;
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'small-10 columns' },
-	            _react2.default.createElement(
-	              'p',
-	              { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	              text
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'small-2 columns' },
-	            _react2.default.createElement(RaisedButton, {
-	              label: 'Edit',
-	              style: {
-	                height: '20px',
-	                width: '10px'
-	              },
-	              onClick: this.toggleEditingTrue.bind(this)
-	            })
-	          )
 	        );
 	      } else {
-	        var text = this.state.title ? this.state.title : this.state.description;
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'small-10 columns' },
+	          null,
 	          _react2.default.createElement(
 	            'p',
 	            { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	            text
-	          )
+	            this.state.note
+	          ),
+	          _react2.default.createElement(RaisedButton, {
+	            id: 'edit',
+	            label: this.props.note ? "Edit Note" : "New Note",
+	            onClick: this.toggleEditingTrue.bind(this)
+	          })
 	        );
 	      }
 	    }
@@ -68332,32 +68552,25 @@
 	        { className: 'habit-card' },
 	        _react2.default.createElement(
 	          _materialUi.Card,
-	          { initiallyExpanded: false, style: styles, id: this.props.id, index: this.props.index, className: 'small-12 columns' },
+	          { initiallyExpanded: false, style: styles, id: this.props.habitInfo.habit.id, index: this.props.habitInfo.habit.index, className: 'small-12 columns' },
 	          _react2.default.createElement(_materialUi.CardHeader, {
 	            className: 'small-12 columns',
 	            actAsExpander: false,
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              {
-	                color: 'orange',
-	                backgroundColor: 'green'
-	              },
+	              { color: 'orange', backgroundColor: 'green' },
 	              'G'
 	            ),
-	            title: _react2.default.createElement(_EditableText2.default, {
-	              title: this.props.title,
-	              haveButton: false,
-	              id: this.props.id,
-	              handleEdit: this.props.handleEdit.bind(this)
-	            })
+	            title: this.props.habitInfo.habit.title,
+	            id: this.props.habitInfo.habit.id
 	          }),
 	          _react2.default.createElement(
 	            _materialUi.CardText,
 	            { expandable: true },
 	            _react2.default.createElement(_EditableText2.default, {
 	              className: 'small-12 columns',
-	              description: this.props.description,
+	              note: this.props.note,
 	              id: this.props.id,
 	              handleEdit: this.props.handleEdit.bind(this),
 	              multiline: true,
@@ -68368,9 +68581,19 @@
 	          ),
 	          _react2.default.createElement(
 	            _materialUi.CardActions,
-	            { expandable: true, className: 'small-1 columns' },
+	            { expandable: true },
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'completed',
+	              primary: true,
+	              onClick: this.props.handleComplete.bind(this, this.props.id)
+	            }),
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'missed',
+	              secondary: true,
+	              onClick: this.props.handleMiss.bind(this, this.props.id)
+	            }),
 	            _react2.default.createElement(_materialUi.RaisedButton, {
-	              label: 'Delete',
+	              label: 'delete',
 	              primary: true,
 	              style: {
 	                height: '20px',
@@ -68662,119 +68885,6 @@
 	};
 
 	module.exports = keyOf;
-
-/***/ },
-/* 501 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.HabitList = undefined;
-
-	var _materialUi = __webpack_require__(163);
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(159);
-
-	var _reactDnd = __webpack_require__(370);
-
-	var _flow = __webpack_require__(479);
-
-	var _flow2 = _interopRequireDefault(_flow);
-
-	var _ItemTypes = __webpack_require__(493);
-
-	var _colors = __webpack_require__(494);
-
-	var _EditableText = __webpack_require__(495);
-
-	var _EditableText2 = _interopRequireDefault(_EditableText);
-
-	var _HabitCard = __webpack_require__(496);
-
-	var _HabitCard2 = _interopRequireDefault(_HabitCard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var propTypes = {
-	  onMount: _react.PropTypes.func.isRequired
-	};
-
-	var HabitList = exports.HabitList = (function (_React$Component) {
-	  _inherits(HabitList, _React$Component);
-
-	  function HabitList(props) {
-	    _classCallCheck(this, HabitList);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitList).call(this, props));
-	  }
-
-	  _createClass(HabitList, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.props.onMount();
-	    }
-	  }, {
-	    key: 'handleHabitDelete',
-	    value: function handleHabitDelete(habitInfo) {
-	      this.props.onHabitDelete(habitInfo);
-	    }
-	  }, {
-	    key: 'handleHabitEdit',
-	    value: function handleHabitEdit(habitInfo) {
-	      this.props.onHabitEdit(habitInfo);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var id = _props.id;
-	      var isDragging = _props.isDragging;
-	      var connectDragSource = _props.connectDragSource;
-	      var connectDropTarget = _props.connectDropTarget;
-	      var connectDragPreview = _props.connectDragPreview;
-
-	      var habitList = this.props.filteredSchedules.map(function (schedule, i) {
-	        return _react2.default.createElement(_HabitCard2.default, _extends({
-	          key: schedule.id,
-	          index: i,
-	          moveHabit: _this2.props.moveHabit.bind(_this2),
-	          handleDelete: _this2.handleHabitDelete.bind(_this2),
-	          handleEdit: _this2.handleHabitEdit.bind(_this2)
-	        }, schedule.habit));
-	      });
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        habitList
-	      );
-	    }
-	  }]);
-
-	  return HabitList;
-	})(_react2.default.Component);
-
-	HabitList.propTypes = propTypes;
-	exports.default = HabitList;
 
 /***/ }
 /******/ ]);

@@ -28,3 +28,8 @@ _Testing the app:_ <br />
 
 
 <hr />
+
+NOTE: there is an issue with the HTML5Backend used for the drag and drop features. <br />
+Chrome gives the best drag and drop user experience, but sometimes does not work. <br />
+You may need to navigate to the site in FireFox is the drag and drop is not working <br />
+And then return to the site in Chrome.
