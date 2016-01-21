@@ -39,7 +39,7 @@ export class HabitTabs extends React.Component {
     const dragHabit = habits[dragIndex];
     habits.splice(dragIndex, 1)
     habits.splice(hoverIndex, 0, dragHabit)
-    this.props.onPositionChange(habits)
+    this.props.onPositionChange(habits, dragIndex, hoverIndex)
   }
 
   handleDelete (scheduleInfo) {

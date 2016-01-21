@@ -213,8 +213,15 @@ export class HabitBox extends React.Component {
     this.loadHabits();
   }
 
-  handlePositionChange (schedules) {
-    this.setState({ schedules: schedules });
+  handlePositionChange (schedules, dragIndex, hoverIndex) {
+    var schedulesArray = this.state.schedules;
+    var insert_position = schedulesArray.indexOf(schedules[hoverIndex]);
+      for(var i = 0; i < schedulesArray.length; i++) {
+        if(schedulesArray[i].id === schedules[dragIndex].id) {
+           schedulesArray[i] = schedulesArray.splice(insert_position, 1, schedules[dragIndex])[0];
+        }
+      }
+    this.setState({schedules: schedulesArray});
   }
 
   render () {
