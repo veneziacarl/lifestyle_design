@@ -101,12 +101,11 @@ export class HabitBox extends React.Component {
       dataType: "json",
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       cache: false,
-      success: function(updatedSchedule) {
+      success: function(info) {
         var schedulesArray = this.state.schedules;
         for(var i = 0; i < schedulesArray.length; i++) {
-          var schedule = schedulesArray[i]
-          if(schedule.id === updatedSchedule.schedule.id) {
-            [schedule.id, schedule.title, schedule.description, schedule.time_type] = [updatedSchedule.schedule.id, updatedSchedule.schedule.title, updatedSchedule.schedule.description, updatedSchedule.schedule.time_type]
+          if(schedulesArray[i].id === info.schedule.id) {
+             schedulesArray.splice(i, 1, info.schedule);
           }
         }
         this.setState({schedules: schedulesArray});

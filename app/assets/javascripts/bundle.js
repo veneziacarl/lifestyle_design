@@ -29039,16 +29039,11 @@
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        cache: false,
-	        success: (function (updatedSchedule) {
+	        success: (function (info) {
 	          var schedulesArray = this.state.schedules;
 	          for (var i = 0; i < schedulesArray.length; i++) {
-	            var schedule = schedulesArray[i];
-	            if (schedule.id === updatedSchedule.schedule.id) {
-	              var _ref = [updatedSchedule.schedule.id, updatedSchedule.schedule.title, updatedSchedule.schedule.description, updatedSchedule.schedule.time_type];
-	              schedule.id = _ref[0];
-	              schedule.title = _ref[1];
-	              schedule.description = _ref[2];
-	              schedule.time_type = _ref[3];
+	            if (schedulesArray[i].id === info.schedule.id) {
+	              schedulesArray.splice(i, 1, info.schedule);
 	            }
 	          }
 	          this.setState({ schedules: schedulesArray });
@@ -68273,11 +68268,9 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EditableText).call(this, props));
 
 	    _this.state = {
-	      title: _this.props.title,
-	      note: _this.props.note ? _this.props.note : "hey testing this out",
+	      note: _this.props.note,
 	      editing: false,
-	      initialTitle: _this.props.title,
-	      initialNote: _this.props.note ? _this.props.note : "this is a note"
+	      initialNote: _this.props.note
 	    };
 	    return _this;
 	  }
@@ -68285,12 +68278,8 @@
 	  _createClass(EditableText, [{
 	    key: 'toggleEditingTrue',
 	    value: function toggleEditingTrue(event) {
+	      this.state.note ? this.state.note : this.setState({ note: " " });
 	      this.setState({ editing: true });
-	    }
-	  }, {
-	    key: 'handleTitleChange',
-	    value: function handleTitleChange(event) {
-	      this.setState({ title: event.target.value });
 	    }
 	  }, {
 	    key: 'handleNoteChange',
@@ -68304,12 +68293,6 @@
 	      this.setState({ editing: false });
 	    }
 	  }, {
-	    key: 'handleTitleSubmit',
-	    value: function handleTitleSubmit(event) {
-	      this.props.handleEdit({ id: this.props.id, title: this.state.title });
-	      this.setState({ editing: false });
-	    }
-	  }, {
 	    key: 'handleCancel',
 	    value: function handleCancel(event) {
 	      this.setState({ note: this.state.initialNote });
@@ -68318,24 +68301,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (this.state.editing && this.state.title) {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement('textarea', { value: this.state.title, className: 'titleText', onChange: this.handleTitleChange.bind(this) }),
-	          _react2.default.createElement(RaisedButton, {
-	            label: 'Submit',
-	            secondary: true,
-	            className: 'submit',
-	            onClick: this.handleTitleSubmit.bind(this)
-	          }),
-	          _react2.default.createElement(RaisedButton, {
-	            label: 'Cancel',
-	            primary: true,
-	            onClick: this.handleCancel.bind(this)
-	          })
-	        );
-	      } else if (this.state.editing && this.state.note) {
+	      if (this.state.editing && this.state.note) {
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'editableNote' },
@@ -68351,18 +68317,17 @@
 	            onClick: this.handleCancel.bind(this)
 	          })
 	        );
-	      } else if (this.props.haveButton) {
-	        var text = this.state.title ? this.state.title : this.state.note;
+	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'small-10 columns' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'small-10 columns' },
 	            _react2.default.createElement(
 	              'p',
 	              { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	              text
+	              this.state.note
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -68370,24 +68335,13 @@
 	            { className: 'small-2 columns' },
 	            _react2.default.createElement(RaisedButton, {
 	              id: 'edit',
-	              label: 'Edit',
+	              label: this.props.note ? "Edit Note" : "New Note",
 	              style: {
 	                height: '20px',
 	                width: '10px'
 	              },
 	              onClick: this.toggleEditingTrue.bind(this)
 	            })
-	          )
-	        );
-	      } else {
-	        var text = this.state.title ? this.state.title : this.state.note;
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'small-10 columns' },
-	          _react2.default.createElement(
-	            'p',
-	            { onDoubleClick: this.toggleEditingTrue.bind(this) },
-	            text
 	          )
 	        );
 	      }
@@ -68527,22 +68481,31 @@
 	        _react2.default.createElement(
 	          _materialUi.Card,
 	          { initiallyExpanded: false, style: styles, id: this.props.habitInfo.habit.id, index: this.props.habitInfo.habit.index, className: 'small-12 columns' },
-	          _react2.default.createElement(_materialUi.CardHeader, {
-	            className: 'small-12 columns',
-	            actAsExpander: false,
-	            showExpandableButton: true,
-	            avatar: _react2.default.createElement(
-	              _materialUi.Avatar,
-	              { color: 'orange', backgroundColor: 'green' },
-	              'G'
-	            ),
-	            title: _react2.default.createElement(_EditableText2.default, {
+	          _react2.default.createElement(
+	            _materialUi.CardHeader,
+	            {
+	              className: 'small-12 columns',
+	              actAsExpander: false,
+	              showExpandableButton: true,
+	              avatar: _react2.default.createElement(
+	                _materialUi.Avatar,
+	                { color: 'orange', backgroundColor: 'green' },
+	                'G'
+	              ),
 	              title: this.props.habitInfo.habit.title,
-	              haveButton: false,
-	              id: this.props.habitInfo.habit.id,
-	              handleEdit: this.props.handleEdit.bind(this)
+	              id: this.props.habitInfo.habit.id
+	            },
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'Add Habit',
+	              primary: true,
+	              onClick: this.props.handleEdit
+	            }),
+	            _react2.default.createElement(_materialUi.FlatButton, {
+	              label: 'Add Habit',
+	              primary: true,
+	              onClick: this.props.handleEdit
 	            })
-	          }),
+	          ),
 	          _react2.default.createElement(
 	            _materialUi.CardText,
 	            { expandable: true },

@@ -92,13 +92,20 @@ class HabitCard extends Component {
                 G
               </Avatar>
             }
-            title={<EditableText
-              title={this.props.habitInfo.habit.title}
-              haveButton={false}
-              id={this.props.habitInfo.habit.id}
-              handleEdit={this.props.handleEdit.bind(this)}
-            />}
+            title={this.props.habitInfo.habit.title}
+            id={this.props.habitInfo.habit.id}
+          >
+          <FlatButton
+            label="Add Habit"
+            primary={true}
+            onClick={this.props.handleEdit}
           />
+          <FlatButton
+            label="Add Habit"
+            primary={true}
+            onClick={this.props.handleEdit}
+          />
+          </CardHeader>
           <CardText expandable={true}>
             <EditableText
               className="small-12 columns"
