@@ -16,7 +16,8 @@ export class HabitBox extends React.Component {
     this.state = {
       schedules: [],
       currentSelectedTab: ((new Date).getDay() - 1),
-      date: new Date
+      date: new Date,
+      goals: []
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleHabitDelete = this.handleHabitDelete.bind(this);
@@ -141,11 +142,27 @@ export class HabitBox extends React.Component {
     });
   }
 
+  loadGoals () {
+    $.ajax({
+      url: '/api/v1/goals',
+      method: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(info) {
+        this.setState({ goals: info.goals });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props, status, err.toString());
+      }.bind(this)
+    });
+  }
+
   onMount () {
   }
 
   componentDidMount () {
     this.setTodayTab();
+    this.loadGoals();
     this.loadHabits();
   }
 
@@ -174,7 +191,8 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitForm onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
+
+          <HabitForm goals={this.state.goals} onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
         </div>
       </div>
     );

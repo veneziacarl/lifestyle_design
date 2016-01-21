@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'user can add a goal to habit on habit creation', focus: true, js: true do
+feature 'create new habit with schedules and tie it to a goal', js: true do
   let! (:schedule) { FactoryGirl.create(:schedule) }
 
   before (:each) do
@@ -8,17 +8,16 @@ feature 'user can add a goal to habit on habit creation', focus: true, js: true 
     visit root_path
   end
 
-  scenario 'navigates to habit index page' do
+  scenario 'navigates to schedule index page' do
     expect(page).to have_content(schedule.habit.title)
   end
 
-  scenario 'clicks link to open new habit form' do
+  scenario 'open new habit form and submit form to see resource on index' do
     click_on 'Create New'
-    expect(page).to have_content('This is filler text in the dialog popover')
-  end
 
-  scenario 'clicks link to open new habit form' do
-    click_on 'Create New'
     expect(page).to have_content('This is filler text in the dialog popover')
+
+    fill_in 'title', with: 'this is a title'
+    fill_in 'description', with: 'this is a description'
   end
 end

@@ -28,7 +28,6 @@ class Api::V1::SchedulesController < Api::V1::BaseController
       if @schedule.save
         render(json: Api::V1::ScheduleSerializer.new(@schedule))
       else
-        binding.pry
         render_unavailable
       end
     else

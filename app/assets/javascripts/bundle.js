@@ -28940,7 +28940,8 @@
 	    _this.state = {
 	      schedules: [],
 	      currentSelectedTab: new Date().getDay() - 1,
-	      date: new Date()
+	      date: new Date(),
+	      goals: []
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleHabitDelete = _this.handleHabitDelete.bind(_this);
@@ -29086,12 +29087,29 @@
 	      });
 	    }
 	  }, {
+	    key: 'loadGoals',
+	    value: function loadGoals() {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/goals',
+	        method: 'GET',
+	        dataType: 'json',
+	        cache: false,
+	        success: (function (info) {
+	          this.setState({ goals: info.goals });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'onMount',
 	    value: function onMount() {}
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.setTodayTab();
+	      this.loadGoals();
 	      this.loadHabits();
 	    }
 	  }, {
@@ -29131,7 +29149,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_HabitForm2.default, { onHabitSubmit: this.handleHabitSubmit, filteredSchedules: filteredSchedules, findDayInWeek: this.findDayInWeek })
+	          _react2.default.createElement(_HabitForm2.default, { goals: this.state.goals, onHabitSubmit: this.handleHabitSubmit, filteredSchedules: filteredSchedules, findDayInWeek: this.findDayInWeek })
 	        )
 	      );
 	    }
@@ -29248,7 +29266,7 @@
 	      for (var i = 0; i < dates.length; i++) {
 	        this.props.onHabitSubmit({ title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal });
 	      }
-	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: '' });
+	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal' });
 	      this.handleClose();
 	    }
 	  }, {
@@ -29274,12 +29292,12 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var goals = this.props.filteredSchedules.map(function (schedule, i) {
-	        return _react2.default.createElement(_materialUi.MenuItem, { value: schedule.habitInfo.habit.goal.title, primaryText: schedule.habitInfo.habit.goal.title, key: i });
+	      var goals = this.props.goals.map(function (goal, i) {
+	        return _react2.default.createElement(_materialUi.MenuItem, { value: goal.title, primaryText: goal.title, key: i });
 	      });
-	      var actions = [_react2.default.createElement('input', { type: 'text', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
+	      var actions = [_react2.default.createElement('input', { type: 'text', name: 'title', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', name: 'description', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
 	        _materialUi.SelectField,
-	        { value: this.state.goal, onChange: this.handleGoalChange.bind(this) },
+	        { id: 'goal', value: this.state.goal, onChange: this.handleGoalChange.bind(this) },
 	        _react2.default.createElement(_materialUi.MenuItem, { value: 'choose the related goal', primaryText: 'choose the related goal' }),
 	        goals
 	      ), _react2.default.createElement(

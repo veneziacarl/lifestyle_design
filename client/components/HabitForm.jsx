@@ -64,7 +64,7 @@ export class HabitForm extends React.Component {
     for(var i = 0; i < dates.length; i++) {
       this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal});
     }
-    this.setState({title: '', description: '', dates: [], status: 'do', repeat: true, goal: ''});
+    this.setState({title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal'});
     this.handleClose();
   }
 
@@ -89,15 +89,15 @@ export class HabitForm extends React.Component {
 
 
   render() {
-    const goals = this.props.filteredSchedules.map ( (schedule, i) => {
+    const goals = this.props.goals.map ( (goal, i) => {
       return (
-        <MenuItem value={schedule.habitInfo.habit.goal.title} primaryText={schedule.habitInfo.habit.goal.title} key={i} />
+        <MenuItem value={goal.title} primaryText={goal.title} key={i} />
       );
     })
     const actions = [
-        <input type="text" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />,
-        <input type="text" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />,
-        <SelectField value={this.state.goal} onChange={this.handleGoalChange.bind(this)}>
+        <input type="text" name="title" placeholder="Habit Title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />,
+        <input type="text" name="description" placeholder="Habit Description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)} />,
+        <SelectField id="goal" value={this.state.goal} onChange={this.handleGoalChange.bind(this)}>
           <MenuItem value="choose the related goal" primaryText="choose the related goal"/>
           {goals}
         </SelectField>,
