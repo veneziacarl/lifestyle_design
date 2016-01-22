@@ -29342,12 +29342,16 @@
 	  }, {
 	    key: 'renderDayOption',
 	    value: function renderDayOption(label, day) {
-	      return _react2.default.createElement(_materialUi.Toggle, {
-	        value: this.props.findDayInWeek(day),
-	        label: label,
-	        style: { marginBottom: 16 },
-	        onToggle: this.handleDateChange.bind(this)
-	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'small-1 small-centered columns' },
+	        _react2.default.createElement(_materialUi.Toggle, {
+	          value: this.props.findDayInWeek(day),
+	          label: label,
+	          style: { marginBottom: 16 },
+	          onToggle: this.handleDateChange.bind(this)
+	        })
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -29362,14 +29366,14 @@
 	        goals
 	      ), _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        this.renderDayOption('M', 1),
 	        this.renderDayOption('T', 2),
 	        this.renderDayOption('W', 3),
 	        this.renderDayOption('Th', 4),
 	        this.renderDayOption('F', 5),
-	        this.renderDayOption('Sa', 6),
-	        this.renderDayOption('S', 7)
+	        this.renderDayOption('S', 6),
+	        this.renderDayOption('Su', 7)
 	      ), _react2.default.createElement(_materialUi.Checkbox, {
 	        name: 'repeat',
 	        value: 'repeat',
@@ -29393,6 +29397,7 @@
 	        _react2.default.createElement(
 	          _materialUi.Dialog,
 	          {
+	            'class': 'row',
 	            title: 'Create New Habit Or Goal',
 	            actions: actions,
 	            modal: false,
@@ -61460,8 +61465,8 @@
 	          this.renderTabCategory('W', 3),
 	          this.renderTabCategory('Th', 4),
 	          this.renderTabCategory('F', 5),
-	          this.renderTabCategory('Sa', 6),
-	          this.renderTabCategory('S', 7)
+	          this.renderTabCategory('S', 6),
+	          this.renderTabCategory('Su', 7)
 	        )
 	      );
 	    }

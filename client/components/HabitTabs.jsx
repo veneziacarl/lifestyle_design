@@ -105,8 +105,8 @@ export class HabitTabs extends React.Component {
            {this.renderTabCategory('W', 3)}
            {this.renderTabCategory('Th', 4)}
            {this.renderTabCategory('F', 5)}
-           {this.renderTabCategory('Sa', 6)}
-           {this.renderTabCategory('S', 7)}
+           {this.renderTabCategory('S', 6)}
+           {this.renderTabCategory('Su', 7)}
          </Tabs>
       </div>
     );

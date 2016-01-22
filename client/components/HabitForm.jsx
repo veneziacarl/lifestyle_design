@@ -81,12 +81,14 @@ export class HabitForm extends React.Component {
 
   renderDayOption (label, day) {
     return (
-      <Toggle
-        value={this.props.findDayInWeek(day)}
-        label={label}
-        style={{marginBottom:16}}
-        onToggle={this.handleDateChange.bind(this)}
-      />
+      <div className="small-1 small-centered columns">
+        <Toggle
+          value={this.props.findDayInWeek(day)}
+          label={label}
+          style={{marginBottom:16}}
+          onToggle={this.handleDateChange.bind(this)}
+        />
+      </div>
     );
   }
 
@@ -104,14 +106,14 @@ export class HabitForm extends React.Component {
           <MenuItem value="choose the related goal" primaryText="choose the related goal"/>
           {goals}
         </SelectField>,
-        <div>
+        <div className="row">
           {this.renderDayOption('M', 1)}
           {this.renderDayOption('T', 2)}
           {this.renderDayOption('W', 3)}
           {this.renderDayOption('Th', 4)}
           {this.renderDayOption('F', 5)}
-          {this.renderDayOption('Sa', 6)}
-          {this.renderDayOption('S', 7)}
+          {this.renderDayOption('S', 6)}
+          {this.renderDayOption('Su', 7)}
         </div>,
         <Checkbox
           name="repeat"
@@ -136,6 +138,7 @@ export class HabitForm extends React.Component {
       <div className="habitForm small-12 medium-6 large-4 columns">
         <RaisedButton label="Create New" onTouchTap={this.handleOpen.bind(this)} />
         <Dialog
+          class="row"
           title="Create New Habit Or Goal"
           actions={actions}
           modal={false}
