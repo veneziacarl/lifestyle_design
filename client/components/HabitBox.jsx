@@ -55,16 +55,18 @@ export class HabitBox extends React.Component {
     }
   }
 
-  handleHabitSubmit (schedule) {
+  handleHabitSubmit (habit) {
     $.ajax({
-      url: '/api/v1/schedules',
+      url: '/api/v1/habits',
       dataType: 'json',
       type: 'POST',
-      data: schedule,
+      data: habit,
       beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
       success: function(info) {
         var schedulesArray = this.state.schedules;
-        schedulesArray.unshift(info.schedule);
+        for(var i = 0; i < info.schedules.length; i++) {
+           schedulesArray.unshift(info.schedules[i]);
+        }
         this.setState({schedules: schedulesArray});
       }.bind(this),
       error: function(xhr, status, err) {

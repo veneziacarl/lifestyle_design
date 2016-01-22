@@ -28985,18 +28985,20 @@
 	    }
 	  }, {
 	    key: 'handleHabitSubmit',
-	    value: function handleHabitSubmit(schedule) {
+	    value: function handleHabitSubmit(habit) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/schedules',
+	        url: '/api/v1/habits',
 	        dataType: 'json',
 	        type: 'POST',
-	        data: schedule,
+	        data: habit,
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        success: (function (info) {
 	          var schedulesArray = this.state.schedules;
-	          schedulesArray.unshift(info.schedule);
+	          for (var i = 0; i < info.schedules.length; i++) {
+	            schedulesArray.unshift(info.schedules[i]);
+	          }
 	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
