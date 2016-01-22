@@ -1,6 +1,7 @@
 class Habit < ActiveRecord::Base
   belongs_to :goal
   has_many :schedules
+  accepts_nested_attributes_for :schedules
 
   validates :goal, presence: true
   validates :title, presence: true

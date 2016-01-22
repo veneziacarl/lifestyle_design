@@ -16,6 +16,7 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   end
 
   def create
+    binding.pry
     @goal = Goal.where(title: schedule_params[:goal]).first
     @habit = Habit.new(
       title: schedule_params[:title],
@@ -75,8 +76,9 @@ class Api::V1::SchedulesController < Api::V1::BaseController
 
   private
 
+  # params.permit(:id, :title, :description, :date, :status, :repeat, :frequency, :goal, :note)
   def schedule_params
-    params.permit(:id, :date, :status, :repeat, :frequency, :title, :description, :goal, :note, :updatedStatus)
+    params.permit(:id, :title, :description, schedules: [])
   end
 
   def to_boolean(str)

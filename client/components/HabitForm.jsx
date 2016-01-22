@@ -63,10 +63,10 @@ export class HabitForm extends React.Component {
     };
     var schedules = dates.map( (schedule, i) => {
       return (
-        [dates[i], frequency, status, repeat, goal]
+        {date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal}
       );
     });
-    this.props.onHabitSubmit({title: title, description: description, schedules: schedules});
+    this.props.onHabitSubmit({title: title, description: description, schedules_attributes: schedules});
     this.setState({title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal'});
     this.handleClose();
   }
