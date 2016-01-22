@@ -39,6 +39,9 @@ export class HabitBox extends React.Component {
   createDay (schedule) {
     var date = new Date(schedule.date);
     var day = date.getDay();
+    if (day == 0) {
+      day = day + 7
+    }
     return day;
   }
 
