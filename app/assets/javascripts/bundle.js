@@ -68566,7 +68566,7 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              { color: styles.background, backgroundColor: 'green' },
+	              { color: styles.background, backgroundColor: '#00bcd4' },
 	              this.props.habitInfo.habit.goal.title.charAt(0)
 	            ),
 	            title: this.props.habitInfo.habit.title,
