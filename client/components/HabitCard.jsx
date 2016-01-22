@@ -88,7 +88,7 @@ class HabitCard extends Component {
             actAsExpander={false}
             showExpandableButton={true}
             avatar={
-              <Avatar color={styles.background} backgroundColor="#00bcd4">
+              <Avatar color={styles.background} backgroundColor={colors.lightBlue}>
                 {this.props.habitInfo.habit.goal.title.charAt(0)}
               </Avatar>
             }

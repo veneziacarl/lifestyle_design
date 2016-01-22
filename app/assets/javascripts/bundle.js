@@ -68321,7 +68321,10 @@
 	var colors = exports.colors = {
 	  headerGray: '#424242',
 	  lightGray: '#4B4B4B',
-	  darkGray: '#262626'
+	  darkGray: '#262626',
+	  orange: '#D45E00',
+	  red: '#D4002E',
+	  lightBlue: '#00bcd4'
 	};
 
 /***/ },
@@ -68566,7 +68569,7 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              { color: styles.background, backgroundColor: '#00bcd4' },
+	              { color: styles.background, backgroundColor: _colors.colors.lightBlue },
 	              this.props.habitInfo.habit.goal.title.charAt(0)
 	            ),
 	            title: this.props.habitInfo.habit.title,

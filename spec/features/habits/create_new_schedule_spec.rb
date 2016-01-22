@@ -6,6 +6,7 @@ feature 'create new habit with schedules and tie it to a goal', js: true do
   before (:each) do
     user_sign_in(schedule.habit.goal.user)
     visit root_path
+    click_on 'Habits'
   end
 
   scenario 'navigates to schedule index page' do

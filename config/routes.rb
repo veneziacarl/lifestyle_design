@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'habits#index'
+  root 'homes#index'
 
   resources :habits
 
