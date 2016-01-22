@@ -60,10 +60,13 @@ export class HabitForm extends React.Component {
     if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
       alert("Title, goal, and schedule are required as input");
       return;
-    }
-    for(var i = 0; i < dates.length; i++) {
-      this.props.onHabitSubmit({title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal});
-    }
+    };
+    var schedules = dates.map( (schedule, i) => {
+      return (
+        [dates[i], frequency, status, repeat, goal]
+      );
+    });
+    this.props.onHabitSubmit({title: title, description: description, schedules: schedules});
     this.setState({title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal'});
     this.handleClose();
   }

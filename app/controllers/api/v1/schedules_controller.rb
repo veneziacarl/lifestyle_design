@@ -21,7 +21,8 @@ class Api::V1::SchedulesController < Api::V1::BaseController
       title: schedule_params[:title],
       description: schedule_params[:description], goal: @goal
     )
-    if @habit.save
+    existing_habit = Habit.search_for_existing_habit(@habit.title)
+    if !existing_habit && @habit.save
       @schedule = Schedule.new(
         date: schedule_params[:date], note: schedule_params[:note],
         status: schedule_params[:status], repeat: to_boolean(schedule_params[:repeat]),

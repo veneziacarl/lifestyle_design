@@ -1,6 +1,6 @@
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
-import { Tabs, Tab } from 'material-ui';
+import { Tabs, Tab, Paper } from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import { DragDropContext } from 'react-dnd';
@@ -59,30 +59,19 @@ export class HabitTabs extends React.Component {
     this.props.onScheduleMiss(scheduleInfo);
   }
 
-  // compareDayWithToday (day) {
-  //   var today = (new Date).getDay()
-  //   if (today == day) {
-  //     return "today";
-  //   } else if (today < day) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  //   passed={this.compareDayWithToday(day)}
-  // }
-
   getStyles (day) {
     const styles = {
-      backgroundColor: colors.lightBlue
+      backgroundColor: '#FEFEFE',
+      color: 'black'
     }
     var today = (new Date).getDay()
 
     if (today == day) {
-      styles.backgroundColor = colors.red;
+      styles.color = colors.red;
     } else if (today < day) {
-      styles.backgroundColor = colors.orange;
+      styles.color = colors.orange;
     } else {
-      styles.backgroundColor = colors.lightBlue;
+      styles.color = colors.lightBlue;
     }
 
     return styles;
@@ -90,7 +79,7 @@ export class HabitTabs extends React.Component {
 
   renderTabCategory (label, day) {
     return (
-      <Tab label={label} day={day}  style={this.getStyles(day)} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} day={day} style={this.getStyles(day)} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitList
             filteredSchedules={this.props.filteredSchedules}
@@ -109,16 +98,16 @@ export class HabitTabs extends React.Component {
 
   render() {
     return (
-      <div className="habittabs small-12 medium-6 large-4 columns">
-       <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
-         {this.renderTabCategory('M', 1)}
-         {this.renderTabCategory('T', 2)}
-         {this.renderTabCategory('W', 3)}
-         {this.renderTabCategory('Th', 4)}
-         {this.renderTabCategory('F', 5)}
-         {this.renderTabCategory('Sa', 6)}
-         {this.renderTabCategory('S', 7)}
-       </Tabs>
+      <div className="habitTabs small-12 medium-6 large-4 columns">
+         <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
+           {this.renderTabCategory('M', 1)}
+           {this.renderTabCategory('T', 2)}
+           {this.renderTabCategory('W', 3)}
+           {this.renderTabCategory('Th', 4)}
+           {this.renderTabCategory('F', 5)}
+           {this.renderTabCategory('Sa', 6)}
+           {this.renderTabCategory('S', 7)}
+         </Tabs>
       </div>
     );
   }
