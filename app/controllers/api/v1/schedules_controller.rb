@@ -1,4 +1,6 @@
 class Api::V1::SchedulesController < Api::V1::BaseController
+  before_action :authenticate_user!
+
   def show
   end
 

@@ -29163,8 +29163,15 @@
 	    }
 	  }, {
 	    key: 'handlePositionChange',
-	    value: function handlePositionChange(schedules) {
-	      this.setState({ schedules: schedules });
+	    value: function handlePositionChange(schedules, dragIndex, hoverIndex) {
+	      var schedulesArray = this.state.schedules;
+	      var insert_position = schedulesArray.indexOf(schedules[hoverIndex]);
+	      for (var i = 0; i < schedulesArray.length; i++) {
+	        if (schedulesArray[i].id === schedules[dragIndex].id) {
+	          schedulesArray[i] = schedulesArray.splice(insert_position, 1, schedules[dragIndex])[0];
+	        }
+	      }
+	      this.setState({ schedules: schedulesArray });
 	    }
 	  }, {
 	    key: 'render',
@@ -61371,7 +61378,7 @@
 	      var dragHabit = habits[dragIndex];
 	      habits.splice(dragIndex, 1);
 	      habits.splice(hoverIndex, 0, dragHabit);
-	      this.props.onPositionChange(habits);
+	      this.props.onPositionChange(habits, dragIndex, hoverIndex);
 	    }
 	  }, {
 	    key: 'handleDelete',
@@ -68314,7 +68321,10 @@
 	var colors = exports.colors = {
 	  headerGray: '#424242',
 	  lightGray: '#4B4B4B',
-	  darkGray: '#262626'
+	  darkGray: '#262626',
+	  orange: '#D45E00',
+	  red: '#D4002E',
+	  lightBlue: '#00bcd4'
 	};
 
 /***/ },
@@ -68559,8 +68569,8 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              { color: 'orange', backgroundColor: 'green' },
-	              'G'
+	              { color: styles.background, backgroundColor: _colors.colors.lightBlue },
+	              this.props.habitInfo.habit.goal.title.charAt(0)
 	            ),
 	            title: this.props.habitInfo.habit.title,
 	            id: this.props.habitInfo.habit.id
