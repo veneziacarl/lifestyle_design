@@ -28985,18 +28985,20 @@
 	    }
 	  }, {
 	    key: 'handleHabitSubmit',
-	    value: function handleHabitSubmit(schedule) {
+	    value: function handleHabitSubmit(habit) {
 	      _jquery2.default.ajax({
-	        url: '/api/v1/schedules',
+	        url: '/api/v1/habits',
 	        dataType: 'json',
 	        type: 'POST',
-	        data: schedule,
+	        data: habit,
 	        beforeSend: function beforeSend(xhr) {
 	          xhr.setRequestHeader('X-CSRF-Token', (0, _jquery2.default)('meta[name="csrf-token"]').attr('content'));
 	        },
 	        success: (function (info) {
 	          var schedulesArray = this.state.schedules;
-	          schedulesArray.unshift(info.schedule);
+	          for (var i = 0; i < info.schedules.length; i++) {
+	            schedulesArray.unshift(info.schedules[i]);
+	          }
 	          this.setState({ schedules: schedulesArray });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
@@ -29319,10 +29321,11 @@
 	      if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
 	        alert("Title, goal, and schedule are required as input");
 	        return;
-	      }
-	      for (var i = 0; i < dates.length; i++) {
-	        this.props.onHabitSubmit({ title: title, description: description, date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal });
-	      }
+	      };
+	      var schedules = dates.map(function (schedule, i) {
+	        return { date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal };
+	      });
+	      this.props.onHabitSubmit({ title: title, description: description, schedules_attributes: schedules });
 	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal' });
 	      this.handleClose();
 	    }
@@ -29339,12 +29342,16 @@
 	  }, {
 	    key: 'renderDayOption',
 	    value: function renderDayOption(label, day) {
-	      return _react2.default.createElement(_materialUi.Toggle, {
-	        value: this.props.findDayInWeek(day),
-	        label: label,
-	        style: { marginBottom: 16 },
-	        onToggle: this.handleDateChange.bind(this)
-	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'small-1 small-centered columns' },
+	        _react2.default.createElement(_materialUi.Toggle, {
+	          value: this.props.findDayInWeek(day),
+	          label: label,
+	          style: { marginBottom: 16 },
+	          onToggle: this.handleDateChange.bind(this)
+	        })
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -29359,14 +29366,14 @@
 	        goals
 	      ), _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        this.renderDayOption('M', 1),
 	        this.renderDayOption('T', 2),
 	        this.renderDayOption('W', 3),
 	        this.renderDayOption('Th', 4),
 	        this.renderDayOption('F', 5),
-	        this.renderDayOption('Sa', 6),
-	        this.renderDayOption('S', 7)
+	        this.renderDayOption('S', 6),
+	        this.renderDayOption('Su', 7)
 	      ), _react2.default.createElement(_materialUi.Checkbox, {
 	        name: 'repeat',
 	        value: 'repeat',
@@ -29390,6 +29397,7 @@
 	        _react2.default.createElement(
 	          _materialUi.Dialog,
 	          {
+	            'class': 'row',
 	            title: 'Create New Habit Or Goal',
 	            actions: actions,
 	            modal: false,
@@ -61328,6 +61336,8 @@
 
 	var _HabitList2 = _interopRequireDefault(_HabitList);
 
+	var _colors = __webpack_require__(494);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61401,11 +61411,30 @@
 	      this.props.onScheduleMiss(scheduleInfo);
 	    }
 	  }, {
+	    key: 'getStyles',
+	    value: function getStyles(day) {
+	      var styles = {
+	        backgroundColor: '#FEFEFE',
+	        color: 'black'
+	      };
+	      var today = new Date().getDay();
+
+	      if (today == day) {
+	        styles.color = _colors.colors.red;
+	      } else if (today < day) {
+	        styles.color = _colors.colors.orange;
+	      } else {
+	        styles.color = _colors.colors.lightBlue;
+	      }
+
+	      return styles;
+	    }
+	  }, {
 	    key: 'renderTabCategory',
 	    value: function renderTabCategory(label, day) {
 	      return _react2.default.createElement(
 	        _materialUi.Tab,
-	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
+	        { label: label, day: day, style: this.getStyles(day), onClick: this.handleChange.bind(this) },
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -61427,7 +61456,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'habittabs small-12 medium-6 large-4 columns' },
+	        { className: 'habitTabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Tabs,
 	          { initialSelectedIndex: this.props.initialSelectedIndex },
@@ -61436,8 +61465,8 @@
 	          this.renderTabCategory('W', 3),
 	          this.renderTabCategory('Th', 4),
 	          this.renderTabCategory('F', 5),
-	          this.renderTabCategory('Sa', 6),
-	          this.renderTabCategory('S', 7)
+	          this.renderTabCategory('S', 6),
+	          this.renderTabCategory('Su', 7)
 	        )
 	      );
 	    }
@@ -68552,9 +68581,8 @@
 	      var styles = {
 	        cursor: 'move',
 	        opacity: isDragging ? 0.5 : 1,
-	        padding: '10',
 	        background: 'white',
-	        margin: '2%'
+	        marginTop: '2%'
 	      };
 
 	      return connectDropTarget(connectDragSource(_react2.default.createElement(

@@ -12,15 +12,35 @@ class Api::V1::HabitsController < Api::V1::BaseController
   end
 
   def create
-    habit = Habit.new(habit_params)
-    if habit.save
-      flash[:notice] = "Habit Successfully Created"
-      flash[:color]= "valid"
+    @goal = Goal.where(title: habit_params[:schedules_attributes]['0'][:goal]).first
+    @habit = Habit.new(
+      title: habit_params[:title],
+      description: habit_params[:description], goal: @goal
+    )
+    if @habit.save
+      @schedules = []
+      habit_params[:schedules_attributes].each do |key, value|
+        schedule = Schedule.new(
+          date: value[:date], note: value[:note],
+          status: value[:status], repeat: to_boolean(value[:repeat]),
+          frequency: value[:frequency], habit: @habit
+        )
+        @schedules << schedule
+      end
+      if schedules_saved?(@schedules)
+        render(
+          json: ActiveModel::ArraySerializer.new(
+            @schedules,
+            each_serializer: Api::V1::ScheduleSerializer,
+            root: 'schedules'
+          )
+        )
+      else
+        render_unavailable
+      end
     else
-      flash[:notice] = "Form is invalid"
-      flash[:color]= "invalid"
+      render_unavailable
     end
-    render json: habit
   end
 
   def destroy
@@ -39,7 +59,11 @@ class Api::V1::HabitsController < Api::V1::BaseController
   private
 
   def habit_params
-    params.permit(:id, :title, :description, :time_type)
+    params.permit(:id, :title, :description, schedules_attributes: [:date, :frequency, :status, :repeat, :goal, :note])
+  end
+
+  def to_boolean(str)
+    str == 'true'
   end
 
   def update_info(habit, info)
@@ -51,5 +75,17 @@ class Api::V1::HabitsController < Api::V1::BaseController
       flash[:color]= "invalid"
     end
     habit
+  end
+
+  def schedules_saved?(schedules)
+    saved_schedules = []
+    schedules.each do |schedule|
+      if schedule.save
+        saved_schedules << schedule
+      else
+        saved_schedules = false
+      end
+    end
+    saved_schedules
   end
 end

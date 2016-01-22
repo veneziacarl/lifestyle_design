@@ -75,9 +75,8 @@ class HabitCard extends Component {
     const styles = {
       cursor: 'move',
       opacity: isDragging ? 0.5 : 1,
-      padding: '10',
       background: 'white',
-      margin: '2%'
+      marginTop: '2%'
     }
 
     return connectDropTarget(connectDragSource(
