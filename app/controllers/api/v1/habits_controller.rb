@@ -20,9 +20,11 @@ class Api::V1::HabitsController < Api::V1::BaseController
     if @habit.save
       @schedules = []
       habit_params[:schedules_attributes].each do |key, value|
-        schedule = Schedule.new(date: value[:date], note: value[:note],
-        status: value[:status], repeat: to_boolean(value[:repeat]),
-        frequency: value[:frequency], habit: @habit)
+        schedule = Schedule.new(
+          date: value[:date], note: value[:note],
+          status: value[:status], repeat: to_boolean(value[:repeat]),
+          frequency: value[:frequency], habit: @habit
+        )
         @schedules << schedule
       end
       if schedules_saved?(@schedules)
@@ -77,13 +79,13 @@ class Api::V1::HabitsController < Api::V1::BaseController
 
   def schedules_saved?(schedules)
     saved_schedules = []
-    @schedules.each do |schedule|
+    schedules.each do |schedule|
       if schedule.save
         saved_schedules << schedule
       else
         saved_schedules = false
       end
     end
-    return saved_schedules
+    saved_schedules
   end
 end
