@@ -4,8 +4,8 @@
 
 <hr />
 Habits that build to this goal:
-<% if @habits %>
-  <%= render @habits %>
-<% else %>
+<% if @habits.empty? %>
   No habits yet.
+<% else %>
+  <%= render @habits %>
 <% end %>

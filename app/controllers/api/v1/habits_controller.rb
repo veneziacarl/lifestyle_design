@@ -1,4 +1,6 @@
 class Api::V1::HabitsController < Api::V1::BaseController
+  before_action :authenticate_user!
+
   def show
     habit = Habit.find(params[:id])
     render json: habit
