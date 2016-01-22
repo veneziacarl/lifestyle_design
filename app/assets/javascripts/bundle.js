@@ -61328,6 +61328,8 @@
 
 	var _HabitList2 = _interopRequireDefault(_HabitList);
 
+	var _colors = __webpack_require__(494);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61400,12 +61402,43 @@
 	    value: function handleMiss(scheduleInfo) {
 	      this.props.onScheduleMiss(scheduleInfo);
 	    }
+
+	    // compareDayWithToday (day) {
+	    //   var today = (new Date).getDay()
+	    //   if (today == day) {
+	    //     return "today";
+	    //   } else if (today < day) {
+	    //     return false;
+	    //   } else {
+	    //     return true;
+	    //   }
+	    //   passed={this.compareDayWithToday(day)}
+	    // }
+
+	  }, {
+	    key: 'getStyles',
+	    value: function getStyles(day) {
+	      var styles = {
+	        backgroundColor: _colors.colors.lightBlue
+	      };
+	      var today = new Date().getDay();
+
+	      if (today == day) {
+	        styles.backgroundColor = _colors.colors.red;
+	      } else if (today < day) {
+	        styles.backgroundColor = _colors.colors.orange;
+	      } else {
+	        styles.backgroundColor = _colors.colors.lightBlue;
+	      }
+
+	      return styles;
+	    }
 	  }, {
 	    key: 'renderTabCategory',
 	    value: function renderTabCategory(label, day) {
 	      return _react2.default.createElement(
 	        _materialUi.Tab,
-	        { label: label, day: day, passed: false, onClick: this.handleChange.bind(this) },
+	        { label: label, day: day, style: this.getStyles(day), onClick: this.handleChange.bind(this) },
 	        _react2.default.createElement(
 	          'div',
 	          null,

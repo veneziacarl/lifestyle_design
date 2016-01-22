@@ -7,6 +7,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import HabitList from './HabitList.jsx';
+import { colors } from './colors.jsx';
 
 
 const propTypes = {
@@ -58,9 +59,38 @@ export class HabitTabs extends React.Component {
     this.props.onScheduleMiss(scheduleInfo);
   }
 
+  // compareDayWithToday (day) {
+  //   var today = (new Date).getDay()
+  //   if (today == day) {
+  //     return "today";
+  //   } else if (today < day) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  //   passed={this.compareDayWithToday(day)}
+  // }
+
+  getStyles (day) {
+    const styles = {
+      backgroundColor: colors.lightBlue
+    }
+    var today = (new Date).getDay()
+
+    if (today == day) {
+      styles.backgroundColor = colors.red;
+    } else if (today < day) {
+      styles.backgroundColor = colors.orange;
+    } else {
+      styles.backgroundColor = colors.lightBlue;
+    }
+
+    return styles;
+  }
+
   renderTabCategory (label, day) {
     return (
-      <Tab label={label} day={day} passed={false} onClick={this.handleChange.bind(this)}>
+      <Tab label={label} day={day}  style={this.getStyles(day)} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitList
             filteredSchedules={this.props.filteredSchedules}
