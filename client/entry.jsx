@@ -6,6 +6,6 @@ import HabitBox from './components/HabitBox.jsx';
 
 $(function() {
   if ($('#habit_box').length) {
-    render(<HabitBox />, document.getElementById('habit_box'));
+    render(<HabitBox pollInterval={10000} />, document.getElementById('habit_box'));
   }
 });

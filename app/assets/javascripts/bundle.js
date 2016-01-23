@@ -71,7 +71,7 @@
 
 	(0, _jquery2.default)(function () {
 	  if ((0, _jquery2.default)('#habit_box').length) {
-	    (0, _reactDom.render)(_react2.default.createElement(_HabitBox2.default, null), document.getElementById('habit_box'));
+	    (0, _reactDom.render)(_react2.default.createElement(_HabitBox2.default, { pollInterval: 10000 }), document.getElementById('habit_box'));
 	  }
 	});
 
@@ -28954,6 +28954,7 @@
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
 	    _this.handleScheduleComplete = _this.handleScheduleComplete.bind(_this);
 	    _this.handleScheduleMiss = _this.handleScheduleMiss.bind(_this);
+	    _this.checkScheduleDates = _this.checkScheduleDates.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
 	    _this.handleRequestClose = _this.handleRequestClose.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
@@ -29183,11 +29184,27 @@
 	    key: 'onMount',
 	    value: function onMount() {}
 	  }, {
+	    key: 'checkScheduleDates',
+	    value: function checkScheduleDates() {
+	      var schedulesArray = this.state.schedules;
+	      var date = new Date();
+	      date.setHours(0, 0, 0, 0);
+	      for (var i = 0; i < schedulesArray.length; i++) {
+	        var scheduleDate = new Date(schedulesArray[i].date);
+	        if (scheduleDate < date) {
+	          var schedule = schedulesArray.splice(i, 1);
+	          this.handleScheduleMiss(schedule.id);
+	        }
+	      }
+	      this.setState({ schedules: schedulesArray });
+	    }
+	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.setTodayTab();
 	      this.loadGoals();
 	      this.loadHabits();
+	      setInterval(this.checkScheduleDates, this.props.pollInterval);
 	    }
 	  }, {
 	    key: 'handlePositionChange',
