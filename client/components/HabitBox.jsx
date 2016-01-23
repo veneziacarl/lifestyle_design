@@ -240,13 +240,14 @@ export class HabitBox extends React.Component {
     var date = new Date;
     date.setHours(0,0,0,0);
     for(var i = 0; i < schedulesArray.length; i++) {
-      var scheduleDate = (new Date(schedulesArray[i].date))
+      var schedule = schedulesArray[i]
+      var scheduleDate = (new Date(schedule.date))
       if(scheduleDate < date) {
-        var schedule = schedulesArray.splice(i, 1)
+        schedulesArray.splice(i, 1)
         this.handleScheduleMiss(schedule.id)
+        this.setState({schedules: schedulesArray});
       }
     }
-    this.setState({schedules: schedulesArray});
   }
 
   componentDidMount () {

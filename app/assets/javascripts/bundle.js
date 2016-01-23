@@ -28903,7 +28903,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUi = __webpack_require__(163);
+	var _materialUi = __webpack_require__(162);
 
 	var _reactDom = __webpack_require__(159);
 
@@ -28911,7 +28911,7 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _HabitForm = __webpack_require__(162);
+	var _HabitForm = __webpack_require__(368);
 
 	var _HabitForm2 = _interopRequireDefault(_HabitForm);
 
@@ -29194,13 +29194,14 @@
 	      var date = new Date();
 	      date.setHours(0, 0, 0, 0);
 	      for (var i = 0; i < schedulesArray.length; i++) {
-	        var scheduleDate = new Date(schedulesArray[i].date);
+	        var schedule = schedulesArray[i];
+	        var scheduleDate = new Date(schedule.date);
 	        if (scheduleDate < date) {
-	          var schedule = schedulesArray.splice(i, 1);
+	          schedulesArray.splice(i, 1);
 	          this.handleScheduleMiss(schedule.id);
+	          this.setState({ schedules: schedulesArray });
 	        }
 	      }
-	      this.setState({ schedules: schedulesArray });
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -29296,507 +29297,305 @@
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.HabitForm = undefined;
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _materialUi = __webpack_require__(163);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HabitForm = exports.HabitForm = (function (_React$Component) {
-	  _inherits(HabitForm, _React$Component);
-
-	  function HabitForm(props) {
-	    _classCallCheck(this, HabitForm);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitForm).call(this, props));
-
-	    _this.state = {
-	      title: '',
-	      description: '',
-	      dates: [],
-	      frequency: 'day',
-	      status: 'do',
-	      repeat: true,
-	      goal: 'choose the related goal',
-	      open: false
-	    };
-	    return _this;
-	  }
-
-	  _createClass(HabitForm, [{
-	    key: 'handleTitleChange',
-	    value: function handleTitleChange(e) {
-	      this.setState({ title: e.target.value });
-	    }
-	  }, {
-	    key: 'handleDescriptionChange',
-	    value: function handleDescriptionChange(e) {
-	      this.setState({ description: e.target.value });
-	    }
-	  }, {
-	    key: 'handleGoalChange',
-	    value: function handleGoalChange(e) {
-	      this.setState({ goal: e.target.innerHTML });
-	    }
-	  }, {
-	    key: 'handleDateChange',
-	    value: function handleDateChange(e) {
-	      var dates = this.state.dates;
-	      if (dates.length > 0) {
-	        for (var i = 0; i < dates.length; i++) {
-	          var date = dates[i];
-	          if (new Date(date).getDate() == new Date(e.target.value).getDate()) {
-	            dates.splice(i, 1);
-	          }
-	        }
-	      }
-	      // the `false` used here for the target's react internal component means that the toggle is true
-	      if (e.target._reactInternalComponent._currentElement.props.switched == false) {
-	        dates.push(e.target.value);
-	      }
-	      this.setState({ dates: dates });
-	    }
-	  }, {
-	    key: 'handleRepeat',
-	    value: function handleRepeat(e) {
-	      this.setState({ repeat: e.target.checked });
-	    }
-	  }, {
-	    key: 'handleSubmit',
-	    value: function handleSubmit(e) {
-	      var title = this.state.title.trim();
-	      var description = this.state.description.trim();
-	      var dates = this.state.dates;
-	      var frequency = this.state.frequency;
-	      var status = this.state.status;
-	      var repeat = this.state.repeat;
-	      var goal = this.state.goal.trim();
-	      if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
-	        alert("Title, goal, and schedule are required as input");
-	        return;
-	      };
-	      var schedules = dates.map(function (schedule, i) {
-	        return { date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal };
-	      });
-	      this.props.onHabitSubmit({ title: title, description: description, schedules_attributes: schedules });
-	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal' });
-	      this.handleClose();
-	    }
-	  }, {
-	    key: 'handleOpen',
-	    value: function handleOpen() {
-	      this.setState({ open: true });
-	    }
-	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.setState({ open: false });
-	    }
-	  }, {
-	    key: 'renderDayOption',
-	    value: function renderDayOption(label, day) {
-	      var styles = {};
-	      var labelStyles = {
-	        width: '5px',
-	        paddingRight: '25px',
-	        paddingBottom: '5px'
-	      };
-	      return _react2.default.createElement(_materialUi.Toggle, {
-	        labelStyle: labelStyles,
-	        style: styles,
-	        value: this.props.findDayInWeek(day),
-	        label: label,
-	        onToggle: this.handleDateChange.bind(this)
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var goals = this.props.goals.map(function (goal, i) {
-	        return _react2.default.createElement(_materialUi.MenuItem, { value: goal.title, primaryText: goal.title, key: i });
-	      });
-	      var actions = [_react2.default.createElement('input', { type: 'text', name: 'title', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', name: 'description', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
-	        _materialUi.SelectField,
-	        { id: 'goal', value: this.state.goal, onChange: this.handleGoalChange.bind(this) },
-	        _react2.default.createElement(_materialUi.MenuItem, { value: 'choose the related goal', primaryText: 'choose the related goal' }),
-	        goals
-	      ), _react2.default.createElement(
-	        'div',
-	        { className: 'small-6 small-centered columns' },
-	        this.renderDayOption('M', 1),
-	        this.renderDayOption('T', 2),
-	        this.renderDayOption('W', 3),
-	        this.renderDayOption('Th', 4),
-	        this.renderDayOption('F', 5),
-	        this.renderDayOption('S', 6),
-	        this.renderDayOption('Su', 7)
-	      ), _react2.default.createElement(_materialUi.Checkbox, {
-	        name: 'repeat',
-	        value: 'repeat',
-	        label: 'Repeat This Schedule Weekly?',
-	        defaultChecked: true,
-	        onCheck: this.handleRepeat.bind(this),
-	        labelPosition: 'left',
-	        style: { paddingRight: '50px' }
-	      }), _react2.default.createElement(_materialUi.FlatButton, {
-	        label: 'Cancel',
-	        secondary: true,
-	        onClick: this.handleClose.bind(this)
-	      }), _react2.default.createElement(_materialUi.FlatButton, {
-	        label: 'Add Habit',
-	        primary: true,
-	        onClick: this.handleSubmit.bind(this)
-	      })];
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'habitForm small-12 medium-6 large-4 columns' },
-	        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
-	        _react2.default.createElement(
-	          _materialUi.Dialog,
-	          {
-	            'class': 'row',
-	            title: 'Create New Habit Or Goal',
-	            actions: actions,
-	            modal: false,
-	            open: this.state.open,
-	            onRequestClose: this.handleClose.bind(this)
-	          },
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'This is filler text in the dialog popover'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return HabitForm;
-	})(_react2.default.Component);
-
-	exports.default = HabitForm;
-
-/***/ },
-/* 163 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _appBar = __webpack_require__(164);
+	var _appBar = __webpack_require__(163);
 
 	var _appBar2 = _interopRequireDefault(_appBar);
 
-	var _appCanvas = __webpack_require__(238);
+	var _appCanvas = __webpack_require__(237);
 
 	var _appCanvas2 = _interopRequireDefault(_appCanvas);
 
-	var _autoComplete = __webpack_require__(239);
+	var _autoComplete = __webpack_require__(238);
 
 	var _autoComplete2 = _interopRequireDefault(_autoComplete);
 
-	var _avatar = __webpack_require__(266);
+	var _avatar = __webpack_require__(265);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
 
-	var _badge = __webpack_require__(267);
+	var _badge = __webpack_require__(266);
 
 	var _badge2 = _interopRequireDefault(_badge);
 
-	var _beforeAfterWrapper = __webpack_require__(268);
+	var _beforeAfterWrapper = __webpack_require__(267);
 
 	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
 
-	var _cardCard = __webpack_require__(269);
+	var _cardCard = __webpack_require__(268);
 
 	var _cardCard2 = _interopRequireDefault(_cardCard);
 
-	var _cardCardActions = __webpack_require__(273);
+	var _cardCardActions = __webpack_require__(272);
 
 	var _cardCardActions2 = _interopRequireDefault(_cardCardActions);
 
-	var _cardCardExpandable = __webpack_require__(270);
+	var _cardCardExpandable = __webpack_require__(269);
 
 	var _cardCardExpandable2 = _interopRequireDefault(_cardCardExpandable);
 
-	var _cardCardHeader = __webpack_require__(274);
+	var _cardCardHeader = __webpack_require__(273);
 
 	var _cardCardHeader2 = _interopRequireDefault(_cardCardHeader);
 
-	var _cardCardMedia = __webpack_require__(279);
+	var _cardCardMedia = __webpack_require__(278);
 
 	var _cardCardMedia2 = _interopRequireDefault(_cardCardMedia);
 
-	var _cardCardText = __webpack_require__(280);
+	var _cardCardText = __webpack_require__(279);
 
 	var _cardCardText2 = _interopRequireDefault(_cardCardText);
 
-	var _cardCardTitle = __webpack_require__(281);
+	var _cardCardTitle = __webpack_require__(280);
 
 	var _cardCardTitle2 = _interopRequireDefault(_cardCardTitle);
 
-	var _checkbox = __webpack_require__(282);
+	var _checkbox = __webpack_require__(281);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
-	var _circularProgress = __webpack_require__(287);
+	var _circularProgress = __webpack_require__(286);
 
 	var _circularProgress2 = _interopRequireDefault(_circularProgress);
 
-	var _clearfix = __webpack_require__(284);
+	var _clearfix = __webpack_require__(283);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _datePickerDatePicker = __webpack_require__(288);
+	var _datePickerDatePicker = __webpack_require__(287);
 
 	var _datePickerDatePicker2 = _interopRequireDefault(_datePickerDatePicker);
 
-	var _datePickerDatePickerDialog = __webpack_require__(290);
+	var _datePickerDatePickerDialog = __webpack_require__(289);
 
 	var _datePickerDatePickerDialog2 = _interopRequireDefault(_datePickerDatePickerDialog);
 
-	var _dialog = __webpack_require__(304);
+	var _dialog = __webpack_require__(303);
 
 	var _dialog2 = _interopRequireDefault(_dialog);
 
-	var _divider = __webpack_require__(264);
+	var _divider = __webpack_require__(263);
 
 	var _divider2 = _interopRequireDefault(_divider);
 
-	var _dropDownIcon = __webpack_require__(310);
+	var _dropDownIcon = __webpack_require__(309);
 
 	var _dropDownIcon2 = _interopRequireDefault(_dropDownIcon);
 
-	var _dropDownMenu = __webpack_require__(318);
+	var _dropDownMenu = __webpack_require__(317);
 
 	var _dropDownMenu2 = _interopRequireDefault(_dropDownMenu);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _flatButton = __webpack_require__(305);
+	var _flatButton = __webpack_require__(304);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _floatingActionButton = __webpack_require__(322);
+	var _floatingActionButton = __webpack_require__(321);
 
 	var _floatingActionButton2 = _interopRequireDefault(_floatingActionButton);
 
-	var _fontIcon = __webpack_require__(233);
+	var _fontIcon = __webpack_require__(232);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _gridListGridList = __webpack_require__(323);
+	var _gridListGridList = __webpack_require__(322);
 
 	var _gridListGridList2 = _interopRequireDefault(_gridListGridList);
 
-	var _gridListGridTile = __webpack_require__(324);
+	var _gridListGridTile = __webpack_require__(323);
 
 	var _gridListGridTile2 = _interopRequireDefault(_gridListGridTile);
 
-	var _iconButton = __webpack_require__(185);
+	var _iconButton = __webpack_require__(184);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _menusIconMenu = __webpack_require__(325);
+	var _menusIconMenu = __webpack_require__(324);
 
 	var _menusIconMenu2 = _interopRequireDefault(_menusIconMenu);
 
-	var _leftNav = __webpack_require__(326);
+	var _leftNav = __webpack_require__(325);
 
 	var _leftNav2 = _interopRequireDefault(_leftNav);
 
-	var _linearProgress = __webpack_require__(329);
+	var _linearProgress = __webpack_require__(328);
 
 	var _linearProgress2 = _interopRequireDefault(_linearProgress);
 
-	var _listsList = __webpack_require__(251);
+	var _listsList = __webpack_require__(250);
 
 	var _listsList2 = _interopRequireDefault(_listsList);
 
-	var _listsListDivider = __webpack_require__(330);
+	var _listsListDivider = __webpack_require__(329);
 
 	var _listsListDivider2 = _interopRequireDefault(_listsListDivider);
 
-	var _listsListItem = __webpack_require__(260);
+	var _listsListItem = __webpack_require__(259);
 
 	var _listsListItem2 = _interopRequireDefault(_listsListItem);
 
-	var _menusMenu = __webpack_require__(248);
+	var _menusMenu = __webpack_require__(247);
 
 	var _menusMenu2 = _interopRequireDefault(_menusMenu);
 
-	var _menusMenuItem = __webpack_require__(252);
+	var _menusMenuItem = __webpack_require__(251);
 
 	var _menusMenuItem2 = _interopRequireDefault(_menusMenuItem);
 
-	var _mixins = __webpack_require__(331);
+	var _mixins = __webpack_require__(330);
 
 	var _mixins2 = _interopRequireDefault(_mixins);
 
-	var _overlay = __webpack_require__(307);
+	var _overlay = __webpack_require__(306);
 
 	var _overlay2 = _interopRequireDefault(_overlay);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _popoverPopover = __webpack_require__(253);
+	var _popoverPopover = __webpack_require__(252);
 
 	var _popoverPopover2 = _interopRequireDefault(_popoverPopover);
 
-	var _radioButton = __webpack_require__(333);
+	var _radioButton = __webpack_require__(332);
 
 	var _radioButton2 = _interopRequireDefault(_radioButton);
 
-	var _radioButtonGroup = __webpack_require__(336);
+	var _radioButtonGroup = __webpack_require__(335);
 
 	var _radioButtonGroup2 = _interopRequireDefault(_radioButtonGroup);
 
-	var _raisedButton = __webpack_require__(337);
+	var _raisedButton = __webpack_require__(336);
 
 	var _raisedButton2 = _interopRequireDefault(_raisedButton);
 
-	var _refreshIndicator = __webpack_require__(338);
+	var _refreshIndicator = __webpack_require__(337);
 
 	var _refreshIndicator2 = _interopRequireDefault(_refreshIndicator);
 
-	var _ripples = __webpack_require__(339);
+	var _ripples = __webpack_require__(338);
 
 	var _ripples2 = _interopRequireDefault(_ripples);
 
-	var _selectField = __webpack_require__(340);
+	var _selectField = __webpack_require__(339);
 
 	var _selectField2 = _interopRequireDefault(_selectField);
 
-	var _hocSelectableEnhance = __webpack_require__(341);
+	var _hocSelectableEnhance = __webpack_require__(340);
 
 	var _hocSelectableEnhance2 = _interopRequireDefault(_hocSelectableEnhance);
 
-	var _slider = __webpack_require__(342);
+	var _slider = __webpack_require__(341);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
-	var _styles = __webpack_require__(275);
+	var _styles = __webpack_require__(274);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
-	var _snackbar = __webpack_require__(343);
+	var _snackbar = __webpack_require__(342);
 
 	var _snackbar2 = _interopRequireDefault(_snackbar);
 
-	var _tabsTab = __webpack_require__(344);
+	var _tabsTab = __webpack_require__(343);
 
 	var _tabsTab2 = _interopRequireDefault(_tabsTab);
 
-	var _tabsTabs = __webpack_require__(345);
+	var _tabsTabs = __webpack_require__(344);
 
 	var _tabsTabs2 = _interopRequireDefault(_tabsTabs);
 
-	var _tableTable = __webpack_require__(348);
+	var _tableTable = __webpack_require__(347);
 
 	var _tableTable2 = _interopRequireDefault(_tableTable);
 
-	var _tableTableBody = __webpack_require__(349);
+	var _tableTableBody = __webpack_require__(348);
 
 	var _tableTableBody2 = _interopRequireDefault(_tableTableBody);
 
-	var _tableTableFooter = __webpack_require__(351);
+	var _tableTableFooter = __webpack_require__(350);
 
 	var _tableTableFooter2 = _interopRequireDefault(_tableTableFooter);
 
-	var _tableTableHeader = __webpack_require__(352);
+	var _tableTableHeader = __webpack_require__(351);
 
 	var _tableTableHeader2 = _interopRequireDefault(_tableTableHeader);
 
-	var _tableTableHeaderColumn = __webpack_require__(353);
+	var _tableTableHeaderColumn = __webpack_require__(352);
 
 	var _tableTableHeaderColumn2 = _interopRequireDefault(_tableTableHeaderColumn);
 
-	var _tableTableRow = __webpack_require__(354);
+	var _tableTableRow = __webpack_require__(353);
 
 	var _tableTableRow2 = _interopRequireDefault(_tableTableRow);
 
-	var _tableTableRowColumn = __webpack_require__(350);
+	var _tableTableRowColumn = __webpack_require__(349);
 
 	var _tableTableRowColumn2 = _interopRequireDefault(_tableTableRowColumn);
 
-	var _toggle = __webpack_require__(315);
+	var _toggle = __webpack_require__(314);
 
 	var _toggle2 = _interopRequireDefault(_toggle);
 
-	var _themeWrapper = __webpack_require__(355);
+	var _themeWrapper = __webpack_require__(354);
 
 	var _themeWrapper2 = _interopRequireDefault(_themeWrapper);
 
-	var _timePicker = __webpack_require__(356);
+	var _timePicker = __webpack_require__(355);
 
 	var _timePicker2 = _interopRequireDefault(_timePicker);
 
-	var _TextField = __webpack_require__(241);
+	var _TextField = __webpack_require__(240);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
-	var _toolbarToolbar = __webpack_require__(297);
+	var _toolbarToolbar = __webpack_require__(296);
 
 	var _toolbarToolbar2 = _interopRequireDefault(_toolbarToolbar);
 
-	var _toolbarToolbarGroup = __webpack_require__(298);
+	var _toolbarToolbarGroup = __webpack_require__(297);
 
 	var _toolbarToolbarGroup2 = _interopRequireDefault(_toolbarToolbarGroup);
 
-	var _toolbarToolbarSeparator = __webpack_require__(366);
+	var _toolbarToolbarSeparator = __webpack_require__(365);
 
 	var _toolbarToolbarSeparator2 = _interopRequireDefault(_toolbarToolbarSeparator);
 
-	var _toolbarToolbarTitle = __webpack_require__(367);
+	var _toolbarToolbarTitle = __webpack_require__(366);
 
 	var _toolbarToolbarTitle2 = _interopRequireDefault(_toolbarToolbarTitle);
 
-	var _tooltip = __webpack_require__(234);
+	var _tooltip = __webpack_require__(233);
 
 	var _tooltip2 = _interopRequireDefault(_tooltip);
 
-	var _utils = __webpack_require__(368);
+	var _utils = __webpack_require__(367);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _svgIconsNavigationMenu = __webpack_require__(235);
+	var _svgIconsNavigationMenu = __webpack_require__(234);
 
 	var _svgIconsNavigationMenu2 = _interopRequireDefault(_svgIconsNavigationMenu);
 
-	var _svgIconsNavigationChevronLeft = __webpack_require__(299);
+	var _svgIconsNavigationChevronLeft = __webpack_require__(298);
 
 	var _svgIconsNavigationChevronLeft2 = _interopRequireDefault(_svgIconsNavigationChevronLeft);
 
-	var _svgIconsNavigationChevronRight = __webpack_require__(300);
+	var _svgIconsNavigationChevronRight = __webpack_require__(299);
 
 	var _svgIconsNavigationChevronRight2 = _interopRequireDefault(_svgIconsNavigationChevronRight);
 
@@ -29952,7 +29751,7 @@
 	};
 
 /***/ },
-/* 164 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29971,35 +29770,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _iconButton = __webpack_require__(185);
+	var _iconButton = __webpack_require__(184);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _svgIconsNavigationMenu = __webpack_require__(235);
+	var _svgIconsNavigationMenu = __webpack_require__(234);
 
 	var _svgIconsNavigationMenu2 = _interopRequireDefault(_svgIconsNavigationMenu);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
@@ -30332,7 +30131,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30347,11 +30146,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsImmutabilityHelper = __webpack_require__(166);
+	var _utilsImmutabilityHelper = __webpack_require__(165);
 
 	var _utilsImmutabilityHelper2 = _interopRequireDefault(_utilsImmutabilityHelper);
 
-	var _utilsStyles = __webpack_require__(169);
+	var _utilsStyles = __webpack_require__(168);
 
 	var _utilsStyles2 = _interopRequireDefault(_utilsStyles);
 
@@ -30392,7 +30191,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 166 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30403,7 +30202,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _reactAddonsUpdate = __webpack_require__(167);
+	var _reactAddonsUpdate = __webpack_require__(166);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
@@ -30446,13 +30245,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 167 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(168);
+	module.exports = __webpack_require__(167);
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30565,7 +30364,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30576,11 +30375,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _utilsImmutabilityHelper = __webpack_require__(166);
+	var _utilsImmutabilityHelper = __webpack_require__(165);
 
 	var _utilsImmutabilityHelper2 = _interopRequireDefault(_utilsImmutabilityHelper);
 
@@ -30690,7 +30489,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30701,7 +30500,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _inlineStylePrefixer = __webpack_require__(171);
+	var _inlineStylePrefixer = __webpack_require__(170);
 
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 
@@ -30775,7 +30574,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30790,19 +30589,19 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _getBrowserInformation = __webpack_require__(172);
+	var _getBrowserInformation = __webpack_require__(171);
 
 	var _getBrowserInformation2 = _interopRequireDefault(_getBrowserInformation);
 
-	var _getPrefixedKeyframes = __webpack_require__(174);
+	var _getPrefixedKeyframes = __webpack_require__(173);
 
 	var _getPrefixedKeyframes2 = _interopRequireDefault(_getPrefixedKeyframes);
 
-	var _caniuseData = __webpack_require__(175);
+	var _caniuseData = __webpack_require__(174);
 
 	var _caniuseData2 = _interopRequireDefault(_caniuseData);
 
-	var _Plugins = __webpack_require__(176);
+	var _Plugins = __webpack_require__(175);
 
 	var _Plugins2 = _interopRequireDefault(_Plugins);
 
@@ -30975,7 +30774,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30986,7 +30785,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _bowser = __webpack_require__(173);
+	var _bowser = __webpack_require__(172);
 
 	var _bowser2 = _interopRequireDefault(_bowser);
 
@@ -31184,7 +30983,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -31481,7 +31280,7 @@
 
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31505,13 +31304,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports) {
 
 	var caniuseData = {"chrome":{"transform":35,"transformOrigin":35,"transformOriginX":35,"transformOriginY":35,"backfaceVisibility":35,"perspective":35,"perspectiveOrigin":35,"transformStyle":35,"transformOriginZ":35,"animation":42,"animationDelay":42,"animationDirection":42,"animationFillMode":42,"animationDuration":42,"animationIterationCount":42,"animationName":42,"animationPlayState":42,"animationTimingFunction":42,"appearance":49,"userSelect":49,"fontKerning":32,"textEmphasisPosition":49,"textEmphasis":49,"textEmphasisStyle":49,"textEmphasisColor":49,"boxDecorationBreak":49,"clipPath":49,"maskImage":49,"maskMode":49,"maskRepeat":49,"maskPosition":49,"maskClip":49,"maskOrigin":49,"maskSize":49,"maskComposite":49,"mask":49,"maskBorderSource":49,"maskBorderMode":49,"maskBorderSlice":49,"maskBorderWidth":49,"maskBorderOutset":49,"maskBorderRepeat":49,"maskBorder":49,"maskType":49,"textDecorationStyle":49,"textDecorationSkip":49,"textDecorationLine":49,"textDecorationColor":49,"filter":49,"fontFeatureSettings":49,"breakAfter":49,"breakBefore":49,"breakInside":49,"columnCount":49,"columnFill":49,"columnGap":49,"columnRule":49,"columnRuleColor":49,"columnRuleStyle":49,"columnRuleWidth":49,"columns":49,"columnSpan":49,"columnWidth":49},"safari":{"flex":8,"flexBasis":8,"flexDirection":8,"flexGrow":8,"flexFlow":8,"flexShrink":8,"flexWrap":8,"alignContent":8,"alignItems":8,"alignSelf":8,"justifyContent":8,"order":8,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8,"transformOrigin":8,"transformOriginX":8,"transformOriginY":8,"backfaceVisibility":8,"perspective":8,"perspectiveOrigin":8,"transformStyle":8,"transformOriginZ":8,"animation":8,"animationDelay":8,"animationDirection":8,"animationFillMode":8,"animationDuration":8,"animationIterationCount":8,"animationName":8,"animationPlayState":8,"animationTimingFunction":8,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"textEmphasisPosition":7,"textEmphasis":7,"textEmphasisStyle":7,"textEmphasisColor":7,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8,"breakAfter":8,"breakInside":8,"regionFragment":9,"columnCount":8,"columnFill":8,"columnGap":8,"columnRule":8,"columnRuleColor":8,"columnRuleStyle":8,"columnRuleWidth":8,"columns":8,"columnSpan":8,"columnWidth":8},"firefox":{"appearance":45,"userSelect":45,"boxSizing":28,"textAlignLast":45,"textDecorationStyle":35,"textDecorationSkip":35,"textDecorationLine":35,"textDecorationColor":35,"tabSize":45,"hyphens":42,"fontFeatureSettings":33,"breakAfter":45,"breakBefore":45,"breakInside":45,"columnCount":45,"columnFill":45,"columnGap":45,"columnRule":45,"columnRuleColor":45,"columnRuleStyle":45,"columnRuleWidth":45,"columns":45,"columnSpan":45,"columnWidth":45},"opera":{"flex":16,"flexBasis":16,"flexDirection":16,"flexGrow":16,"flexFlow":16,"flexShrink":16,"flexWrap":16,"alignContent":16,"alignItems":16,"alignSelf":16,"justifyContent":16,"order":16,"transform":22,"transformOrigin":22,"transformOriginX":22,"transformOriginY":22,"backfaceVisibility":22,"perspective":22,"perspectiveOrigin":22,"transformStyle":22,"transformOriginZ":22,"animation":29,"animationDelay":29,"animationDirection":29,"animationFillMode":29,"animationDuration":29,"animationIterationCount":29,"animationName":29,"animationPlayState":29,"animationTimingFunction":29,"appearance":35,"userSelect":35,"fontKerning":19,"textEmphasisPosition":35,"textEmphasis":35,"textEmphasisStyle":35,"textEmphasisColor":35,"boxDecorationBreak":35,"clipPath":35,"maskImage":35,"maskMode":35,"maskRepeat":35,"maskPosition":35,"maskClip":35,"maskOrigin":35,"maskSize":35,"maskComposite":35,"mask":35,"maskBorderSource":35,"maskBorderMode":35,"maskBorderSlice":35,"maskBorderWidth":35,"maskBorderOutset":35,"maskBorderRepeat":35,"maskBorder":35,"maskType":35,"filter":35,"fontFeatureSettings":35,"breakAfter":35,"breakBefore":35,"breakInside":35,"columnCount":35,"columnFill":35,"columnGap":35,"columnRule":35,"columnRuleColor":35,"columnRuleStyle":35,"columnRuleWidth":35,"columns":35,"columnSpan":35,"columnWidth":35},"ie":{"gridTemplateRows":11,"grid":11,"flowInto":11,"flexDirection":10,"touchAction":10,"gridRow":11,"scrollSnapPointsX":11,"wrapMargin":11,"breakBefore":11,"gridRowEnd":11,"gridRowStart":11,"breakInside":11,"transformOrigin":9,"scrollSnapType":11,"scrollSnapDestination":11,"gridTemplate":11,"flexWrap":10,"transformOriginX":9,"flowFrom":11,"gridColumnStart":11,"userSelect":11,"wrapFlow":11,"scrollSnapCoordinate":11,"gridGap":11,"gridAutoRows":11,"hyphens":11,"regionFragment":11,"flex":10,"columnGap":11,"wrapThrough":11,"transformOriginY":9,"breakAfter":11,"rowGap":11,"gridTemplateColumns":11,"gridArea":11,"transform":9,"gridAutoFlow":11,"flexFlow":10,"gridTemplateAreas":11,"gridColumn":11,"gridAutoColumns":11,"scrollSnapPointsY":11,"textSizeAdjust":11},"ios_saf":{"flex":8.1,"flexBasis":8.1,"flexDirection":8.1,"flexGrow":8.1,"flexFlow":8.1,"flexShrink":8.1,"flexWrap":8.1,"alignContent":8.1,"alignItems":8.1,"alignSelf":8.1,"justifyContent":8.1,"order":8.1,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8.1,"transformOrigin":8.1,"transformOriginX":8.1,"transformOriginY":8.1,"backfaceVisibility":8.1,"perspective":8.1,"perspectiveOrigin":8.1,"transformStyle":8.1,"transformOriginZ":8.1,"animation":8.1,"animationDelay":8.1,"animationDirection":8.1,"animationFillMode":8.1,"animationDuration":8.1,"animationIterationCount":8.1,"animationName":8.1,"animationPlayState":8.1,"animationTimingFunction":8.1,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textSizeAdjust":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8.1,"breakAfter":8.1,"breakInside":8.1,"regionFragment":9,"columnCount":8.1,"columnFill":8.1,"columnGap":8.1,"columnRule":8.1,"columnRuleColor":8.1,"columnRuleStyle":8.1,"columnRuleWidth":8.1,"columns":8.1,"columnSpan":8.1,"columnWidth":8.1},"android":{"borderImage":4.2,"borderImageOutset":4.2,"borderImageRepeat":4.2,"borderImageSlice":4.2,"borderImageSource":4.2,"borderImageWidth":4.2,"flex":4.2,"flexBasis":4.2,"flexDirection":4.2,"flexGrow":4.2,"flexFlow":4.2,"flexShrink":4.2,"flexWrap":4.2,"alignContent":4.2,"alignItems":4.2,"alignSelf":4.2,"justifyContent":4.2,"order":4.2,"transition":4.2,"transitionDelay":4.2,"transitionDuration":4.2,"transitionProperty":4.2,"transitionTimingFunction":4.2,"transform":4.4,"transformOrigin":4.4,"transformOriginX":4.4,"transformOriginY":4.4,"backfaceVisibility":4.4,"perspective":4.4,"perspectiveOrigin":4.4,"transformStyle":4.4,"transformOriginZ":4.4,"animation":4.4,"animationDelay":4.4,"animationDirection":4.4,"animationFillMode":4.4,"animationDuration":4.4,"animationIterationCount":4.4,"animationName":4.4,"animationPlayState":4.4,"animationTimingFunction":4.4,"appearance":44,"userSelect":44,"fontKerning":4.4,"textEmphasisPosition":44,"textEmphasis":44,"textEmphasisStyle":44,"textEmphasisColor":44,"boxDecorationBreak":44,"clipPath":44,"maskImage":44,"maskMode":44,"maskRepeat":44,"maskPosition":44,"maskClip":44,"maskOrigin":44,"maskSize":44,"maskComposite":44,"mask":44,"maskBorderSource":44,"maskBorderMode":44,"maskBorderSlice":44,"maskBorderWidth":44,"maskBorderOutset":44,"maskBorderRepeat":44,"maskBorder":44,"maskType":44,"filter":44,"fontFeatureSettings":44,"breakAfter":44,"breakBefore":44,"breakInside":44,"columnCount":44,"columnFill":44,"columnGap":44,"columnRule":44,"columnRuleColor":44,"columnRuleStyle":44,"columnRuleWidth":44,"columns":44,"columnSpan":44,"columnWidth":44},"and_chr":{"appearance":46,"userSelect":46,"textEmphasisPosition":46,"textEmphasis":46,"textEmphasisStyle":46,"textEmphasisColor":46,"boxDecorationBreak":46,"clipPath":46,"maskImage":46,"maskMode":46,"maskRepeat":46,"maskPosition":46,"maskClip":46,"maskOrigin":46,"maskSize":46,"maskComposite":46,"mask":46,"maskBorderSource":46,"maskBorderMode":46,"maskBorderSlice":46,"maskBorderWidth":46,"maskBorderOutset":46,"maskBorderRepeat":46,"maskBorder":46,"maskType":46,"textDecorationStyle":46,"textDecorationSkip":46,"textDecorationLine":46,"textDecorationColor":46,"filter":46,"fontFeatureSettings":46,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"and_uc":{"flex":9.9,"flexBasis":9.9,"flexDirection":9.9,"flexGrow":9.9,"flexFlow":9.9,"flexShrink":9.9,"flexWrap":9.9,"alignContent":9.9,"alignItems":9.9,"alignSelf":9.9,"justifyContent":9.9,"order":9.9,"transition":9.9,"transitionDelay":9.9,"transitionDuration":9.9,"transitionProperty":9.9,"transitionTimingFunction":9.9,"transform":9.9,"transformOrigin":9.9,"transformOriginX":9.9,"transformOriginY":9.9,"backfaceVisibility":9.9,"perspective":9.9,"perspectiveOrigin":9.9,"transformStyle":9.9,"transformOriginZ":9.9,"animation":9.9,"animationDelay":9.9,"animationDirection":9.9,"animationFillMode":9.9,"animationDuration":9.9,"animationIterationCount":9.9,"animationName":9.9,"animationPlayState":9.9,"animationTimingFunction":9.9,"appearance":9.9,"userSelect":9.9,"fontKerning":9.9,"textEmphasisPosition":9.9,"textEmphasis":9.9,"textEmphasisStyle":9.9,"textEmphasisColor":9.9,"maskImage":9.9,"maskMode":9.9,"maskRepeat":9.9,"maskPosition":9.9,"maskClip":9.9,"maskOrigin":9.9,"maskSize":9.9,"maskComposite":9.9,"mask":9.9,"maskBorderSource":9.9,"maskBorderMode":9.9,"maskBorderSlice":9.9,"maskBorderWidth":9.9,"maskBorderOutset":9.9,"maskBorderRepeat":9.9,"maskBorder":9.9,"maskType":9.9,"textSizeAdjust":9.9,"filter":9.9,"hyphens":9.9,"flowInto":9.9,"flowFrom":9.9,"breakBefore":9.9,"breakAfter":9.9,"breakInside":9.9,"regionFragment":9.9,"fontFeatureSettings":9.9,"columnCount":9.9,"columnFill":9.9,"columnGap":9.9,"columnRule":9.9,"columnRuleColor":9.9,"columnRuleStyle":9.9,"columnRuleWidth":9.9,"columns":9.9,"columnSpan":9.9,"columnWidth":9.9},"op_mini":{"borderImage":5,"borderImageOutset":5,"borderImageRepeat":5,"borderImageSlice":5,"borderImageSource":5,"borderImageWidth":5,"tabSize":5,"objectFit":5,"objectPosition":5}}; module.exports = caniuseData
 
 /***/ },
-/* 176 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31522,29 +31321,29 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _pluginsCursor = __webpack_require__(177);
+	var _pluginsCursor = __webpack_require__(176);
 
 	var _pluginsCursor2 = _interopRequireDefault(_pluginsCursor);
 
-	var _pluginsFlex = __webpack_require__(178);
+	var _pluginsFlex = __webpack_require__(177);
 
 	var _pluginsFlex2 = _interopRequireDefault(_pluginsFlex);
 
-	var _pluginsSizing = __webpack_require__(179);
+	var _pluginsSizing = __webpack_require__(178);
 
 	var _pluginsSizing2 = _interopRequireDefault(_pluginsSizing);
 
-	var _pluginsGradient = __webpack_require__(180);
+	var _pluginsGradient = __webpack_require__(179);
 
 	var _pluginsGradient2 = _interopRequireDefault(_pluginsGradient);
 
 	// special flexbox specifications
 
-	var _pluginsFlexboxIE = __webpack_require__(181);
+	var _pluginsFlexboxIE = __webpack_require__(180);
 
 	var _pluginsFlexboxIE2 = _interopRequireDefault(_pluginsFlexboxIE);
 
-	var _pluginsFlexboxOld = __webpack_require__(182);
+	var _pluginsFlexboxOld = __webpack_require__(181);
 
 	var _pluginsFlexboxOld2 = _interopRequireDefault(_pluginsFlexboxOld);
 
@@ -31552,7 +31351,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 177 */
+/* 176 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31578,7 +31377,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31604,7 +31403,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31633,7 +31432,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31660,7 +31459,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31706,7 +31505,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31758,7 +31557,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31771,7 +31570,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _colors = __webpack_require__(184);
+	var _colors = __webpack_require__(183);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -31799,7 +31598,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32097,7 +31896,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32116,43 +31915,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _fontIcon = __webpack_require__(233);
+	var _fontIcon = __webpack_require__(232);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _tooltip = __webpack_require__(234);
+	var _tooltip = __webpack_require__(233);
 
 	var _tooltip2 = _interopRequireDefault(_tooltip);
 
-	var _utilsChildren = __webpack_require__(194);
+	var _utilsChildren = __webpack_require__(193);
 
 	var _utilsChildren2 = _interopRequireDefault(_utilsChildren);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -32393,7 +32192,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32404,7 +32203,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsShallowEqual = __webpack_require__(187);
+	var _utilsShallowEqual = __webpack_require__(186);
 
 	var _utilsShallowEqual2 = _interopRequireDefault(_utilsShallowEqual);
 
@@ -32463,7 +32262,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32503,7 +32302,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32545,7 +32344,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32586,7 +32385,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32605,43 +32404,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _utilsChildren = __webpack_require__(194);
+	var _utilsChildren = __webpack_require__(193);
 
 	var _utilsChildren2 = _interopRequireDefault(_utilsChildren);
 
-	var _utilsEvents = __webpack_require__(197);
+	var _utilsEvents = __webpack_require__(196);
 
 	var _utilsEvents2 = _interopRequireDefault(_utilsEvents);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _ripplesFocusRipple = __webpack_require__(199);
+	var _ripplesFocusRipple = __webpack_require__(198);
 
 	var _ripplesFocusRipple2 = _interopRequireDefault(_ripplesFocusRipple);
 
-	var _ripplesTouchRipple = __webpack_require__(230);
+	var _ripplesTouchRipple = __webpack_require__(229);
 
 	var _ripplesTouchRipple2 = _interopRequireDefault(_ripplesTouchRipple);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -32937,13 +32736,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(192);
+	module.exports = __webpack_require__(191);
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32959,7 +32758,7 @@
 
 	'use strict';
 
-	var shallowCompare = __webpack_require__(193);
+	var shallowCompare = __webpack_require__(192);
 
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -32994,7 +32793,7 @@
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33023,7 +32822,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33038,7 +32837,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsCreateFragment = __webpack_require__(195);
+	var _reactAddonsCreateFragment = __webpack_require__(194);
 
 	var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
 
@@ -33081,13 +32880,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(196).create;
+	module.exports = __webpack_require__(195).create;
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -33157,7 +32956,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33206,7 +33005,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33227,7 +33026,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33246,27 +33045,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _transitionGroupsScaleIn = __webpack_require__(200);
+	var _transitionGroupsScaleIn = __webpack_require__(199);
 
 	var _transitionGroupsScaleIn2 = _interopRequireDefault(_transitionGroupsScaleIn);
 
@@ -33392,7 +33191,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33411,27 +33210,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(201);
+	var _reactAddonsTransitionGroup = __webpack_require__(200);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _scaleInChild = __webpack_require__(204);
+	var _scaleInChild = __webpack_require__(203);
 
 	var _scaleInChild2 = _interopRequireDefault(_scaleInChild);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -33532,13 +33331,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(202);
+	module.exports = __webpack_require__(201);
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33555,7 +33354,7 @@
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var ReactTransitionChildMapping = __webpack_require__(203);
+	var ReactTransitionChildMapping = __webpack_require__(202);
 
 	var assign = __webpack_require__(40);
 	var emptyFunction = __webpack_require__(16);
@@ -33748,7 +33547,7 @@
 	module.exports = ReactTransitionGroup;
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33851,7 +33650,7 @@
 	module.exports = ReactTransitionChildMapping;
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33874,27 +33673,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -34030,7 +33829,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34041,7 +33840,7 @@
 
 	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
 
-	var _baseThemesLightBaseTheme = __webpack_require__(206);
+	var _baseThemesLightBaseTheme = __webpack_require__(205);
 
 	exports['default'] = _interopRequire(_baseThemesLightBaseTheme);
 
@@ -34055,7 +33854,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 206 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34066,15 +33865,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _colors = __webpack_require__(184);
+	var _colors = __webpack_require__(183);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _spacing = __webpack_require__(208);
+	var _spacing = __webpack_require__(207);
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
@@ -34106,7 +33905,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34289,7 +34088,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 208 */
+/* 207 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34314,7 +34113,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 209 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34325,15 +34124,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _reactAddonsUpdate = __webpack_require__(167);
+	var _reactAddonsUpdate = __webpack_require__(166);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
-	var _utilsExtend = __webpack_require__(210);
+	var _utilsExtend = __webpack_require__(209);
 
 	var _utilsExtend2 = _interopRequireDefault(_utilsExtend);
 
-	var _getMuiTheme = __webpack_require__(211);
+	var _getMuiTheme = __webpack_require__(210);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -34360,7 +34159,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 210 */
+/* 209 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34418,7 +34217,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 211 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34430,23 +34229,23 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashMerge = __webpack_require__(212);
+	var _lodashMerge = __webpack_require__(211);
 
 	var _lodashMerge2 = _interopRequireDefault(_lodashMerge);
 
-	var _colors = __webpack_require__(184);
+	var _colors = __webpack_require__(183);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _baseThemesLightBaseTheme = __webpack_require__(206);
+	var _baseThemesLightBaseTheme = __webpack_require__(205);
 
 	var _baseThemesLightBaseTheme2 = _interopRequireDefault(_baseThemesLightBaseTheme);
 
-	var _zIndex = __webpack_require__(229);
+	var _zIndex = __webpack_require__(228);
 
 	var _zIndex2 = _interopRequireDefault(_zIndex);
 
@@ -34677,7 +34476,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 212 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34688,15 +34487,15 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var arrayCopy = __webpack_require__(213),
-	    arrayEach = __webpack_require__(214),
-	    createAssigner = __webpack_require__(215),
-	    isArguments = __webpack_require__(219),
-	    isArray = __webpack_require__(220),
-	    isPlainObject = __webpack_require__(221),
-	    isTypedArray = __webpack_require__(224),
-	    keys = __webpack_require__(225),
-	    toPlainObject = __webpack_require__(227);
+	var arrayCopy = __webpack_require__(212),
+	    arrayEach = __webpack_require__(213),
+	    createAssigner = __webpack_require__(214),
+	    isArguments = __webpack_require__(218),
+	    isArray = __webpack_require__(219),
+	    isPlainObject = __webpack_require__(220),
+	    isTypedArray = __webpack_require__(223),
+	    keys = __webpack_require__(224),
+	    toPlainObject = __webpack_require__(226);
 
 	/**
 	 * Checks if `value` is object-like.
@@ -34949,7 +34748,7 @@
 
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports) {
 
 	/**
@@ -34984,7 +34783,7 @@
 
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports) {
 
 	/**
@@ -35021,7 +34820,7 @@
 
 
 /***/ },
-/* 215 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35032,9 +34831,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(216),
-	    isIterateeCall = __webpack_require__(217),
-	    restParam = __webpack_require__(218);
+	var bindCallback = __webpack_require__(215),
+	    isIterateeCall = __webpack_require__(216),
+	    restParam = __webpack_require__(217);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -35079,7 +34878,7 @@
 
 
 /***/ },
-/* 216 */
+/* 215 */
 /***/ function(module, exports) {
 
 	/**
@@ -35150,7 +34949,7 @@
 
 
 /***/ },
-/* 217 */
+/* 216 */
 /***/ function(module, exports) {
 
 	/**
@@ -35288,7 +35087,7 @@
 
 
 /***/ },
-/* 218 */
+/* 217 */
 /***/ function(module, exports) {
 
 	/**
@@ -35361,7 +35160,7 @@
 
 
 /***/ },
-/* 219 */
+/* 218 */
 /***/ function(module, exports) {
 
 	/**
@@ -35473,7 +35272,7 @@
 
 
 /***/ },
-/* 220 */
+/* 219 */
 /***/ function(module, exports) {
 
 	/**
@@ -35659,7 +35458,7 @@
 
 
 /***/ },
-/* 221 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35670,9 +35469,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(222),
-	    isArguments = __webpack_require__(219),
-	    keysIn = __webpack_require__(223);
+	var baseFor = __webpack_require__(221),
+	    isArguments = __webpack_require__(218),
+	    keysIn = __webpack_require__(222);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -35768,7 +35567,7 @@
 
 
 /***/ },
-/* 222 */
+/* 221 */
 /***/ function(module, exports) {
 
 	/**
@@ -35860,7 +35659,7 @@
 
 
 /***/ },
-/* 223 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35871,8 +35670,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(219),
-	    isArray = __webpack_require__(220);
+	var isArguments = __webpack_require__(218),
+	    isArray = __webpack_require__(219);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -35998,7 +35797,7 @@
 
 
 /***/ },
-/* 224 */
+/* 223 */
 /***/ function(module, exports) {
 
 	/**
@@ -36114,7 +35913,7 @@
 
 
 /***/ },
-/* 225 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36125,9 +35924,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(226),
-	    isArguments = __webpack_require__(219),
-	    isArray = __webpack_require__(220);
+	var getNative = __webpack_require__(225),
+	    isArguments = __webpack_require__(218),
+	    isArray = __webpack_require__(219);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -36356,7 +36155,7 @@
 
 
 /***/ },
-/* 226 */
+/* 225 */
 /***/ function(module, exports) {
 
 	/**
@@ -36499,7 +36298,7 @@
 
 
 /***/ },
-/* 227 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36510,8 +36309,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(228),
-	    keysIn = __webpack_require__(223);
+	var baseCopy = __webpack_require__(227),
+	    keysIn = __webpack_require__(222);
 
 	/**
 	 * Converts `value` to a plain object flattening inherited enumerable
@@ -36544,7 +36343,7 @@
 
 
 /***/ },
-/* 228 */
+/* 227 */
 /***/ function(module, exports) {
 
 	/**
@@ -36582,7 +36381,7 @@
 
 
 /***/ },
-/* 229 */
+/* 228 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36605,7 +36404,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 230 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36624,27 +36423,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(201);
+	var _reactAddonsTransitionGroup = __webpack_require__(200);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsDom = __webpack_require__(231);
+	var _utilsDom = __webpack_require__(230);
 
 	var _utilsDom2 = _interopRequireDefault(_utilsDom);
 
-	var _utilsImmutabilityHelper = __webpack_require__(166);
+	var _utilsImmutabilityHelper = __webpack_require__(165);
 
 	var _utilsImmutabilityHelper2 = _interopRequireDefault(_utilsImmutabilityHelper);
 
-	var _circleRipple = __webpack_require__(232);
+	var _circleRipple = __webpack_require__(231);
 
 	var _circleRipple2 = _interopRequireDefault(_circleRipple);
 
@@ -36811,7 +36610,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 231 */
+/* 230 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36896,7 +36695,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 232 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36919,23 +36718,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
@@ -37032,7 +36831,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 233 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37051,19 +36850,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -37164,7 +36963,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 234 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37187,23 +36986,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -37381,7 +37180,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 235 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37396,11 +37195,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -37423,7 +37222,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 236 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37442,19 +37241,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -37569,7 +37368,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 237 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37588,27 +37387,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -37707,7 +37506,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 238 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37722,15 +37521,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -37812,7 +37611,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 239 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37835,35 +37634,35 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _textField = __webpack_require__(240);
+	var _textField = __webpack_require__(239);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _menusMenu = __webpack_require__(248);
+	var _menusMenu = __webpack_require__(247);
 
 	var _menusMenu2 = _interopRequireDefault(_menusMenu);
 
-	var _menusMenuItem = __webpack_require__(252);
+	var _menusMenuItem = __webpack_require__(251);
 
 	var _menusMenuItem2 = _interopRequireDefault(_menusMenuItem);
 
-	var _divider = __webpack_require__(264);
+	var _divider = __webpack_require__(263);
 
 	var _divider2 = _interopRequireDefault(_divider);
 
-	var _popoverPopover = __webpack_require__(253);
+	var _popoverPopover = __webpack_require__(252);
 
 	var _popoverPopover2 = _interopRequireDefault(_popoverPopover);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
@@ -38215,6 +38014,25 @@
 	module.exports = exports['default'];
 
 /***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _TextField = __webpack_require__(240);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	exports['default'] = _TextField2['default'];
+	module.exports = exports['default'];
+
+/***/ },
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -38237,25 +38055,6 @@
 /* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _TextField = __webpack_require__(242);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
-	exports['default'] = _TextField2['default'];
-	module.exports = exports['default'];
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -38276,47 +38075,47 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsUniqueId = __webpack_require__(243);
+	var _utilsUniqueId = __webpack_require__(242);
 
 	var _utilsUniqueId2 = _interopRequireDefault(_utilsUniqueId);
 
-	var _enhancedTextarea = __webpack_require__(244);
+	var _enhancedTextarea = __webpack_require__(243);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _TextFieldHint = __webpack_require__(245);
+	var _TextFieldHint = __webpack_require__(244);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldUnderline = __webpack_require__(246);
+	var _TextFieldUnderline = __webpack_require__(245);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -38745,7 +38544,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 243 */
+/* 242 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -38763,7 +38562,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 244 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38786,15 +38585,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -38980,7 +38779,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 245 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38995,11 +38794,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsStyles = __webpack_require__(169);
+	var _utilsStyles = __webpack_require__(168);
 
 	var _utilsStyles2 = _interopRequireDefault(_utilsStyles);
 
@@ -39061,7 +38860,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 246 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39076,11 +38875,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsStyles = __webpack_require__(169);
+	var _utilsStyles = __webpack_require__(168);
 
 	var _utilsStyles2 = _interopRequireDefault(_utilsStyles);
 
@@ -39201,7 +39000,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 247 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -39268,7 +39067,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 248 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39291,51 +39090,51 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsUpdate = __webpack_require__(167);
+	var _reactAddonsUpdate = __webpack_require__(166);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
-	var _mixinsControllable = __webpack_require__(249);
+	var _mixinsControllable = __webpack_require__(248);
 
 	var _mixinsControllable2 = _interopRequireDefault(_mixinsControllable);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsClickAwayable = __webpack_require__(250);
+	var _mixinsClickAwayable = __webpack_require__(249);
 
 	var _mixinsClickAwayable2 = _interopRequireDefault(_mixinsClickAwayable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _listsList = __webpack_require__(251);
+	var _listsList = __webpack_require__(250);
 
 	var _listsList2 = _interopRequireDefault(_listsList);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -39830,7 +39629,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 249 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39873,7 +39672,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 250 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39888,11 +39687,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsEvents = __webpack_require__(197);
+	var _utilsEvents = __webpack_require__(196);
 
 	var _utilsEvents2 = _interopRequireDefault(_utilsEvents);
 
-	var _utilsDom = __webpack_require__(231);
+	var _utilsDom = __webpack_require__(230);
 
 	var _utilsDom2 = _interopRequireDefault(_utilsDom);
 
@@ -39936,7 +39735,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 251 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39955,31 +39754,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -40087,7 +39886,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 252 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40110,39 +39909,39 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _popoverPopover = __webpack_require__(253);
+	var _popoverPopover = __webpack_require__(252);
 
 	var _popoverPopover2 = _interopRequireDefault(_popoverPopover);
 
-	var _svgIconsNavigationCheck = __webpack_require__(259);
+	var _svgIconsNavigationCheck = __webpack_require__(258);
 
 	var _svgIconsNavigationCheck2 = _interopRequireDefault(_svgIconsNavigationCheck);
 
-	var _listsListItem = __webpack_require__(260);
+	var _listsListItem = __webpack_require__(259);
 
 	var _listsListItem2 = _interopRequireDefault(_listsListItem);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _menu = __webpack_require__(248);
+	var _menu = __webpack_require__(247);
 
 	var _menu2 = _interopRequireDefault(_menu);
 
@@ -40397,7 +40196,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 253 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40420,43 +40219,43 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _renderToLayer = __webpack_require__(255);
+	var _renderToLayer = __webpack_require__(254);
 
 	var _renderToLayer2 = _interopRequireDefault(_renderToLayer);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _lodashThrottle = __webpack_require__(256);
+	var _lodashThrottle = __webpack_require__(255);
 
 	var _lodashThrottle2 = _interopRequireDefault(_lodashThrottle);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _utilsExtend = __webpack_require__(210);
+	var _utilsExtend = __webpack_require__(209);
 
 	var _utilsExtend2 = _interopRequireDefault(_utilsExtend);
 
-	var _popoverDefaultAnimation = __webpack_require__(258);
+	var _popoverDefaultAnimation = __webpack_require__(257);
 
 	var _popoverDefaultAnimation2 = _interopRequireDefault(_popoverDefaultAnimation);
 
@@ -40787,7 +40586,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 254 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40798,7 +40597,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsEvents = __webpack_require__(197);
+	var _utilsEvents = __webpack_require__(196);
 
 	var _utilsEvents2 = _interopRequireDefault(_utilsEvents);
 
@@ -40826,7 +40625,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 255 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40845,15 +40644,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsDom = __webpack_require__(231);
+	var _utilsDom = __webpack_require__(230);
 
 	var _utilsDom2 = _interopRequireDefault(_utilsDom);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -41014,7 +40813,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 256 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41025,7 +40824,7 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var debounce = __webpack_require__(257);
+	var debounce = __webpack_require__(256);
 
 	/** Used as the `TypeError` message for "Functions" methods. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -41116,7 +40915,7 @@
 
 
 /***/ },
-/* 257 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -41127,7 +40926,7 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(226);
+	var getNative = __webpack_require__(225);
 
 	/** Used as the `TypeError` message for "Functions" methods. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -41356,7 +41155,7 @@
 
 
 /***/ },
-/* 258 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41367,7 +41166,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
@@ -41375,23 +41174,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
@@ -41542,7 +41341,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 259 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41557,11 +41356,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -41584,7 +41383,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 260 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41607,55 +41406,55 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _iconButton = __webpack_require__(185);
+	var _iconButton = __webpack_require__(184);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _svgIconsNavigationArrowDropUp = __webpack_require__(261);
+	var _svgIconsNavigationArrowDropUp = __webpack_require__(260);
 
 	var _svgIconsNavigationArrowDropUp2 = _interopRequireDefault(_svgIconsNavigationArrowDropUp);
 
-	var _svgIconsNavigationArrowDropDown = __webpack_require__(262);
+	var _svgIconsNavigationArrowDropDown = __webpack_require__(261);
 
 	var _svgIconsNavigationArrowDropDown2 = _interopRequireDefault(_svgIconsNavigationArrowDropDown);
 
-	var _nestedList = __webpack_require__(263);
+	var _nestedList = __webpack_require__(262);
 
 	var _nestedList2 = _interopRequireDefault(_nestedList);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -42129,7 +41928,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 261 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42144,11 +41943,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -42171,7 +41970,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 262 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42186,11 +41985,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -42213,7 +42012,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42228,11 +42027,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsImmutabilityHelper = __webpack_require__(166);
+	var _utilsImmutabilityHelper = __webpack_require__(165);
 
 	var _utilsImmutabilityHelper2 = _interopRequireDefault(_utilsImmutabilityHelper);
 
-	var _list = __webpack_require__(251);
+	var _list = __webpack_require__(250);
 
 	var _list2 = _interopRequireDefault(_list);
 
@@ -42287,7 +42086,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 264 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42306,11 +42105,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _muiThemeable = __webpack_require__(265);
+	var _muiThemeable = __webpack_require__(264);
 
 	var _muiThemeable2 = _interopRequireDefault(_muiThemeable);
 
-	var _utilsStyles = __webpack_require__(169);
+	var _utilsStyles = __webpack_require__(168);
 
 	var _utilsStyles2 = _interopRequireDefault(_utilsStyles);
 
@@ -42365,7 +42164,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 265 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42384,11 +42183,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -42418,7 +42217,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 266 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42437,19 +42236,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -42609,7 +42408,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 267 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42628,19 +42427,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
@@ -42778,7 +42577,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 268 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42795,19 +42594,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -42939,7 +42738,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 269 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42958,15 +42757,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _cardExpandable = __webpack_require__(270);
+	var _cardExpandable = __webpack_require__(269);
 
 	var _cardExpandable2 = _interopRequireDefault(_cardExpandable);
 
@@ -43093,7 +42892,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 270 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43108,35 +42907,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsExtend = __webpack_require__(210);
+	var _utilsExtend = __webpack_require__(209);
 
 	var _utilsExtend2 = _interopRequireDefault(_utilsExtend);
 
-	var _svgIconsHardwareKeyboardArrowUp = __webpack_require__(271);
+	var _svgIconsHardwareKeyboardArrowUp = __webpack_require__(270);
 
 	var _svgIconsHardwareKeyboardArrowUp2 = _interopRequireDefault(_svgIconsHardwareKeyboardArrowUp);
 
-	var _svgIconsHardwareKeyboardArrowDown = __webpack_require__(272);
+	var _svgIconsHardwareKeyboardArrowDown = __webpack_require__(271);
 
 	var _svgIconsHardwareKeyboardArrowDown2 = _interopRequireDefault(_svgIconsHardwareKeyboardArrowDown);
 
-	var _iconButton = __webpack_require__(185);
+	var _iconButton = __webpack_require__(184);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
@@ -43237,7 +43036,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 271 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43252,11 +43051,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -43279,7 +43078,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 272 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43294,11 +43093,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -43321,7 +43120,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 273 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43338,15 +43137,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -43427,7 +43226,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 274 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43444,23 +43243,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(275);
+	var _styles = __webpack_require__(274);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
-	var _avatar = __webpack_require__(266);
+	var _avatar = __webpack_require__(265);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -43596,7 +43395,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 275 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43607,51 +43406,51 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _autoPrefix = __webpack_require__(170);
+	var _autoPrefix = __webpack_require__(169);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _colors = __webpack_require__(184);
+	var _colors = __webpack_require__(183);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _spacing = __webpack_require__(208);
+	var _spacing = __webpack_require__(207);
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
-	var _themeManager = __webpack_require__(209);
+	var _themeManager = __webpack_require__(208);
 
 	var _themeManager2 = _interopRequireDefault(_themeManager);
 
-	var _transitions = __webpack_require__(188);
+	var _transitions = __webpack_require__(187);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _typography = __webpack_require__(183);
+	var _typography = __webpack_require__(182);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _rawThemesLightRawTheme = __webpack_require__(205);
+	var _rawThemesLightRawTheme = __webpack_require__(204);
 
 	var _rawThemesLightRawTheme2 = _interopRequireDefault(_rawThemesLightRawTheme);
 
-	var _baseThemesLightBaseTheme = __webpack_require__(206);
+	var _baseThemesLightBaseTheme = __webpack_require__(205);
 
 	var _baseThemesLightBaseTheme2 = _interopRequireDefault(_baseThemesLightBaseTheme);
 
-	var _rawThemesDarkRawTheme = __webpack_require__(276);
+	var _rawThemesDarkRawTheme = __webpack_require__(275);
 
 	var _rawThemesDarkRawTheme2 = _interopRequireDefault(_rawThemesDarkRawTheme);
 
-	var _baseThemesDarkBaseTheme = __webpack_require__(277);
+	var _baseThemesDarkBaseTheme = __webpack_require__(276);
 
 	var _baseThemesDarkBaseTheme2 = _interopRequireDefault(_baseThemesDarkBaseTheme);
 
-	var _themeDecorator = __webpack_require__(278);
+	var _themeDecorator = __webpack_require__(277);
 
 	var _themeDecorator2 = _interopRequireDefault(_themeDecorator);
 
-	var _zIndex = __webpack_require__(229);
+	var _zIndex = __webpack_require__(228);
 
 	var _zIndex2 = _interopRequireDefault(_zIndex);
 
@@ -43681,7 +43480,7 @@
 	};
 
 /***/ },
-/* 276 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43692,7 +43491,7 @@
 
 	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
 
-	var _baseThemesDarkBaseTheme = __webpack_require__(277);
+	var _baseThemesDarkBaseTheme = __webpack_require__(276);
 
 	exports['default'] = _interopRequire(_baseThemesDarkBaseTheme);
 
@@ -43706,7 +43505,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 277 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43717,15 +43516,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _colors = __webpack_require__(184);
+	var _colors = __webpack_require__(183);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _spacing = __webpack_require__(208);
+	var _spacing = __webpack_require__(207);
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
@@ -43751,7 +43550,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 278 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43792,7 +43591,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 279 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43809,19 +43608,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(275);
+	var _styles = __webpack_require__(274);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -43966,7 +43765,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 280 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43983,15 +43782,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -44067,7 +43866,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 281 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44084,19 +43883,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(275);
+	var _styles = __webpack_require__(274);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -44208,7 +44007,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 282 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44227,31 +44026,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _enhancedSwitch = __webpack_require__(283);
+	var _enhancedSwitch = __webpack_require__(282);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _svgIconsToggleCheckBoxOutlineBlank = __webpack_require__(285);
+	var _svgIconsToggleCheckBoxOutlineBlank = __webpack_require__(284);
 
 	var _svgIconsToggleCheckBoxOutlineBlank2 = _interopRequireDefault(_svgIconsToggleCheckBoxOutlineBlank);
 
-	var _svgIconsToggleCheckBox = __webpack_require__(286);
+	var _svgIconsToggleCheckBox = __webpack_require__(285);
 
 	var _svgIconsToggleCheckBox2 = _interopRequireDefault(_svgIconsToggleCheckBox);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -44429,7 +44228,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 283 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44452,47 +44251,47 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsUniqueId = __webpack_require__(243);
+	var _utilsUniqueId = __webpack_require__(242);
 
 	var _utilsUniqueId2 = _interopRequireDefault(_utilsUniqueId);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _clearfix = __webpack_require__(284);
+	var _clearfix = __webpack_require__(283);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _ripplesFocusRipple = __webpack_require__(199);
+	var _ripplesFocusRipple = __webpack_require__(198);
 
 	var _ripplesFocusRipple2 = _interopRequireDefault(_ripplesFocusRipple);
 
-	var _ripplesTouchRipple = __webpack_require__(230);
+	var _ripplesTouchRipple = __webpack_require__(229);
 
 	var _ripplesTouchRipple2 = _interopRequireDefault(_ripplesTouchRipple);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -44926,7 +44725,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 284 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44945,7 +44744,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _beforeAfterWrapper = __webpack_require__(268);
+	var _beforeAfterWrapper = __webpack_require__(267);
 
 	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
 
@@ -44992,7 +44791,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 285 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45007,11 +44806,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -45034,7 +44833,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 286 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45049,11 +44848,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -45076,7 +44875,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 287 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45099,23 +44898,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -45319,7 +45118,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 288 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -45338,31 +45137,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
-	var _datePickerDialog = __webpack_require__(290);
+	var _datePickerDialog = __webpack_require__(289);
 
 	var _datePickerDialog2 = _interopRequireDefault(_datePickerDialog);
 
-	var _textField = __webpack_require__(240);
+	var _textField = __webpack_require__(239);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -45580,7 +45379,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -45591,7 +45390,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -45745,7 +45544,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45764,47 +45563,47 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _calendar = __webpack_require__(291);
+	var _calendar = __webpack_require__(290);
 
 	var _calendar2 = _interopRequireDefault(_calendar);
 
-	var _dialog = __webpack_require__(304);
+	var _dialog = __webpack_require__(303);
 
 	var _dialog2 = _interopRequireDefault(_dialog);
 
-	var _datePickerInline = __webpack_require__(309);
+	var _datePickerInline = __webpack_require__(308);
 
 	var _datePickerInline2 = _interopRequireDefault(_datePickerInline);
 
-	var _flatButton = __webpack_require__(305);
+	var _flatButton = __webpack_require__(304);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
@@ -46020,7 +45819,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 291 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46035,55 +45834,55 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _calendarMonth = __webpack_require__(292);
+	var _calendarMonth = __webpack_require__(291);
 
 	var _calendarMonth2 = _interopRequireDefault(_calendarMonth);
 
-	var _calendarYear = __webpack_require__(294);
+	var _calendarYear = __webpack_require__(293);
 
 	var _calendarYear2 = _interopRequireDefault(_calendarYear);
 
-	var _calendarToolbar = __webpack_require__(296);
+	var _calendarToolbar = __webpack_require__(295);
 
 	var _calendarToolbar2 = _interopRequireDefault(_calendarToolbar);
 
-	var _dateDisplay = __webpack_require__(303);
+	var _dateDisplay = __webpack_require__(302);
 
 	var _dateDisplay2 = _interopRequireDefault(_dateDisplay);
 
-	var _transitionGroupsSlideIn = __webpack_require__(301);
+	var _transitionGroupsSlideIn = __webpack_require__(300);
 
 	var _transitionGroupsSlideIn2 = _interopRequireDefault(_transitionGroupsSlideIn);
 
-	var _clearfix = __webpack_require__(284);
+	var _clearfix = __webpack_require__(283);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -46450,7 +46249,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 292 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46465,15 +46264,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
-	var _dayButton = __webpack_require__(293);
+	var _dayButton = __webpack_require__(292);
 
 	var _dayButton2 = _interopRequireDefault(_dayButton);
 
-	var _clearfix = __webpack_require__(284);
+	var _clearfix = __webpack_require__(283);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
@@ -46565,7 +46364,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46584,27 +46383,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -46760,7 +46559,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 294 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46781,19 +46580,19 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _utilsDateTime = __webpack_require__(289);
+	var _utilsDateTime = __webpack_require__(288);
 
 	var _utilsDateTime2 = _interopRequireDefault(_utilsDateTime);
 
-	var _yearButton = __webpack_require__(295);
+	var _yearButton = __webpack_require__(294);
 
 	var _yearButton2 = _interopRequireDefault(_yearButton);
 
@@ -46889,7 +46688,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 295 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46908,19 +46707,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -47068,7 +46867,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 296 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47083,35 +46882,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _iconButton = __webpack_require__(185);
+	var _iconButton = __webpack_require__(184);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _toolbarToolbar = __webpack_require__(297);
+	var _toolbarToolbar = __webpack_require__(296);
 
 	var _toolbarToolbar2 = _interopRequireDefault(_toolbarToolbar);
 
-	var _toolbarToolbarGroup = __webpack_require__(298);
+	var _toolbarToolbarGroup = __webpack_require__(297);
 
 	var _toolbarToolbarGroup2 = _interopRequireDefault(_toolbarToolbarGroup);
 
-	var _svgIconsNavigationChevronLeft = __webpack_require__(299);
+	var _svgIconsNavigationChevronLeft = __webpack_require__(298);
 
 	var _svgIconsNavigationChevronLeft2 = _interopRequireDefault(_svgIconsNavigationChevronLeft);
 
-	var _svgIconsNavigationChevronRight = __webpack_require__(300);
+	var _svgIconsNavigationChevronRight = __webpack_require__(299);
 
 	var _svgIconsNavigationChevronRight2 = _interopRequireDefault(_svgIconsNavigationChevronRight);
 
-	var _transitionGroupsSlideIn = __webpack_require__(301);
+	var _transitionGroupsSlideIn = __webpack_require__(300);
 
 	var _transitionGroupsSlideIn2 = _interopRequireDefault(_transitionGroupsSlideIn);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -47259,7 +47058,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47278,15 +47077,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -47395,7 +47194,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47414,19 +47213,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -47655,7 +47454,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47670,11 +47469,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -47697,7 +47496,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47712,11 +47511,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -47739,7 +47538,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47758,23 +47557,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(201);
+	var _reactAddonsTransitionGroup = __webpack_require__(200);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _slideInChild = __webpack_require__(302);
+	var _slideInChild = __webpack_require__(301);
 
 	var _slideInChild2 = _interopRequireDefault(_slideInChild);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -47880,7 +47679,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47903,23 +47702,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -48044,7 +47843,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48063,23 +47862,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _transitionGroupsSlideIn = __webpack_require__(301);
+	var _transitionGroupsSlideIn = __webpack_require__(300);
 
 	var _transitionGroupsSlideIn2 = _interopRequireDefault(_transitionGroupsSlideIn);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -48283,7 +48082,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -48306,55 +48105,55 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _flatButton = __webpack_require__(305);
+	var _flatButton = __webpack_require__(304);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _overlay = __webpack_require__(307);
+	var _overlay = __webpack_require__(306);
 
 	var _overlay2 = _interopRequireDefault(_overlay);
 
-	var _renderToLayer = __webpack_require__(255);
+	var _renderToLayer = __webpack_require__(254);
 
 	var _renderToLayer2 = _interopRequireDefault(_renderToLayer);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _utilsDeprecatedPropType = __webpack_require__(308);
+	var _utilsDeprecatedPropType = __webpack_require__(307);
 
 	var _utilsDeprecatedPropType2 = _interopRequireDefault(_utilsDeprecatedPropType);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(201);
+	var _reactAddonsTransitionGroup = __webpack_require__(200);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
@@ -48959,7 +48758,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48978,43 +48777,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsChildren = __webpack_require__(194);
+	var _utilsChildren = __webpack_require__(193);
 
 	var _utilsChildren2 = _interopRequireDefault(_utilsChildren);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _utilsImmutabilityHelper = __webpack_require__(166);
+	var _utilsImmutabilityHelper = __webpack_require__(165);
 
 	var _utilsImmutabilityHelper2 = _interopRequireDefault(_utilsImmutabilityHelper);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _buttonsFlatButtonLabel = __webpack_require__(306);
+	var _buttonsFlatButtonLabel = __webpack_require__(305);
 
 	var _buttonsFlatButtonLabel2 = _interopRequireDefault(_buttonsFlatButtonLabel);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -49223,7 +49022,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49238,19 +49037,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -49329,7 +49128,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49352,15 +49151,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesColors = __webpack_require__(184);
+	var _stylesColors = __webpack_require__(183);
 
 	var _stylesColors2 = _interopRequireDefault(_stylesColors);
 
@@ -49480,7 +49279,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -49492,7 +49291,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -49510,7 +49309,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49527,7 +49326,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
@@ -49608,7 +49407,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 310 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49627,31 +49426,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsClickAwayable = __webpack_require__(250);
+	var _mixinsClickAwayable = __webpack_require__(249);
 
 	var _mixinsClickAwayable2 = _interopRequireDefault(_mixinsClickAwayable);
 
-	var _fontIcon = __webpack_require__(233);
+	var _fontIcon = __webpack_require__(232);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _menuMenu = __webpack_require__(311);
+	var _menuMenu = __webpack_require__(310);
 
 	var _menuMenu2 = _interopRequireDefault(_menuMenu);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -49807,7 +49606,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 311 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -49830,55 +49629,55 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsCssEvent = __webpack_require__(312);
+	var _utilsCssEvent = __webpack_require__(311);
 
 	var _utilsCssEvent2 = _interopRequireDefault(_utilsCssEvent);
 
-	var _utilsKeyLine = __webpack_require__(313);
+	var _utilsKeyLine = __webpack_require__(312);
 
 	var _utilsKeyLine2 = _interopRequireDefault(_utilsKeyLine);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsClickAwayable = __webpack_require__(250);
+	var _mixinsClickAwayable = __webpack_require__(249);
 
 	var _mixinsClickAwayable2 = _interopRequireDefault(_mixinsClickAwayable);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _menuItem2 = __webpack_require__(314);
+	var _menuItem2 = __webpack_require__(313);
 
 	var _menuItem3 = _interopRequireDefault(_menuItem2);
 
-	var _linkMenuItem = __webpack_require__(316);
+	var _linkMenuItem = __webpack_require__(315);
 
 	var _linkMenuItem2 = _interopRequireDefault(_linkMenuItem);
 
-	var _subheaderMenuItem = __webpack_require__(317);
+	var _subheaderMenuItem = __webpack_require__(316);
 
 	var _subheaderMenuItem2 = _interopRequireDefault(_subheaderMenuItem);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -50510,7 +50309,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 312 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50521,7 +50320,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _events = __webpack_require__(197);
+	var _events = __webpack_require__(196);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -50576,7 +50375,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 313 */
+/* 312 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50600,7 +50399,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 314 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50621,27 +50420,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _fontIcon = __webpack_require__(233);
+	var _fontIcon = __webpack_require__(232);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _toggle = __webpack_require__(315);
+	var _toggle = __webpack_require__(314);
 
 	var _toggle2 = _interopRequireDefault(_toggle);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -50882,7 +50681,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 315 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50901,27 +50700,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _enhancedSwitch = __webpack_require__(283);
+	var _enhancedSwitch = __webpack_require__(282);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -51109,7 +50908,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 316 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51126,15 +50925,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -51266,7 +51065,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 317 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51281,19 +51080,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -51391,6 +51190,25 @@
 	module.exports = exports['default'];
 
 /***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _DropDownMenu = __webpack_require__(318);
+
+	var _DropDownMenu2 = _interopRequireDefault(_DropDownMenu);
+
+	exports['default'] = _DropDownMenu2['default'];
+	module.exports = exports['default'];
+
+/***/ },
 /* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -51413,25 +51231,6 @@
 /* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _DropDownMenu = __webpack_require__(320);
-
-	var _DropDownMenu2 = _interopRequireDefault(_DropDownMenu);
-
-	exports['default'] = _DropDownMenu2['default'];
-	module.exports = exports['default'];
-
-/***/ },
-/* 320 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -51448,51 +51247,51 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _svgIconsNavigationArrowDropDown = __webpack_require__(262);
+	var _svgIconsNavigationArrowDropDown = __webpack_require__(261);
 
 	var _svgIconsNavigationArrowDropDown2 = _interopRequireDefault(_svgIconsNavigationArrowDropDown);
 
-	var _menusMenu = __webpack_require__(248);
+	var _menusMenu = __webpack_require__(247);
 
 	var _menusMenu2 = _interopRequireDefault(_menusMenu);
 
-	var _menusMenuItem = __webpack_require__(252);
+	var _menusMenuItem = __webpack_require__(251);
 
 	var _menusMenuItem2 = _interopRequireDefault(_menusMenuItem);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _clearfix = __webpack_require__(284);
+	var _clearfix = __webpack_require__(283);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _popoverPopover = __webpack_require__(253);
+	var _popoverPopover = __webpack_require__(252);
 
 	var _popoverPopover2 = _interopRequireDefault(_popoverPopover);
 
-	var _popoverPopoverAnimationFromTop = __webpack_require__(321);
+	var _popoverPopoverAnimationFromTop = __webpack_require__(320);
 
 	var _popoverPopoverAnimationFromTop2 = _interopRequireDefault(_popoverPopoverAnimationFromTop);
 
-	var _utilsStyles = __webpack_require__(169);
+	var _utilsStyles = __webpack_require__(168);
 
 	var _utilsStyles2 = _interopRequireDefault(_utilsStyles);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _utilsDeprecatedPropType = __webpack_require__(308);
+	var _utilsDeprecatedPropType = __webpack_require__(307);
 
 	var _utilsDeprecatedPropType2 = _interopRequireDefault(_utilsDeprecatedPropType);
 
@@ -51910,7 +51709,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 321 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51921,7 +51720,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
@@ -51929,23 +51728,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
@@ -52062,7 +51861,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 322 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -52085,43 +51884,43 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _fontIcon = __webpack_require__(233);
+	var _fontIcon = __webpack_require__(232);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _utilsChildren = __webpack_require__(194);
+	var _utilsChildren = __webpack_require__(193);
 
 	var _utilsChildren2 = _interopRequireDefault(_utilsChildren);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -52376,7 +52175,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 323 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52395,15 +52194,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -52517,7 +52316,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 324 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52542,15 +52341,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -52780,7 +52579,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -52803,35 +52602,35 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsEvents = __webpack_require__(197);
+	var _utilsEvents = __webpack_require__(196);
 
 	var _utilsEvents2 = _interopRequireDefault(_utilsEvents);
 
-	var _utilsPropTypes = __webpack_require__(189);
+	var _utilsPropTypes = __webpack_require__(188);
 
 	var _utilsPropTypes2 = _interopRequireDefault(_utilsPropTypes);
 
-	var _menusMenu = __webpack_require__(248);
+	var _menusMenu = __webpack_require__(247);
 
 	var _menusMenu2 = _interopRequireDefault(_menusMenu);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _popoverPopover = __webpack_require__(253);
+	var _popoverPopover = __webpack_require__(252);
 
 	var _popoverPopover2 = _interopRequireDefault(_popoverPopover);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -53110,7 +52909,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 326 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -53129,59 +52928,59 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _overlay = __webpack_require__(307);
+	var _overlay = __webpack_require__(306);
 
 	var _overlay2 = _interopRequireDefault(_overlay);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _menuMenu = __webpack_require__(311);
+	var _menuMenu = __webpack_require__(310);
 
 	var _menuMenu2 = _interopRequireDefault(_menuMenu);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _utilsDeprecatedPropType = __webpack_require__(308);
+	var _utilsDeprecatedPropType = __webpack_require__(307);
 
 	var _utilsDeprecatedPropType2 = _interopRequireDefault(_utilsDeprecatedPropType);
 
-	var _utilsIsBrowser = __webpack_require__(327);
+	var _utilsIsBrowser = __webpack_require__(326);
 
 	var _utilsIsBrowser2 = _interopRequireDefault(_utilsIsBrowser);
 
-	var Modernizr = _utilsIsBrowser2['default'] ? __webpack_require__(328) : undefined;
+	var Modernizr = _utilsIsBrowser2['default'] ? __webpack_require__(327) : undefined;
 	var openNavEventHandler = null;
 
 	var LeftNav = _react2['default'].createClass({
@@ -53703,7 +53502,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 327 */
+/* 326 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -53715,7 +53514,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 328 */
+/* 327 */
 /***/ function(module, exports) {
 
 	/* Modernizr 2.8.3 (Custom Build) | MIT & BSD
@@ -53985,7 +53784,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 329 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54008,19 +53807,19 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -54201,7 +54000,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 330 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -54216,11 +54015,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _divider = __webpack_require__(264);
+	var _divider = __webpack_require__(263);
 
 	var _divider2 = _interopRequireDefault(_divider);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -54241,7 +54040,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 331 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54252,19 +54051,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _clickAwayable = __webpack_require__(250);
+	var _clickAwayable = __webpack_require__(249);
 
 	var _clickAwayable2 = _interopRequireDefault(_clickAwayable);
 
-	var _windowListenable = __webpack_require__(254);
+	var _windowListenable = __webpack_require__(253);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _stylePropable = __webpack_require__(165);
+	var _stylePropable = __webpack_require__(164);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _styleResizable = __webpack_require__(332);
+	var _styleResizable = __webpack_require__(331);
 
 	var _styleResizable2 = _interopRequireDefault(_styleResizable);
 
@@ -54280,7 +54079,7 @@
 	};
 
 /***/ },
-/* 332 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54291,7 +54090,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsEvents = __webpack_require__(197);
+	var _utilsEvents = __webpack_require__(196);
 
 	var _utilsEvents2 = _interopRequireDefault(_utilsEvents);
 
@@ -54342,7 +54141,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 333 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54361,31 +54160,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _enhancedSwitch = __webpack_require__(283);
+	var _enhancedSwitch = __webpack_require__(282);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
-	var _svgIconsToggleRadioButtonUnchecked = __webpack_require__(334);
+	var _svgIconsToggleRadioButtonUnchecked = __webpack_require__(333);
 
 	var _svgIconsToggleRadioButtonUnchecked2 = _interopRequireDefault(_svgIconsToggleRadioButtonUnchecked);
 
-	var _svgIconsToggleRadioButtonChecked = __webpack_require__(335);
+	var _svgIconsToggleRadioButtonChecked = __webpack_require__(334);
 
 	var _svgIconsToggleRadioButtonChecked2 = _interopRequireDefault(_svgIconsToggleRadioButtonChecked);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -54545,7 +54344,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 334 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54560,11 +54359,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -54587,7 +54386,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 335 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54602,11 +54401,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(191);
+	var _reactAddonsPureRenderMixin = __webpack_require__(190);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(236);
+	var _svgIcon = __webpack_require__(235);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -54629,7 +54428,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 336 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -54648,19 +54447,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _radioButton = __webpack_require__(333);
+	var _radioButton = __webpack_require__(332);
 
 	var _radioButton2 = _interopRequireDefault(_radioButton);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -54814,7 +54613,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 337 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54837,39 +54636,39 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _utilsChildren = __webpack_require__(194);
+	var _utilsChildren = __webpack_require__(193);
 
 	var _utilsChildren2 = _interopRequireDefault(_utilsChildren);
 
-	var _stylesTypography = __webpack_require__(183);
+	var _stylesTypography = __webpack_require__(182);
 
 	var _stylesTypography2 = _interopRequireDefault(_stylesTypography);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -55146,7 +54945,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 338 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55169,27 +54968,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesAutoPrefix = __webpack_require__(170);
+	var _stylesAutoPrefix = __webpack_require__(169);
 
 	var _stylesAutoPrefix2 = _interopRequireDefault(_stylesAutoPrefix);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _paper = __webpack_require__(237);
+	var _paper = __webpack_require__(236);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -55505,7 +55304,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 339 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55516,15 +55315,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _circleRipple = __webpack_require__(232);
+	var _circleRipple = __webpack_require__(231);
 
 	var _circleRipple2 = _interopRequireDefault(_circleRipple);
 
-	var _focusRipple = __webpack_require__(199);
+	var _focusRipple = __webpack_require__(198);
 
 	var _focusRipple2 = _interopRequireDefault(_focusRipple);
 
-	var _touchRipple = __webpack_require__(230);
+	var _touchRipple = __webpack_require__(229);
 
 	var _touchRipple2 = _interopRequireDefault(_touchRipple);
 
@@ -55538,7 +55337,7 @@
 	};
 
 /***/ },
-/* 340 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55557,27 +55356,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _textField = __webpack_require__(240);
+	var _textField = __webpack_require__(239);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _dropDownMenu = __webpack_require__(318);
+	var _dropDownMenu = __webpack_require__(317);
 
 	var _dropDownMenu2 = _interopRequireDefault(_dropDownMenu);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
@@ -55739,7 +55538,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 341 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55756,19 +55555,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _utilsColorManipulator = __webpack_require__(207);
+	var _utilsColorManipulator = __webpack_require__(206);
 
 	var _utilsColorManipulator2 = _interopRequireDefault(_utilsColorManipulator);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -55896,7 +55695,7 @@
 	exports.SelectableContainerEnhance = SelectableContainerEnhance;
 
 /***/ },
-/* 342 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55919,23 +55718,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _ripplesFocusRipple = __webpack_require__(199);
+	var _ripplesFocusRipple = __webpack_require__(198);
 
 	var _ripplesFocusRipple2 = _interopRequireDefault(_ripplesFocusRipple);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -56435,7 +56234,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 343 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -56454,43 +56253,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsClickAwayable = __webpack_require__(250);
+	var _mixinsClickAwayable = __webpack_require__(249);
 
 	var _mixinsClickAwayable2 = _interopRequireDefault(_mixinsClickAwayable);
 
-	var _flatButton = __webpack_require__(305);
+	var _flatButton = __webpack_require__(304);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _mixinsContextPure = __webpack_require__(186);
+	var _mixinsContextPure = __webpack_require__(185);
 
 	var _mixinsContextPure2 = _interopRequireDefault(_mixinsContextPure);
 
-	var _mixinsStyleResizable = __webpack_require__(332);
+	var _mixinsStyleResizable = __webpack_require__(331);
 
 	var _mixinsStyleResizable2 = _interopRequireDefault(_mixinsStyleResizable);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _utilsDeprecatedPropType = __webpack_require__(308);
+	var _utilsDeprecatedPropType = __webpack_require__(307);
 
 	var _utilsDeprecatedPropType2 = _interopRequireDefault(_utilsDeprecatedPropType);
 
@@ -56856,7 +56655,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 344 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56875,15 +56674,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -57016,7 +56815,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 345 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -57041,31 +56840,31 @@
 
 	// I'm using require not to break react-codmod
 
-	var _inkBar = __webpack_require__(346);
+	var _inkBar = __webpack_require__(345);
 
 	var _inkBar2 = _interopRequireDefault(_inkBar);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsControllable = __webpack_require__(249);
+	var _mixinsControllable = __webpack_require__(248);
 
 	var _mixinsControllable2 = _interopRequireDefault(_mixinsControllable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _warning = __webpack_require__(247);
+	var _warning = __webpack_require__(246);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var TabTemplate = __webpack_require__(347);
+	var TabTemplate = __webpack_require__(346);
 
 	var Tabs = _react2['default'].createClass({
 	  displayName: 'Tabs',
@@ -57310,7 +57109,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 346 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57327,19 +57126,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -57422,7 +57221,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 347 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57471,7 +57270,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 348 */
+/* 347 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57492,15 +57291,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -57794,7 +57593,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 349 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57815,27 +57614,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _checkbox = __webpack_require__(282);
+	var _checkbox = __webpack_require__(281);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
-	var _tableRowColumn = __webpack_require__(350);
+	var _tableRowColumn = __webpack_require__(349);
 
 	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
-	var _mixinsClickAwayable = __webpack_require__(250);
+	var _mixinsClickAwayable = __webpack_require__(249);
 
 	var _mixinsClickAwayable2 = _interopRequireDefault(_mixinsClickAwayable);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -58216,7 +58015,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 350 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58235,15 +58034,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -58387,7 +58186,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 351 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58406,19 +58205,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _tableRowColumn = __webpack_require__(350);
+	var _tableRowColumn = __webpack_require__(349);
 
 	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -58550,7 +58349,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 352 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58567,23 +58366,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _checkbox = __webpack_require__(282);
+	var _checkbox = __webpack_require__(281);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _tableHeaderColumn = __webpack_require__(353);
+	var _tableHeaderColumn = __webpack_require__(352);
 
 	var _tableHeaderColumn2 = _interopRequireDefault(_tableHeaderColumn);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -58766,7 +58565,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 353 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58785,19 +58584,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _tooltip = __webpack_require__(234);
+	var _tooltip = __webpack_require__(233);
 
 	var _tooltip2 = _interopRequireDefault(_tooltip);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -58936,7 +58735,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 354 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58955,15 +58754,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -59169,7 +58968,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 355 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59209,7 +59008,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 356 */
+/* 355 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59220,7 +59019,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _timePicker = __webpack_require__(357);
+	var _timePicker = __webpack_require__(356);
 
 	var _timePicker2 = _interopRequireDefault(_timePicker);
 
@@ -59228,7 +59027,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 357 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59247,27 +59046,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _timePickerDialog = __webpack_require__(358);
+	var _timePickerDialog = __webpack_require__(357);
 
 	var _timePickerDialog2 = _interopRequireDefault(_timePickerDialog);
 
-	var _textField = __webpack_require__(240);
+	var _textField = __webpack_require__(239);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -59453,7 +59252,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 358 */
+/* 357 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59472,35 +59271,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _mixinsWindowListenable = __webpack_require__(254);
+	var _mixinsWindowListenable = __webpack_require__(253);
 
 	var _mixinsWindowListenable2 = _interopRequireDefault(_mixinsWindowListenable);
 
-	var _utilsKeyCode = __webpack_require__(198);
+	var _utilsKeyCode = __webpack_require__(197);
 
 	var _utilsKeyCode2 = _interopRequireDefault(_utilsKeyCode);
 
-	var _clock = __webpack_require__(359);
+	var _clock = __webpack_require__(358);
 
 	var _clock2 = _interopRequireDefault(_clock);
 
-	var _dialog = __webpack_require__(304);
+	var _dialog = __webpack_require__(303);
 
 	var _dialog2 = _interopRequireDefault(_dialog);
 
-	var _flatButton = __webpack_require__(305);
+	var _flatButton = __webpack_require__(304);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -59645,7 +59444,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 359 */
+/* 358 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59660,31 +59459,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _timeDisplay = __webpack_require__(360);
+	var _timeDisplay = __webpack_require__(359);
 
 	var _timeDisplay2 = _interopRequireDefault(_timeDisplay);
 
-	var _clockButton = __webpack_require__(361);
+	var _clockButton = __webpack_require__(360);
 
 	var _clockButton2 = _interopRequireDefault(_clockButton);
 
-	var _clockHours = __webpack_require__(362);
+	var _clockHours = __webpack_require__(361);
 
 	var _clockHours2 = _interopRequireDefault(_clockHours);
 
-	var _clockMinutes = __webpack_require__(365);
+	var _clockMinutes = __webpack_require__(364);
 
 	var _clockMinutes2 = _interopRequireDefault(_clockMinutes);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
@@ -59899,7 +59698,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 360 */
+/* 359 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59920,15 +59719,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -60098,7 +59897,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 361 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60117,23 +59916,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _enhancedButton = __webpack_require__(190);
+	var _enhancedButton = __webpack_require__(189);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _stylesTransitions = __webpack_require__(188);
+	var _stylesTransitions = __webpack_require__(187);
 
 	var _stylesTransitions2 = _interopRequireDefault(_stylesTransitions);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -60268,7 +60067,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 362 */
+/* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60287,23 +60086,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _clockNumber = __webpack_require__(363);
+	var _clockNumber = __webpack_require__(362);
 
 	var _clockNumber2 = _interopRequireDefault(_clockNumber);
 
-	var _clockPointer = __webpack_require__(364);
+	var _clockPointer = __webpack_require__(363);
 
 	var _clockPointer2 = _interopRequireDefault(_clockPointer);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -60532,7 +60331,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 363 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60549,15 +60348,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -60681,7 +60480,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 364 */
+/* 363 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60696,15 +60495,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -60833,7 +60632,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 365 */
+/* 364 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60852,23 +60651,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _clockNumber = __webpack_require__(363);
+	var _clockNumber = __webpack_require__(362);
 
 	var _clockNumber2 = _interopRequireDefault(_clockNumber);
 
-	var _clockPointer = __webpack_require__(364);
+	var _clockPointer = __webpack_require__(363);
 
 	var _clockPointer2 = _interopRequireDefault(_clockPointer);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -61062,7 +60861,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 366 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61081,15 +60880,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -61178,7 +60977,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 367 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61197,15 +60996,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _mixinsStylePropable = __webpack_require__(165);
+	var _mixinsStylePropable = __webpack_require__(164);
 
 	var _mixinsStylePropable2 = _interopRequireDefault(_mixinsStylePropable);
 
-	var _stylesRawThemesLightRawTheme = __webpack_require__(205);
+	var _stylesRawThemesLightRawTheme = __webpack_require__(204);
 
 	var _stylesRawThemesLightRawTheme2 = _interopRequireDefault(_stylesRawThemesLightRawTheme);
 
-	var _stylesThemeManager = __webpack_require__(209);
+	var _stylesThemeManager = __webpack_require__(208);
 
 	var _stylesThemeManager2 = _interopRequireDefault(_stylesThemeManager);
 
@@ -61302,7 +61101,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 368 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61313,43 +61112,43 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _colorManipulator = __webpack_require__(207);
+	var _colorManipulator = __webpack_require__(206);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _cssEvent = __webpack_require__(312);
+	var _cssEvent = __webpack_require__(311);
 
 	var _cssEvent2 = _interopRequireDefault(_cssEvent);
 
-	var _dom = __webpack_require__(231);
+	var _dom = __webpack_require__(230);
 
 	var _dom2 = _interopRequireDefault(_dom);
 
-	var _events = __webpack_require__(197);
+	var _events = __webpack_require__(196);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _extend = __webpack_require__(210);
+	var _extend = __webpack_require__(209);
 
 	var _extend2 = _interopRequireDefault(_extend);
 
-	var _immutabilityHelper = __webpack_require__(166);
+	var _immutabilityHelper = __webpack_require__(165);
 
 	var _immutabilityHelper2 = _interopRequireDefault(_immutabilityHelper);
 
-	var _keyCode = __webpack_require__(198);
+	var _keyCode = __webpack_require__(197);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _keyLine = __webpack_require__(313);
+	var _keyLine = __webpack_require__(312);
 
 	var _keyLine2 = _interopRequireDefault(_keyLine);
 
-	var _uniqueId = __webpack_require__(243);
+	var _uniqueId = __webpack_require__(242);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _styles = __webpack_require__(169);
+	var _styles = __webpack_require__(168);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
@@ -61377,6 +61176,208 @@
 	};
 
 /***/ },
+/* 368 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.HabitForm = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUi = __webpack_require__(162);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HabitForm = exports.HabitForm = (function (_React$Component) {
+	  _inherits(HabitForm, _React$Component);
+
+	  function HabitForm(props) {
+	    _classCallCheck(this, HabitForm);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitForm).call(this, props));
+
+	    _this.state = {
+	      title: '',
+	      description: '',
+	      dates: [],
+	      frequency: 'day',
+	      status: 'do',
+	      repeat: true,
+	      goal: 'choose the related goal',
+	      open: false
+	    };
+	    return _this;
+	  }
+
+	  _createClass(HabitForm, [{
+	    key: 'handleTitleChange',
+	    value: function handleTitleChange(e) {
+	      this.setState({ title: e.target.value });
+	    }
+	  }, {
+	    key: 'handleDescriptionChange',
+	    value: function handleDescriptionChange(e) {
+	      this.setState({ description: e.target.value });
+	    }
+	  }, {
+	    key: 'handleGoalChange',
+	    value: function handleGoalChange(e) {
+	      this.setState({ goal: e.target.innerHTML });
+	    }
+	  }, {
+	    key: 'handleDateChange',
+	    value: function handleDateChange(e) {
+	      var dates = this.state.dates;
+	      if (dates.length > 0) {
+	        for (var i = 0; i < dates.length; i++) {
+	          var date = dates[i];
+	          if (new Date(date).getDate() == new Date(e.target.value).getDate()) {
+	            dates.splice(i, 1);
+	          }
+	        }
+	      }
+	      // the `false` used here for the target's react internal component means that the toggle is true
+	      if (e.target._reactInternalComponent._currentElement.props.switched == false) {
+	        dates.push(e.target.value);
+	      }
+	      this.setState({ dates: dates });
+	    }
+	  }, {
+	    key: 'handleRepeat',
+	    value: function handleRepeat(e) {
+	      this.setState({ repeat: e.target.checked });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      var title = this.state.title.trim();
+	      var description = this.state.description.trim();
+	      var dates = this.state.dates;
+	      var frequency = this.state.frequency;
+	      var status = this.state.status;
+	      var repeat = this.state.repeat;
+	      var goal = this.state.goal.trim();
+	      if (title == "" || dates.length == 0 || goal == "" || goal == "choose the related goal") {
+	        alert("Title, goal, and schedule are required as input");
+	        return;
+	      };
+	      var schedules = dates.map(function (schedule, i) {
+	        return { date: dates[i], frequency: frequency, status: status, repeat: repeat, goal: goal };
+	      });
+	      this.props.onHabitSubmit({ title: title, description: description, schedules_attributes: schedules });
+	      this.setState({ title: '', description: '', dates: [], status: 'do', repeat: true, goal: 'choose the related goal' });
+	      this.handleClose();
+	    }
+	  }, {
+	    key: 'handleOpen',
+	    value: function handleOpen() {
+	      this.setState({ open: true });
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false });
+	    }
+	  }, {
+	    key: 'renderDayOption',
+	    value: function renderDayOption(label, day) {
+	      var styles = {};
+	      var labelStyles = {
+	        width: '5px',
+	        paddingRight: '25px',
+	        paddingBottom: '5px'
+	      };
+	      return _react2.default.createElement(_materialUi.Toggle, {
+	        labelStyle: labelStyles,
+	        style: styles,
+	        value: this.props.findDayInWeek(day),
+	        label: label,
+	        onToggle: this.handleDateChange.bind(this)
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var goals = this.props.goals.map(function (goal, i) {
+	        return _react2.default.createElement(_materialUi.MenuItem, { value: goal.title, primaryText: goal.title, key: i });
+	      });
+	      var actions = [_react2.default.createElement('input', { type: 'text', name: 'title', placeholder: 'Habit Title', value: this.state.title, onChange: this.handleTitleChange.bind(this) }), _react2.default.createElement('input', { type: 'text', name: 'description', placeholder: 'Habit Description', value: this.state.description, onChange: this.handleDescriptionChange.bind(this) }), _react2.default.createElement(
+	        _materialUi.SelectField,
+	        { id: 'goal', value: this.state.goal, onChange: this.handleGoalChange.bind(this) },
+	        _react2.default.createElement(_materialUi.MenuItem, { value: 'choose the related goal', primaryText: 'choose the related goal' }),
+	        goals
+	      ), _react2.default.createElement(
+	        'div',
+	        { className: 'small-6 small-centered columns' },
+	        this.renderDayOption('M', 1),
+	        this.renderDayOption('T', 2),
+	        this.renderDayOption('W', 3),
+	        this.renderDayOption('Th', 4),
+	        this.renderDayOption('F', 5),
+	        this.renderDayOption('S', 6),
+	        this.renderDayOption('Su', 7)
+	      ), _react2.default.createElement(_materialUi.Checkbox, {
+	        name: 'repeat',
+	        value: 'repeat',
+	        label: 'Repeat This Schedule Weekly?',
+	        defaultChecked: true,
+	        onCheck: this.handleRepeat.bind(this),
+	        labelPosition: 'left',
+	        style: { paddingRight: '50px' }
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Cancel',
+	        secondary: true,
+	        onClick: this.handleClose.bind(this)
+	      }), _react2.default.createElement(_materialUi.FlatButton, {
+	        label: 'Add Habit',
+	        primary: true,
+	        onClick: this.handleSubmit.bind(this)
+	      })];
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'habitForm small-12 medium-6 large-4 columns' },
+	        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
+	        _react2.default.createElement(
+	          _materialUi.Dialog,
+	          {
+	            'class': 'row',
+	            title: 'Create New Habit Or Goal',
+	            actions: actions,
+	            modal: false,
+	            open: this.state.open,
+	            onRequestClose: this.handleClose.bind(this)
+	          },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'This is filler text in the dialog popover'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HabitForm;
+	})(_react2.default.Component);
+
+	exports.default = HabitForm;
+
+/***/ },
 /* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -61389,7 +61390,7 @@
 	});
 	exports.HabitTabs = undefined;
 
-	var _materialUi = __webpack_require__(163);
+	var _materialUi = __webpack_require__(162);
 
 	var _react = __webpack_require__(2);
 
@@ -61529,19 +61530,31 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var styles = {
+	        height: '600px',
+	        overflow: 'auto'
+	      };
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'habitTabs small-12 medium-6 large-4 columns' },
 	        _react2.default.createElement(
-	          _materialUi.Tabs,
-	          { initialSelectedIndex: this.props.initialSelectedIndex },
-	          this.renderTabCategory('M', 1),
-	          this.renderTabCategory('T', 2),
-	          this.renderTabCategory('W', 3),
-	          this.renderTabCategory('Th', 4),
-	          this.renderTabCategory('F', 5),
-	          this.renderTabCategory('S', 6),
-	          this.renderTabCategory('Su', 7)
+	          _materialUi.Paper,
+	          { zDepth: 1, style: styles },
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              _materialUi.Tabs,
+	              { initialSelectedIndex: this.props.initialSelectedIndex },
+	              this.renderTabCategory('M', 1),
+	              this.renderTabCategory('T', 2),
+	              this.renderTabCategory('W', 3),
+	              this.renderTabCategory('Th', 4),
+	              this.renderTabCategory('F', 5),
+	              this.renderTabCategory('S', 6),
+	              this.renderTabCategory('Su', 7)
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -67779,7 +67792,7 @@
 	});
 	exports.HabitList = undefined;
 
-	var _materialUi = __webpack_require__(163);
+	var _materialUi = __webpack_require__(162);
 
 	var _react = __webpack_require__(2);
 
@@ -68455,7 +68468,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var RaisedButton = __webpack_require__(337);
+	var RaisedButton = __webpack_require__(336);
 
 	var EditableText = (function (_React$Component) {
 	  _inherits(EditableText, _React$Component);
@@ -68551,7 +68564,7 @@
 	  value: true
 	});
 
-	var _materialUi = __webpack_require__(163);
+	var _materialUi = __webpack_require__(162);
 
 	var _react = __webpack_require__(2);
 
@@ -69003,7 +69016,7 @@
 /* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -69015,6 +69028,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _materialUi = __webpack_require__(162);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69022,6 +69037,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Highcharts = __webpack_require__(502);
 
 	var HabitDisplay = (function (_React$Component) {
 	  _inherits(HabitDisplay, _React$Component);
@@ -69033,15 +69050,20 @@
 	  }
 
 	  _createClass(HabitDisplay, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
+	      var config = {};
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "habitDisplay" },
+	        'div',
+	        { className: 'small-6 columns' },
 	        _react2.default.createElement(
-	          "p",
-	          null,
-	          "habit display box"
+	          _materialUi.Paper,
+	          { zDepth: 1 },
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(Highcharts, { config: config })
+	          )
 	        )
 	      );
 	    }
@@ -69051,6 +69073,24 @@
 	})(_react2.default.Component);
 
 	exports.default = HabitDisplay;
+
+/***/ },
+/* 502 */
+/***/ function(module, exports, __webpack_require__) {
+
+	!function(t,e){ true?module.exports=e(__webpack_require__(2)):"function"==typeof define&&define.amd?define(["react"],e):"object"==typeof exports?exports.Highcharts=e(require("react")):t.Highcharts=e(t.react)}(this,function(t){return function(t){function e(n){if(i[n])return i[n].exports;var o=i[n]={exports:{},id:n,loaded:!1};return t[n].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var i={};return e.m=t,e.c=i,e.p="",e(0)}([function(t,e,i){(function(e){"use strict";"undefined"==typeof e.Highcharts&&(e.Highcharts=i(6)),t.exports=i(3)}).call(e,function(){return this}())},function(t,e,i){"use strict";var n=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var i=arguments[e];for(var n in i)Object.prototype.hasOwnProperty.call(i,n)&&(t[n]=i[n])}return t},o=i(2);if("undefined"==typeof Highcharts)throw Error('Starting with version 3 of react-highcharts, Highcharts is not bundled by default.  use "react-highcharts/dist/bundle/highcharts" instead, or include highcharts. ');t.exports=function(t,e){var i="Highcharts"+e,r=o.createClass({displayName:i,propTypes:{config:o.PropTypes.object.isRequired,isPureConfig:o.PropTypes.bool},renderChart:function(o){if(!o)throw new Error("Config must be specified for the "+i+" component");var r=o.chart;this.chart=new t[e](n({},o,{chart:n({},r,{renderTo:this.refs.chart})}))},shouldComponentUpdate:function(t){return this.props.isPureConfig&&this.props.config===t.config||this.renderChart(t.config),!0},getChart:function(){if(!this.chart)throw new Error("getChart() should not be called before the component is mounted");return this.chart},componentDidMount:function(){this.renderChart(this.props.config)},render:function(){var t=this.props;return t=n({},t,{ref:"chart"}),o.createElement("div",t)}});return r.Highcharts=t,r}},function(e,i){e.exports=t},function(t,e,i){"use strict";var n=i(1);t.exports=n(Highcharts,"Chart")},,,function(t,e){/**
+		 * @license Highcharts JS v4.2.0 (2105-12-15)
+		 *
+		 * (c) 2009-2014 Torstein Honsi
+		 *
+		 * License: www.highcharts.com/license
+		 */
+	!function(e,i){"object"==typeof t&&t.exports?t.exports=e.document?i(e):i:e.Highcharts=i(e)}("undefined"!=typeof window?window:this,function(t){function e(e,i){var n="Highcharts error #"+e+": www.highcharts.com/errors/"+e;if(i)throw new Error(n);t.console&&console.log(n)}function i(t,e,i){this.options=e,this.elem=t,this.prop=i}function n(){var t,e,i=arguments,n={},o=function(t,e){var i,n;"object"!=typeof t&&(t={});for(n in e)e.hasOwnProperty(n)&&(i=e[n],i&&"object"==typeof i&&"[object Array]"!==Object.prototype.toString.call(i)&&"renderTo"!==n&&"number"!=typeof i.nodeType?t[n]=o(t[n]||{},i):t[n]=e[n]);return t};for(i[0]===!0&&(n=i[1],i=Array.prototype.slice.call(i,2)),e=i.length,t=0;e>t;t++)n=o(n,i[t]);return n}function o(t,e){return parseInt(t,e||10)}function r(t){return"string"==typeof t}function s(t){return t&&"object"==typeof t}function a(t){return"[object Array]"===Object.prototype.toString.call(t)}function l(t){return"number"==typeof t}function h(t){return gt.log(t)/gt.LN10}function c(t){return gt.pow(10,t)}function d(t,e){for(var i=t.length;i--;)if(t[i]===e){t.splice(i,1);break}}function p(t){return t!==F&&null!==t}function u(t,e,i){var n,o;if(r(e))p(i)?t.setAttribute(e,i):t&&t.getAttribute&&(o=t.getAttribute(e));else if(p(e)&&s(e))for(n in e)t.setAttribute(n,e[n]);return o}function f(t){return a(t)?t:[t]}function g(t,e,i){return e?setTimeout(t,e,i):void t.call(0,i)}function m(t,e){Lt&&!Rt&&e&&e.opacity!==F&&(e.filter="alpha(opacity="+100*e.opacity+")"),xe(t.style,e)}function y(t,e,i,n,o){var r=ft.createElement(t);return e&&xe(r,e),o&&m(r,{padding:0,border:"none",margin:0}),i&&m(r,i),n&&n.appendChild(r),r}function v(t,e){var i=function(){};return i.prototype=new t,xe(i.prototype,e),i}function x(t,e){return new Array((e||2)+1-String(t).length).join(0)+t}function b(t,e){return/%$/.test(t)?e*parseFloat(t)/100:parseFloat(t)}function k(t){return 6e4*(Q&&Q(t)||J||0)}function w(t,e){var i,n=/f$/,o=/\.([0-9])/,r=V.lang;return n.test(t)?(i=t.match(o),i=i?i[1]:-1,null!==e&&(e=ut.numberFormat(e,i,r.decimalPoint,t.indexOf(",")>-1?r.thousandsSep:""))):e=_(t,e),e}function S(t,e){for(var i,n,o,r,s,a,l,h="{",c=!1,d=[];-1!==(l=t.indexOf(h));){if(i=t.slice(0,l),c){for(n=i.split(":"),o=n.shift().split("."),s=o.length,a=e,r=0;s>r;r++)a=a[o[r]];n.length&&(a=w(n.join(":"),a)),d.push(a)}else d.push(i);t=t.slice(l+1),c=!c,h=c?"}":"{"}return d.push(t),d.join("")}function T(t){return gt.pow(10,yt(gt.log(t)/gt.LN10))}function A(t,e,i,n,o){var r,s,a=t;for(i=be(i,1),r=t/i,e||(e=[1,2,2.5,5,10],n===!1&&(1===i?e=[1,2,5,10]:.1>=i&&(e=[1/i]))),s=0;s<e.length&&(a=e[s],!(o&&a*i>=t||!o&&r<=(e[s]+(e[s+1]||e[s]))/2));s++);return a*=i}function C(t,e){var i,n,o=t.length;for(n=0;o>n;n++)t[n].safeI=n;for(t.sort(function(t,n){return i=e(t,n),0===i?t.safeI-n.safeI:i}),n=0;o>n;n++)delete t[n].safeI}function P(t){for(var e=t.length,i=t[0];e--;)t[e]<i&&(i=t[e]);return i}function L(t){for(var e=t.length,i=t[0];e--;)t[e]>i&&(i=t[e]);return i}function M(t,e){var i;for(i in t)t[i]&&t[i]!==e&&t[i].destroy&&t[i].destroy(),delete t[i]}function I(t){j||(j=y(jt)),t&&j.appendChild(t),j.innerHTML=""}function O(t,e){return parseFloat(t.toPrecision(e||14))}function D(t,e){e.renderer.globalAnimation=be(t,e.animation)}function z(){var e=V.global,i=e.useUTC,n=i?"getUTC":"get",o=i?"setUTC":"set";q=e.Date||t.Date,J=i&&e.timezoneOffset,Q=i&&e.getTimezoneOffset,$=function(t,e,n,o,r,s){var a;return i?(a=q.UTC.apply(0,arguments),a+=k(a)):a=new q(t,e,be(n,1),be(o,0),be(r,0),be(s,0)).getTime(),a},tt=n+"Minutes",et=n+"Hours",it=n+"Day",nt=n+"Date",ot=n+"Month",rt=n+"FullYear",st=o+"Milliseconds",at=o+"Seconds",lt=o+"Minutes",ht=o+"Hours",ct=o+"Date",dt=o+"Month",pt=o+"FullYear"}function R(t){return V=n(!0,V,t),z(),V}function B(){return V}function E(t){return this instanceof E?void this.init(t):new E(t)}function H(){}function X(t,e){var i=ft.getElementsByTagName("head")[0],n=ft.createElement("script");n.type="text/javascript",n.src=t,n.onload=e,i.appendChild(n)}function W(t,e,i,n){this.axis=t,this.pos=e,this.type=i||"",this.isNew=!0,i||n||this.addLabel()}function G(t,e,i,n,o){var r=t.chart.inverted;this.axis=t,this.isNegative=i,this.options=e,this.x=n,this.total=null,this.points={},this.stack=o,this.alignOptions={align:e.align||(r?i?"left":"right":"center"),verticalAlign:e.verticalAlign||(r?"middle":i?"bottom":"top"),y:be(e.y,r?4:i?14:-6),x:be(e.x,r?i?-6:6:0)},this.textAlign=e.textAlign||(r?i?"right":"left":"center")}var F,Y,N,j,V,_,U,K,Z,q,$,J,Q,tt,et,it,nt,ot,rt,st,at,lt,ht,ct,dt,pt,ut,ft=t.document,gt=Math,mt=gt.round,yt=gt.floor,vt=gt.ceil,xt=gt.max,bt=gt.min,kt=gt.abs,wt=gt.cos,St=gt.sin,Tt=gt.PI,At=2*Tt/360,Ct=t.navigator&&t.navigator.userAgent||"",Pt=t.opera,Lt=/(msie|trident|edge)/i.test(Ct)&&!Pt,Mt=ft&&8===ft.documentMode,It=!Lt&&/AppleWebKit/.test(Ct),Ot=/Firefox/.test(Ct),Dt=/(Mobile|Android|Windows Phone)/.test(Ct),zt="http://www.w3.org/2000/svg",Rt=ft&&ft.createElementNS&&!!ft.createElementNS(zt,"svg").createSVGRect,Bt=Ot&&parseInt(Ct.split("Firefox/")[1],10)<4,Et=ft&&!Rt&&!Lt&&!!ft.createElement("canvas").getContext,Ht={},Xt=0,Wt=function(){},Gt=[],Ft=0,Yt="Highcharts",Nt="4.2.0",jt="div",Vt="absolute",_t="relative",Ut="hidden",Kt="highcharts-",Zt="visible",qt="px",$t="none",Jt="M",Qt="L",te=/^[0-9]+$/,ee="",ie="hover",ne="select",oe=["plotTop","marginRight","marginBottom","plotLeft"],re="stroke-width",se={};ut=t.Highcharts?e(16,!0):{win:t},ut.seriesTypes=se;var ae,le,he,ce,de,pe,ue,fe,ge,me,ye,ve=[];i.prototype={dSetter:function(){var t,e=this.paths[0],i=this.paths[1],n=[],o=this.now,r=e.length;if(1===o)n=this.toD;else if(r===i.length&&1>o)for(;r--;)t=parseFloat(e[r]),n[r]=isNaN(t)?e[r]:o*parseFloat(i[r]-t)+t;else n=i;this.elem.attr("d",n)},update:function(){var t=this.elem,e=this.prop,i=this.now,n=this.options.step;this[e+"Setter"]?this[e+"Setter"]():t.attr?t.element&&t.attr(e,i):t.style[e]=i+this.unit,n&&n.call(t,i,this)},run:function(t,e,i){var n,o=this,r=function(t){return r.stopped?!1:o.step(t)};this.startTime=+new q,this.start=t,this.end=e,this.unit=i,this.now=this.start,this.pos=0,r.elem=this.elem,r()&&1===ve.push(r)&&(r.timerId=setInterval(function(){for(n=0;n<ve.length;n++)ve[n]()||ve.splice(n--,1);ve.length||clearInterval(r.timerId)},13))},step:function(t){var e,i,n,o=+new q,r=this.options,s=this.elem,a=r.complete,l=r.duration,h=r.curAnim;if(s.attr&&!s.element)e=!1;else if(t||o>=l+this.startTime){this.now=this.end,this.pos=1,this.update(),h[this.prop]=!0,i=!0;for(n in h)h[n]!==!0&&(i=!1);i&&a&&a.call(s),e=!1}else this.pos=r.easing((o-this.startTime)/l),this.now=this.start+(this.end-this.start)*this.pos,this.update(),e=!0;return e},initPath:function(t,e,i){e=e||"";var n,o,r,s,a,l=t.shift,h=e.indexOf("C")>-1,c=h?7:3,d=e.split(" "),p=[].concat(i),u=function(t){for(r=t.length;r--;)t[r]===Jt&&t.splice(r+1,0,t[r+1],t[r+2],t[r+1],t[r+2])};if(h&&(u(d),u(p)),t.isArea&&(s=d.splice(d.length-6,6),a=p.splice(p.length-6,6)),l<=p.length/c&&d.length===p.length)for(;l--;)p=[].concat(p).splice(0,c).concat(p);if(t.shift=0,d.length)for(n=p.length;d.length<n;)o=[].concat(d).splice(d.length-c,c),h&&(o[c-6]=o[c-2],o[c-5]=o[c-1]),d=d.concat(o);return s&&(d=d.concat(s),p=p.concat(a)),[d,p]}};var xe=ut.extend=function(t,e){var i;t||(t={});for(i in e)t[i]=e[i];return t},be=ut.pick=function(){var t,e,i=arguments,n=i.length;for(t=0;n>t;t++)if(e=i[t],e!==F&&null!==e)return e},ke=ut.wrap=function(t,e,i){var n=t[e];t[e]=function(){var t=Array.prototype.slice.call(arguments);return t.unshift(n),i.apply(this,t)}};_=function(t,e,i){if(!p(e)||isNaN(e))return V.lang.invalidDate||"";t=be(t,"%Y-%m-%d %H:%M:%S");var n,o=new q(e-k(e)),r=o[et](),s=o[it](),a=o[nt](),l=o[ot](),h=o[rt](),c=V.lang,d=c.weekdays,u=xe({a:d[s].substr(0,3),A:d[s],d:x(a),e:a,w:s,b:c.shortMonths[l],B:c.months[l],m:x(l+1),y:h.toString().substr(2,2),Y:h,H:x(r),k:r,I:x(r%12||12),l:r%12||12,M:x(o[tt]()),p:12>r?"AM":"PM",P:12>r?"am":"pm",S:x(o.getSeconds()),L:x(mt(e%1e3),3)},ut.dateFormats);for(n in u)for(;-1!==t.indexOf("%"+n);)t=t.replace("%"+n,"function"==typeof u[n]?u[n](e):u[n]);return i?t.substr(0,1).toUpperCase()+t.substr(1):t},K={millisecond:1,second:1e3,minute:6e4,hour:36e5,day:864e5,week:6048e5,month:24192e5,year:314496e5},ut.numberFormat=function(t,e,i,n){var r=V.lang,s=+t||0,a=-1===e?Math.min((s.toString().split(".")[1]||"").length,20):isNaN(e=Math.abs(e))?2:e,l=void 0===i?r.decimalPoint:i,h=void 0===n?r.thousandsSep:n,c=0>s?"-":"",d=String(o(s=kt(s).toFixed(a))),p=d.length>3?d.length%3:0;return c+(p?d.substr(0,p)+h:"")+d.substr(p).replace(/(\d{3})(?=\d)/g,"$1"+h)+(a?l+kt(s-d).toFixed(a).slice(2):"")},Math.easeInOutSine=function(t){return-.5*(Math.cos(Math.PI*t)-1)},ae=function(e,i){var n=t.getComputedStyle(e,void 0);return n&&o(n.getPropertyValue(i))},le=function(t,e){return e.indexOf?e.indexOf(t):[].indexOf.call(e,t)},ce=function(t,e){return[].filter.call(t,e)},pe=function(t,e){for(var i=[],n=0,o=t.length;o>n;n++)i[n]=e.call(t[n],t[n],n,t);return i},de=function(e){var i=ft.documentElement,n=e.getBoundingClientRect();return{top:n.top+(t.pageYOffset||i.scrollTop)-(i.clientTop||0),left:n.left+(t.pageXOffset||i.scrollLeft)-(i.clientLeft||0)}},ye=function(t){for(var e=ve.length;e--;)ve[e].elem===t&&(ve[e].stopped=!0)},he=function(t,e){return Array.prototype.forEach.call(t,e)},ue=function(e,i,n){function o(i){i.target=i.srcElement||t,n.call(e,i)}var r=e.hcEvents=e.hcEvents||{};e.addEventListener?e.addEventListener(i,n,!1):e.attachEvent&&(e.hcEventsIE||(e.hcEventsIE={}),e.hcEventsIE[n.toString()]=o,e.attachEvent("on"+i,o)),r[i]||(r[i]=[]),r[i].push(n)},fe=function(t,e,i){function n(e,i){t.removeEventListener?t.removeEventListener(e,i,!1):t.attachEvent&&(i=t.hcEventsIE[i.toString()],t.detachEvent("on"+e,i))}function o(){var i,o,r;if(t.nodeName){e?(i={},i[e]=!0):i=a;for(r in i)if(a[r])for(o=a[r].length;o--;)n(r,a[r][o])}}var r,s,a=t.hcEvents;a&&(e?(r=a[e]||[],i?(s=le(i,r),s>-1&&(r.splice(s,1),a[e]=r),n(e,i)):(o(),a[e]=[])):(o(),t.hcEvents={}))},ge=function(t,e,i,n){var o,r,s,a,l,h,c=t.hcEvents;if(i=i||{},ft.createEvent&&(t.dispatchEvent||t.fireEvent))o=ft.createEvent("Events"),o.initEvent(e,!0,!0),o.target=t,xe(o,i),t.dispatchEvent?t.dispatchEvent(o):t.fireEvent(e,o);else if(c)for(r=c[e]||[],s=r.length,l=function(){i.defaultPrevented=!0},a=0;s>a;a++){if(h=r[a],i.stopped)return;i.preventDefault=l,i.target=t,i.type||(i.type=e),h.call(t,i)===!1&&i.preventDefault()}n&&!i.defaultPrevented&&n(i)},me=function(t,e,o){var r,a,h,c,d,p="";s(o)||(c=arguments,o={duration:c[2],easing:c[3],complete:c[4]}),l(o.duration)||(o.duration=400),o.easing=Math[o.easing]||Math.easeInOutSine,o.curAnim=n(e);for(d in e)h=new i(t,o,d),a=null,"d"===d?(h.paths=h.initPath(t,t.d,e.d),h.toD=e.d,r=0,a=1):t.attr?r=t.attr(d):(r=parseFloat(ae(t,d))||0,"opacity"!==d&&(p="px")),a||(a=e[d]),a.match&&a.match("px")&&(a=a.replace(/px/g,"")),h.run(r,a,p)},t.jQuery&&(t.jQuery.fn.highcharts=function(){var t=[].slice.call(arguments);return this[0]?t[0]?(new(ut[r(t[0])?t.shift():"Chart"])(this[0],t[0],t[1]),this):Gt[u(this[0],"data-highcharts-chart")]:void 0}),ft&&!ft.defaultView&&(ae=function(t,e){var i,n={width:"clientWidth",height:"clientHeight"}[e];return t.style[e]?o(t.style[e]):("opacity"===e&&(e="filter"),n?(t.style.zoom=1,t[n]-2*ae(t,"padding")):(i=t.currentStyle[e.replace(/\-(\w)/g,function(t,e){return e.toUpperCase()})],"filter"===e&&(i=i.replace(/alpha\(opacity=([0-9]+)\)/,function(t,e){return e/100})),""===i?1:o(i)))}),Array.prototype.forEach||(he=function(t,e){for(var i=0,n=t.length;n>i;i++)if(e.call(t[i],t[i],i,t)===!1)return i}),Array.prototype.indexOf||(le=function(t,e){var i,n=0;if(e)for(i=e.length;i>n;n++)if(e[n]===t)return n;return-1}),Array.prototype.filter||(ce=function(t,e){for(var i=[],n=0,o=t.length;o>n;n++)e(t[n],n)&&i.push(t[n]);return i}),ut.Fx=i,ut.inArray=le,ut.each=he,ut.grep=ce,ut.offset=de,ut.map=pe,ut.addEvent=ue,ut.removeEvent=fe,ut.fireEvent=ge,ut.animate=me,ut.stop=ye,V={colors:["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"],symbols:["circle","diamond","square","triangle","triangle-down"],lang:{loading:"Loading...",months:["January","February","March","April","May","June","July","August","September","October","November","December"],shortMonths:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],weekdays:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],decimalPoint:".",numericSymbols:["k","M","G","T","P","E"],resetZoom:"Reset zoom",resetZoomTitle:"Reset zoom level 1:1",thousandsSep:" "},global:{useUTC:!0,canvasToolsURL:"http://code.highcharts.com/modules/canvas-tools.js",VMLRadialGradientURL:"http://code.highcharts.com/4.2.0/gfx/vml-radial-gradient.png"},chart:{borderColor:"#4572A7",borderRadius:0,defaultSeriesType:"line",ignoreHiddenSeries:!0,spacing:[10,10,15,10],backgroundColor:"#FFFFFF",plotBorderColor:"#C0C0C0",resetZoomButton:{theme:{zIndex:20},position:{align:"right",x:-10,y:10}}},title:{text:"Chart title",align:"center",margin:15,style:{color:"#333333",fontSize:"18px"}},subtitle:{text:"",align:"center",style:{color:"#555555"}},plotOptions:{line:{allowPointSelect:!1,showCheckbox:!1,animation:{duration:1e3},events:{},lineWidth:2,marker:{lineWidth:0,radius:4,lineColor:"#FFFFFF",states:{hover:{enabled:!0,lineWidthPlus:1,radiusPlus:2},select:{fillColor:"#FFFFFF",lineColor:"#000000",lineWidth:2}}},point:{events:{}},dataLabels:{align:"center",formatter:function(){return null===this.y?"":ut.numberFormat(this.y,-1)},style:{color:"contrast",fontSize:"11px",fontWeight:"bold",textShadow:"0 0 6px contrast, 0 0 3px contrast"},verticalAlign:"bottom",x:0,y:0,padding:5},cropThreshold:300,pointRange:0,softThreshold:!0,states:{hover:{lineWidthPlus:1,marker:{},halo:{size:10,opacity:.25}},select:{marker:{}}},stickyTracking:!0,turboThreshold:1e3}},labels:{style:{position:Vt,color:"#3E576F"}},legend:{enabled:!0,align:"center",layout:"horizontal",labelFormatter:function(){return this.name},borderColor:"#909090",borderRadius:0,navigation:{activeColor:"#274b6d",inactiveColor:"#CCC"},shadow:!1,itemStyle:{color:"#333333",fontSize:"12px",fontWeight:"bold"},itemHoverStyle:{color:"#000"},itemHiddenStyle:{color:"#CCC"},itemCheckboxStyle:{position:Vt,width:"13px",height:"13px"},symbolPadding:5,verticalAlign:"bottom",x:0,y:0,title:{style:{fontWeight:"bold"}}},loading:{labelStyle:{fontWeight:"bold",position:_t,top:"45%"},style:{position:Vt,backgroundColor:"white",opacity:.5,textAlign:"center"}},tooltip:{enabled:!0,animation:Rt,backgroundColor:"rgba(249, 249, 249, .85)",borderWidth:1,borderRadius:3,dateTimeLabelFormats:{millisecond:"%A, %b %e, %H:%M:%S.%L",second:"%A, %b %e, %H:%M:%S",minute:"%A, %b %e, %H:%M",hour:"%A, %b %e, %H:%M",day:"%A, %b %e, %Y",week:"Week from %A, %b %e, %Y",month:"%B %Y",year:"%Y"},footerFormat:"",headerFormat:'<span style="font-size: 10px">{point.key}</span><br/>',pointFormat:'<span style="color:{point.color}">●</span> {series.name}: <b>{point.y}</b><br/>',shadow:!0,snap:Dt?25:10,style:{color:"#333333",cursor:"default",fontSize:"12px",padding:"8px",pointerEvents:"none",whiteSpace:"nowrap"}},credits:{enabled:!0,text:"Highcharts.com",href:"http://www.highcharts.com",position:{align:"right",x:-10,verticalAlign:"bottom",y:-5},style:{cursor:"pointer",color:"#909090",fontSize:"9px"}}};var we=V.plotOptions,Se=we.line;z(),E.prototype={parsers:[{regex:/rgba\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]?(?:\.[0-9]+)?)\s*\)/,parse:function(t){return[o(t[1]),o(t[2]),o(t[3]),parseFloat(t[4],10)]}},{regex:/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/,parse:function(t){return[o(t[1],16),o(t[2],16),o(t[3],16),1]}},{regex:/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/,parse:function(t){return[o(t[1]),o(t[2]),o(t[3]),1]}}],init:function(t){var e,i,n,o;if(this.input=t,t&&t.stops)this.stops=pe(t.stops,function(t){return new E(t[1])});else for(n=this.parsers.length;n--&&!i;)o=this.parsers[n],e=o.regex.exec(t),e&&(i=o.parse(e));this.rgba=i||[]},get:function(t){var e,i=this.input,o=this.rgba;return this.stops?(e=n(i),e.stops=[].concat(e.stops),he(this.stops,function(i,n){e.stops[n]=[e.stops[n][0],i.get(t)]})):e=o&&!isNaN(o[0])?"rgb"===t||!t&&1===o[3]?"rgb("+o[0]+","+o[1]+","+o[2]+")":"a"===t?o[3]:"rgba("+o.join(",")+")":i,e},brighten:function(t){var e,i=this.rgba;if(this.stops)he(this.stops,function(e){e.brighten(t)});else if(l(t)&&0!==t)for(e=0;3>e;e++)i[e]+=o(255*t),i[e]<0&&(i[e]=0),i[e]>255&&(i[e]=255);return this},setOpacity:function(t){return this.rgba[3]=t,this}},H.prototype={opacity:1,textProps:["direction","fontSize","fontWeight","fontFamily","fontStyle","color","lineHeight","width","textDecoration","textOverflow","textShadow"],init:function(t,e){var i=this;i.element="span"===e?y(e):ft.createElementNS(zt,e),i.renderer=t},animate:function(t,e,i){var o=be(e,this.renderer.globalAnimation,!0);return ye(this),o?(o=n(o,{}),i&&(o.complete=i),me(this,t,o)):this.attr(t,null,i),this},colorGradient:function(t,e,i){var o,r,s,l,h,c,d,u,f,g,m,y,v,x=this.renderer,b=[];if(t.linearGradient?r="linearGradient":t.radialGradient&&(r="radialGradient"),r){s=t[r],h=x.gradients,d=t.stops,g=i.radialReference,a(s)&&(t[r]=s={x1:s[0],y1:s[1],x2:s[2],y2:s[3],gradientUnits:"userSpaceOnUse"}),"radialGradient"===r&&g&&!p(s.gradientUnits)&&(l=s,s=n(s,x.getRadialAttr(g,l),{gradientUnits:"userSpaceOnUse"}));for(m in s)"id"!==m&&b.push(m,s[m]);for(m in d)b.push(d[m]);b=b.join(","),h[b]?y=h[b].attr("id"):(s.id=y=Kt+Xt++,h[b]=c=x.createElement(r).attr(s).add(x.defs),c.radAttr=l,c.stops=[],he(d,function(t){var e;0===t[1].indexOf("rgba")?(o=E(t[1]),u=o.get("rgb"),f=o.get("a")):(u=t[1],f=1),e=x.createElement("stop").attr({offset:t[0],"stop-color":u,"stop-opacity":f}).add(c),c.stops.push(e)})),v="url("+x.url+"#"+y+")",i.setAttribute(e,v),i.gradient=b,t.toString=function(){return v}}},applyTextShadow:function(t){var e,i=this.element,n=-1!==t.indexOf("contrast"),r={},s=this.renderer.forExport,a=s||i.style.textShadow!==F&&!Lt;n&&(r.textShadow=t=t.replace(/contrast/g,this.renderer.getContrast(i.style.fill))),(It||s)&&(r.textRendering="geometricPrecision"),a?this.css(r):(this.fakeTS=!0,this.ySetter=this.xSetter,e=[].slice.call(i.getElementsByTagName("tspan")),he(t.split(/\s?,\s?/g),function(t){var n,r,s=i.firstChild;t=t.split(" "),n=t[t.length-1],r=t[t.length-2],r&&he(e,function(t,e){var a;0===e&&(t.setAttribute("x",i.getAttribute("x")),e=i.getAttribute("y"),t.setAttribute("y",e||0),null===e&&i.setAttribute("y",0)),a=t.cloneNode(1),u(a,{"class":Kt+"text-shadow",fill:n,stroke:n,"stroke-opacity":1/xt(o(r),3),"stroke-width":r,"stroke-linejoin":"round"}),i.insertBefore(a,s)})}))},attr:function(t,e,i){var n,o,r,s,a=this.element,l=this;if("string"==typeof t&&e!==F&&(n=t,t={},t[n]=e),"string"==typeof t)l=(this[t+"Getter"]||this._defaultGetter).call(this,t,a);else{for(n in t)o=t[n],s=!1,this.symbolName&&/^(x|y|width|height|r|start|end|innerR|anchorX|anchorY)/.test(n)&&(r||(this.symbolAttr(t),r=!0),s=!0),!this.rotation||"x"!==n&&"y"!==n||(this.doTransform=!0),s||(this[n+"Setter"]||this._defaultSetter).call(this,o,n,a),this.shadows&&/^(width|height|visibility|x|y|d|transform|cx|cy|r)$/.test(n)&&this.updateShadows(n,o);this.doTransform&&(this.updateTransform(),this.doTransform=!1)}return i&&i(),l},updateShadows:function(t,e){for(var i=this.shadows,n=i.length;n--;)i[n].setAttribute(t,"height"===t?Math.max(e-(i[n].cutHeight||0),0):"d"===t?this.d:e)},addClass:function(t){var e=this.element,i=u(e,"class")||"";return-1===i.indexOf(t)&&u(e,"class",i+" "+t),this},symbolAttr:function(t){var e=this;he(["x","y","r","start","end","width","height","innerR","anchorX","anchorY"],function(i){e[i]=be(t[i],e[i])}),e.attr({d:e.renderer.symbols[e.symbolName](e.x,e.y,e.width,e.height,e)})},clip:function(t){return this.attr("clip-path",t?"url("+this.renderer.url+"#"+t.id+")":$t)},crisp:function(t){var e,i,n=this,o={},r=t.strokeWidth||n.strokeWidth||0;i=mt(r)%2/2,t.x=yt(t.x||n.x||0)+i,t.y=yt(t.y||n.y||0)+i,t.width=yt((t.width||n.width||0)-2*i),t.height=yt((t.height||n.height||0)-2*i),t.strokeWidth=r;for(e in t)n[e]!==t[e]&&(n[e]=o[e]=t[e]);return o},css:function(t){var e,i,n,r=this,s=r.styles,a={},l=r.element,h="",c=!s;if(t&&t.color&&(t.fill=t.color),s)for(i in t)t[i]!==s[i]&&(a[i]=t[i],c=!0);if(c){if(e=r.textWidth=t&&t.width&&"text"===l.nodeName.toLowerCase()&&o(t.width)||r.textWidth,s&&(t=xe(s,a)),r.styles=t,e&&(Et||!Rt&&r.renderer.forExport)&&delete t.width,Lt&&!Rt)m(r.element,t);else{n=function(t,e){return"-"+e.toLowerCase()};for(i in t)h+=i.replace(/([A-Z])/g,n)+":"+t[i]+";";u(l,"style",h)}e&&r.added&&r.renderer.buildText(r)}return r},on:function(t,e){var i=this,n=i.element;return N&&"click"===t?(n.ontouchstart=function(t){i.touchEventFired=q.now(),t.preventDefault(),e.call(n,t)},n.onclick=function(t){(-1===Ct.indexOf("Android")||q.now()-(i.touchEventFired||0)>1100)&&e.call(n,t)}):n["on"+t]=e,this},setRadialReference:function(t){var e=this.renderer.gradients[this.element.gradient];return this.element.radialReference=t,e&&e.radAttr&&e.animate(this.renderer.getRadialAttr(t,e.radAttr)),this},translate:function(t,e){return this.attr({translateX:t,translateY:e})},invert:function(){var t=this;return t.inverted=!0,t.updateTransform(),t},updateTransform:function(){var t,e=this,i=e.translateX||0,n=e.translateY||0,o=e.scaleX,r=e.scaleY,s=e.inverted,a=e.rotation,l=e.element;s&&(i+=e.attr("width"),n+=e.attr("height")),t=["translate("+i+","+n+")"],s?t.push("rotate(90) scale(-1,1)"):a&&t.push("rotate("+a+" "+(l.getAttribute("x")||0)+" "+(l.getAttribute("y")||0)+")"),(p(o)||p(r))&&t.push("scale("+be(o,1)+" "+be(r,1)+")"),t.length&&l.setAttribute("transform",t.join(" "))},toFront:function(){var t=this.element;return t.parentNode.appendChild(t),this},align:function(t,e,i){var n,o,s,a,l,h={},c=this.renderer,p=c.alignedObjects;return t?(this.alignOptions=t,this.alignByTranslate=e,(!i||r(i))&&(this.alignTo=l=i||"renderer",d(p,this),p.push(this),i=null)):(t=this.alignOptions,e=this.alignByTranslate,l=this.alignTo),i=be(i,c[l],c),n=t.align,o=t.verticalAlign,s=(i.x||0)+(t.x||0),a=(i.y||0)+(t.y||0),("right"===n||"center"===n)&&(s+=(i.width-(t.width||0))/{right:1,center:2}[n]),h[e?"translateX":"x"]=mt(s),("bottom"===o||"middle"===o)&&(a+=(i.height-(t.height||0))/({bottom:1,middle:2}[o]||1)),h[e?"translateY":"y"]=mt(a),this[this.placed?"animate":"attr"](h),this.placed=!0,this.alignAttr=h,this},getBBox:function(t,e){var i,n,o,r,s,a,l,h,c=this,d=c.renderer,p=c.element,u=c.styles,f=c.textStr,g=p.style,m=d.cache,y=d.cacheKeys;if(r=be(e,c.rotation),s=r*At,f!==F&&(h=["",r||0,u&&u.fontSize,p.style.width].join(","),h=""===f||te.test(f)?"num:"+f.toString().length+h:f+h),h&&!t&&(i=m[h]),!i){if(p.namespaceURI===zt||d.forExport){try{l=this.fakeTS&&function(t){he(p.querySelectorAll("."+Kt+"text-shadow"),function(e){e.style.display=t})},Ot&&g.textShadow?(a=g.textShadow,g.textShadow=""):l&&l($t),i=p.getBBox?xe({},p.getBBox()):{width:p.offsetWidth,height:p.offsetHeight},a?g.textShadow=a:l&&l("")}catch(v){}(!i||i.width<0)&&(i={width:0,height:0})}else i=c.htmlGetBBox();if(d.isSVG&&(n=i.width,o=i.height,Lt&&u&&"11px"===u.fontSize&&"16.9"===o.toPrecision(3)&&(i.height=o=14),r&&(i.width=kt(o*St(s))+kt(n*wt(s)),i.height=kt(o*wt(s))+kt(n*St(s)))),h){for(;y.length>250;)delete m[y.shift()];m[h]||y.push(h),m[h]=i}}return i},show:function(t){return this.attr({visibility:t?"inherit":Zt})},hide:function(){return this.attr({visibility:Ut})},fadeOut:function(t){var e=this;e.animate({opacity:0},{duration:t||150,complete:function(){e.attr({y:-9999})}})},add:function(t){var e,i=this.renderer,n=this.element;return t&&(this.parentGroup=t),this.parentInverted=t&&t.inverted,void 0!==this.textStr&&i.buildText(this),this.added=!0,(!t||t.handleZ||this.zIndex)&&(e=this.zIndexSetter()),e||(t?t.element:i.box).appendChild(n),this.onAdd&&this.onAdd(),this},safeRemoveChild:function(t){var e=t.parentNode;e&&e.removeChild(t)},destroy:function(){var t,e,i,n=this,o=n.element||{},r=n.shadows,s=n.renderer.isSVG&&"SPAN"===o.nodeName&&n.parentGroup;if(o.onclick=o.onmouseout=o.onmouseover=o.onmousemove=o.point=null,ye(n),n.clipPath&&(n.clipPath=n.clipPath.destroy()),n.stops){for(i=0;i<n.stops.length;i++)n.stops[i]=n.stops[i].destroy();n.stops=null}for(n.safeRemoveChild(o),r&&he(r,function(t){n.safeRemoveChild(t)});s&&s.div&&0===s.div.childNodes.length;)t=s.parentGroup,n.safeRemoveChild(s.div),delete s.div,s=t;n.alignTo&&d(n.renderer.alignedObjects,n);for(e in n)delete n[e];return null},shadow:function(t,e,i){var n,o,r,s,a,l,h=[],c=this.element;if(t){for(s=be(t.width,3),a=(t.opacity||.15)/s,l=this.parentInverted?"(-1,-1)":"("+be(t.offsetX,1)+", "+be(t.offsetY,1)+")",n=1;s>=n;n++)o=c.cloneNode(0),r=2*s+1-2*n,u(o,{isShadow:"true",stroke:t.color||"black","stroke-opacity":a*n,"stroke-width":r,transform:"translate"+l,fill:$t}),i&&(u(o,"height",xt(u(o,"height")-r,0)),o.cutHeight=r),e?e.element.appendChild(o):c.parentNode.insertBefore(o,c),h.push(o);this.shadows=h}return this},xGetter:function(t){return"circle"===this.element.nodeName&&(t={x:"cx",y:"cy"}[t]||t),this._defaultGetter(t)},_defaultGetter:function(t){var e=be(this[t],this.element?this.element.getAttribute(t):null,0);return/^[\-0-9\.]+$/.test(e)&&(e=parseFloat(e)),e},dSetter:function(t,e,i){t&&t.join&&(t=t.join(" ")),/(NaN| {2}|^$)/.test(t)&&(t="M 0 0"),i.setAttribute(e,t),this[e]=t},dashstyleSetter:function(t){var e;if(t=t&&t.toLowerCase()){for(t=t.replace("shortdashdotdot","3,1,1,1,1,1,").replace("shortdashdot","3,1,1,1").replace("shortdot","1,1,").replace("shortdash","3,1,").replace("longdash","8,3,").replace(/dot/g,"1,3,").replace("dash","4,3,").replace(/,$/,"").split(","),e=t.length;e--;)t[e]=o(t[e])*this["stroke-width"];t=t.join(",").replace("NaN","none"),this.element.setAttribute("stroke-dasharray",t)}},alignSetter:function(t){this.element.setAttribute("text-anchor",{left:"start",center:"middle",right:"end"}[t])},opacitySetter:function(t,e,i){this[e]=t,i.setAttribute(e,t)},titleSetter:function(t){var e=this.element.getElementsByTagName("title")[0];e||(e=ft.createElementNS(zt,"title"),this.element.appendChild(e)),e.appendChild(ft.createTextNode(String(be(t),"").replace(/<[^>]*>/g,"")))},textSetter:function(t){t!==this.textStr&&(delete this.bBox,this.textStr=t,this.added&&this.renderer.buildText(this))},fillSetter:function(t,e,i){"string"==typeof t?i.setAttribute(e,t):t&&this.colorGradient(t,e,i)},visibilitySetter:function(t,e,i){"inherit"===t?i.removeAttribute(e):i.setAttribute(e,t)},zIndexSetter:function(t,e){var i,n,r,s,a,l=this.renderer,h=this.parentGroup,c=h||l,d=c.element||l.box,f=this.element,g=this.added;if(p(t)&&(f.setAttribute(e,t),t=+t,this[e]===t&&(g=!1),this[e]=t),g){for(t=this.zIndex,t&&h&&(h.handleZ=!0),i=d.childNodes,a=0;a<i.length&&!s;a++)n=i[a],r=u(n,"zIndex"),n!==f&&(o(r)>t||!p(t)&&p(r))&&(d.insertBefore(f,n),s=!0);s||d.appendChild(f)}return s},_defaultSetter:function(t,e,i){i.setAttribute(e,t)}},H.prototype.yGetter=H.prototype.xGetter,H.prototype.translateXSetter=H.prototype.translateYSetter=H.prototype.rotationSetter=H.prototype.verticalAlignSetter=H.prototype.scaleXSetter=H.prototype.scaleYSetter=function(t,e){this[e]=t,this.doTransform=!0},H.prototype["stroke-widthSetter"]=H.prototype.strokeSetter=function(t,e,i){this[e]=t,this.stroke&&this["stroke-width"]?(this.strokeWidth=this["stroke-width"],H.prototype.fillSetter.call(this,this.stroke,"stroke",i),i.setAttribute("stroke-width",this["stroke-width"]),this.hasStroke=!0):"stroke-width"===e&&0===t&&this.hasStroke&&(i.removeAttribute("stroke"),this.hasStroke=!1)};var Te=function(){this.init.apply(this,arguments)};Te.prototype={Element:H,init:function(e,i,n,o,r,s){var a,l,h,c=this;a=c.createElement("svg").attr({version:"1.1"}).css(this.getStyle(o)),l=a.element,e.appendChild(l),-1===e.innerHTML.indexOf("xmlns")&&u(l,"xmlns",zt),c.isSVG=!0,c.box=l,c.boxWrapper=a,c.alignedObjects=[],c.url=(Ot||It)&&ft.getElementsByTagName("base").length?t.location.href.replace(/#.*?$/,"").replace(/([\('\)])/g,"\\$1").replace(/ /g,"%20"):"",h=this.createElement("desc").add(),h.element.appendChild(ft.createTextNode("Created with "+Yt+" "+Nt)),c.defs=this.createElement("defs").add(),c.allowHTML=s,c.forExport=r,c.gradients={},c.cache={},c.cacheKeys=[],c.setSize(i,n,!1);var d,p;Ot&&e.getBoundingClientRect&&(c.subPixelFix=d=function(){m(e,{left:0,top:0}),p=e.getBoundingClientRect(),m(e,{left:vt(p.left)-p.left+qt,top:vt(p.top)-p.top+qt})},d(),ue(t,"resize",d))},getStyle:function(t){return this.style=xe({fontFamily:'"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',fontSize:"12px"},t),this.style},isHidden:function(){return!this.boxWrapper.getBBox().width},destroy:function(){var e=this,i=e.defs;return e.box=null,e.boxWrapper=e.boxWrapper.destroy(),M(e.gradients||{}),e.gradients=null,i&&(e.defs=i.destroy()),e.subPixelFix&&fe(t,"resize",e.subPixelFix),e.alignedObjects=null,null},createElement:function(t){var e=new this.Element;return e.init(this,t),e},draw:function(){},getRadialAttr:function(t,e){return{cx:t[0]-t[2]/2+e.cx*t[2],cy:t[1]-t[2]/2+e.cy*t[2],r:e.r*t[2]}},buildText:function(t){for(var e,i,n,r=t.element,s=this,a=s.forExport,l=be(t.textStr,"").toString(),h=-1!==l.indexOf("<"),c=r.childNodes,d=u(r,"x"),p=t.styles,f=t.textWidth,g=p&&p.lineHeight,y=p&&p.textShadow,v=p&&"ellipsis"===p.textOverflow,x=c.length,b=f&&!t.added&&this.box,k=function(t){return g?o(g):s.fontMetrics(/(px|em)$/.test(t&&t.style.fontSize)?t.style.fontSize:p&&p.fontSize||s.style.fontSize||12,t).h},w=function(t){return t.replace(/&lt;/g,"<").replace(/&gt;/g,">")};x--;)r.removeChild(c[x]);h||y||v||-1!==l.indexOf(" ")?(i=/<.*style="([^"]+)".*>/,n=/<.*href="(http[^"]+)".*>/,b&&b.appendChild(r),e=h?l.replace(/<(b|strong)>/g,'<span style="font-weight:bold">').replace(/<(i|em)>/g,'<span style="font-style:italic">').replace(/<a/g,"<span").replace(/<\/(b|strong|i|em|a)>/g,"</span>").split(/<br.*?>/g):[l],""===e[e.length-1]&&e.pop(),he(e,function(e,o){var l,h=0;e=e.replace(/<span/g,"|||<span").replace(/<\/span>/g,"</span>|||"),l=e.split("|||"),he(l,function(e){if(""!==e||1===l.length){var c,g={},y=ft.createElementNS(zt,"tspan");if(i.test(e)&&(c=e.match(i)[1].replace(/(;| |^)color([ :])/,"$1fill$2"),u(y,"style",c)),n.test(e)&&!a&&(u(y,"onclick",'location.href="'+e.match(n)[1]+'"'),m(y,{cursor:"pointer"})),e=w(e.replace(/<(.|\n)*?>/g,"")||" ")," "!==e){if(y.appendChild(ft.createTextNode(e)),h?g.dx=0:o&&null!==d&&(g.x=d),u(y,g),r.appendChild(y),!h&&o&&(!Rt&&a&&m(y,{display:"block"}),u(y,"dy",k(y))),f){for(var x,b,S,T,A=e.replace(/([^\^])-/g,"$1- ").split(" "),C=l.length>1||o||A.length>1&&"nowrap"!==p.whiteSpace,P=[],L=k(y),M=1,I=t.rotation,O=e,D=O.length;(C||v)&&(A.length||P.length);)t.rotation=0,T=t.getBBox(!0),S=T.width,!Rt&&s.forExport&&(S=s.measureSpanWidth(y.firstChild.data,t.styles)),x=S>f,void 0===b&&(b=x),v&&b?(D/=2,""===O||!x&&.5>D?A=[]:(x&&(b=!0),O=e.substring(0,O.length+(x?-1:1)*vt(D)),A=[O+(f>3?"…":"")],y.removeChild(y.firstChild))):x&&1!==A.length?(y.removeChild(y.firstChild),P.unshift(A.pop())):(A=P,P=[],A.length&&(M++,y=ft.createElementNS(zt,"tspan"),u(y,{dy:L,x:d}),c&&u(y,"style",c),r.appendChild(y)),S>f&&(f=S)),A.length&&y.appendChild(ft.createTextNode(A.join(" ").replace(/- /g,"-")));b&&t.attr("title",t.textStr),t.rotation=I}h++}}})}),b&&b.removeChild(r),y&&t.applyTextShadow&&t.applyTextShadow(y)):r.appendChild(ft.createTextNode(w(l)))},getContrast:function(t){return t=E(t).rgba,t[0]+t[1]+t[2]>384?"#000000":"#FFFFFF"},button:function(t,e,i,o,r,s,a,l,h){var c,d,p,u,f,g,m=this.label(t,e,i,h,null,null,null,null,"button"),y=0,v={x1:0,y1:0,x2:0,y2:1};return r=n({"stroke-width":1,stroke:"#CCCCCC",fill:{linearGradient:v,stops:[[0,"#FEFEFE"],[1,"#F6F6F6"]]},r:2,padding:5,style:{color:"black"}},r),p=r.style,delete r.style,s=n(r,{stroke:"#68A",fill:{linearGradient:v,stops:[[0,"#FFF"],[1,"#ACF"]]}},s),u=s.style,delete s.style,a=n(r,{stroke:"#68A",fill:{linearGradient:v,stops:[[0,"#9BD"],[1,"#CDF"]]}},a),f=a.style,delete a.style,l=n(r,{style:{color:"#CCC"}},l),g=l.style,delete l.style,ue(m.element,Lt?"mouseover":"mouseenter",function(){3!==y&&m.attr(s).css(u);
+	}),ue(m.element,Lt?"mouseout":"mouseleave",function(){3!==y&&(c=[r,s,a][y],d=[p,u,f][y],m.attr(c).css(d))}),m.setState=function(t){m.state=y=t,t?2===t?m.attr(a).css(f):3===t&&m.attr(l).css(g):m.attr(r).css(p)},m.on("click",function(t){3!==y&&o.call(m,t)}).attr(r).css(xe({cursor:"default"},p))},crispLine:function(t,e){return t[1]===t[4]&&(t[1]=t[4]=mt(t[1])-e%2/2),t[2]===t[5]&&(t[2]=t[5]=mt(t[2])+e%2/2),t},path:function(t){var e={fill:$t};return a(t)?e.d=t:s(t)&&xe(e,t),this.createElement("path").attr(e)},circle:function(t,e,i){var n=s(t)?t:{x:t,y:e,r:i},o=this.createElement("circle");return o.xSetter=function(t){this.element.setAttribute("cx",t)},o.ySetter=function(t){this.element.setAttribute("cy",t)},o.attr(n)},arc:function(t,e,i,n,o,r){var a;return s(t)&&(e=t.y,i=t.r,n=t.innerR,o=t.start,r=t.end,t=t.x),a=this.symbol("arc",t||0,e||0,i||0,i||0,{innerR:n||0,start:o||0,end:r||0}),a.r=i,a},rect:function(t,e,i,n,o,r){o=s(t)?t.r:o;var a=this.createElement("rect"),l=s(t)?t:t===F?{}:{x:t,y:e,width:xt(i,0),height:xt(n,0)};return r!==F&&(l.strokeWidth=r,l=a.crisp(l)),o&&(l.r=o),a.rSetter=function(t){u(this.element,{rx:t,ry:t})},a.attr(l)},setSize:function(t,e,i){var n=this,o=n.alignedObjects,r=o.length;for(n.width=t,n.height=e,n.boxWrapper[be(i,!0)?"animate":"attr"]({width:t,height:e});r--;)o[r].align()},g:function(t){var e=this.createElement("g");return p(t)?e.attr({"class":Kt+t}):e},image:function(t,e,i,n,o){var r,s={preserveAspectRatio:$t};return arguments.length>1&&xe(s,{x:e,y:i,width:n,height:o}),r=this.createElement("image").attr(s),r.element.setAttributeNS?r.element.setAttributeNS("http://www.w3.org/1999/xlink","href",t):r.element.setAttribute("hc-svg-href",t),r},symbol:function(t,e,i,n,o,r){var s,a,l,h,c=this.symbols[t],d=c&&c(mt(e),mt(i),n,o,r),p=/^url\((.*?)\)$/;return d?(s=this.path(d),xe(s,{symbolName:t,x:e,y:i,width:n,height:o}),r&&xe(s,r)):p.test(t)&&(h=function(t,e){t.element&&(t.attr({width:e[0],height:e[1]}),t.alignByTranslate||t.translate(mt((n-e[0])/2),mt((o-e[1])/2)))},a=t.match(p)[1],l=Ht[a]||r&&r.width&&r.height&&[r.width,r.height],s=this.image(a).attr({x:e,y:i}),s.isImg=!0,l?h(s,l):(s.attr({width:0,height:0}),y("img",{onload:function(){0===this.width&&(m(this,{position:Vt,top:"-999em"}),ft.body.appendChild(this)),h(s,Ht[a]=[this.width,this.height]),this.parentNode&&this.parentNode.removeChild(this)},src:a}))),s},symbols:{circle:function(t,e,i,n){var o=.166*i;return[Jt,t+i/2,e,"C",t+i+o,e,t+i+o,e+n,t+i/2,e+n,"C",t-o,e+n,t-o,e,t+i/2,e,"Z"]},square:function(t,e,i,n){return[Jt,t,e,Qt,t+i,e,t+i,e+n,t,e+n,"Z"]},triangle:function(t,e,i,n){return[Jt,t+i/2,e,Qt,t+i,e+n,t,e+n,"Z"]},"triangle-down":function(t,e,i,n){return[Jt,t,e,Qt,t+i,e,t+i/2,e+n,"Z"]},diamond:function(t,e,i,n){return[Jt,t+i/2,e,Qt,t+i,e+n/2,t+i/2,e+n,t,e+n/2,"Z"]},arc:function(t,e,i,n,o){var r=o.start,s=o.r||i||n,a=o.end-.001,l=o.innerR,h=o.open,c=wt(r),d=St(r),p=wt(a),u=St(a),f=o.end-r<Tt?0:1;return[Jt,t+s*c,e+s*d,"A",s,s,0,f,1,t+s*p,e+s*u,h?Jt:Qt,t+l*p,e+l*u,"A",l,l,0,f,0,t+l*c,e+l*d,h?"":"Z"]},callout:function(t,e,i,n,o){var r,s=6,a=6,l=bt(o&&o.r||0,i,n),h=l+a,c=o&&o.anchorX,d=o&&o.anchorY;return r=["M",t+l,e,"L",t+i-l,e,"C",t+i,e,t+i,e,t+i,e+l,"L",t+i,e+n-l,"C",t+i,e+n,t+i,e+n,t+i-l,e+n,"L",t+l,e+n,"C",t,e+n,t,e+n,t,e+n-l,"L",t,e+l,"C",t,e,t,e,t+l,e],c&&c>i&&d>e+h&&e+n-h>d?r.splice(13,3,"L",t+i,d-a,t+i+s,d,t+i,d+a,t+i,e+n-l):c&&0>c&&d>e+h&&e+n-h>d?r.splice(33,3,"L",t,d+a,t-s,d,t,d-a,t,e+l):d&&d>n&&c>t+h&&t+i-h>c?r.splice(23,3,"L",c+a,e+n,c,e+n+s,c-a,e+n,t+l,e+n):d&&0>d&&c>t+h&&t+i-h>c&&r.splice(3,3,"L",c-a,e,c,e-s,c+a,e,i-l,e),r}},clipRect:function(t,e,i,n){var o,r=Kt+Xt++,s=this.createElement("clipPath").attr({id:r}).add(this.defs);return o=this.rect(t,e,i,n,0).add(s),o.id=r,o.clipPath=s,o.count=0,o},text:function(t,e,i,n){var o,r=this,s=Et||!Rt&&r.forExport,a={};return!n||!r.allowHTML&&r.forExport?(a.x=Math.round(e||0),i&&(a.y=Math.round(i)),(t||0===t)&&(a.text=t),o=r.createElement("text").attr(a),s&&o.css({position:Vt}),n||(o.xSetter=function(t,e,i){var n,o,r=i.getElementsByTagName("tspan"),s=i.getAttribute(e);for(o=0;o<r.length;o++)n=r[o],n.getAttribute(e)===s&&n.setAttribute(e,t);i.setAttribute(e,t)}),o):r.html(t,e,i)},fontMetrics:function(e,i){var n,r,s;return e=e||this.style.fontSize,!e&&i&&t.getComputedStyle&&(i=i.element||i,s=t.getComputedStyle(i,""),e=s&&s.fontSize),e=/px/.test(e)?o(e):/em/.test(e)?12*parseFloat(e):12,n=24>e?e+3:mt(1.2*e),r=mt(.8*n),{h:n,b:r,f:e}},rotCorr:function(t,e,i){var n=t;return e&&i&&(n=xt(n*wt(e*At),4)),{x:-t/3*St(e*At),y:n}},label:function(t,e,i,o,r,s,a,l,h){var c,d,u,f,g,m,y,v,x,b,k,w=this,S=w.g(h),T=w.text("",0,0,a).attr({zIndex:1}),A=0,C=3,P=0,L=0,M={};x=function(){var t,e,i=T.element.style;d=(void 0===u||void 0===f||S.styles.textAlign)&&p(T.textStr)&&T.getBBox(),S.width=(u||d.width||0)+2*C+P,S.height=(f||d.height||0)+2*C,y=C+w.fontMetrics(i&&i.fontSize,T).b,v&&(c||(t=L,e=(l?-y:0)+L,S.box=c=o?w.symbol(o,t,e,S.width,S.height,M):w.rect(t,e,S.width,S.height,0,M[re]),c.isImg||c.attr("fill",$t),c.add(S)),c.isImg||c.attr(xe({width:mt(S.width),height:mt(S.height)},M)),M=null)},b=function(){var t,e=S.styles,i=e&&e.textAlign,n=P+C;t=l?0:y,p(u)&&d&&("center"===i||"right"===i)&&(n+={center:.5,right:1}[i]*(u-d.width)),(n!==T.x||t!==T.y)&&(T.attr("x",n),t!==F&&T.attr("y",t)),T.x=n,T.y=t},k=function(t,e){c?c.attr(t,e):M[t]=e},S.onAdd=function(){T.add(S),S.attr({text:t||0===t?t:"",x:e,y:i}),c&&p(r)&&S.attr({anchorX:r,anchorY:s})},S.widthSetter=function(t){u=t},S.heightSetter=function(t){f=t},S.paddingSetter=function(t){p(t)&&t!==C&&(C=S.padding=t,b())},S.paddingLeftSetter=function(t){p(t)&&t!==P&&(P=t,b())},S.alignSetter=function(t){t={left:0,center:.5,right:1}[t],t!==A&&(A=t,d&&S.attr({x:e}))},S.textSetter=function(t){t!==F&&T.textSetter(t),x(),b()},S["stroke-widthSetter"]=function(t,e){t&&(v=!0),L=t%2/2,k(e,t)},S.strokeSetter=S.fillSetter=S.rSetter=function(t,e){"fill"===e&&t&&(v=!0),k(e,t)},S.anchorXSetter=function(t,e){r=t,k(e,mt(t)-L-g)},S.anchorYSetter=function(t,e){s=t,k(e,t-m)},S.xSetter=function(t){S.x=t,A&&(t-=A*((u||d.width)+2*C)),g=mt(t),S.attr("translateX",g)},S.ySetter=function(t){m=S.y=mt(t),S.attr("translateY",m)};var I=S.css;return xe(S,{css:function(t){if(t){var e={};t=n(t),he(S.textProps,function(i){t[i]!==F&&(e[i]=t[i],delete t[i])}),T.css(e)}return I.call(S,t)},getBBox:function(){return{width:d.width+2*C,height:d.height+2*C,x:d.x-C,y:d.y-C}},shadow:function(t){return c&&c.shadow(t),S},destroy:function(){fe(S.element,"mouseenter"),fe(S.element,"mouseleave"),T&&(T=T.destroy()),c&&(c=c.destroy()),H.prototype.destroy.call(S),S=w=x=b=k=null}})}},Y=Te,xe(H.prototype,{htmlCss:function(t){var e=this,i=e.element,n=t&&"SPAN"===i.tagName&&t.width;return n&&(delete t.width,e.textWidth=n,e.updateTransform()),t&&"ellipsis"===t.textOverflow&&(t.whiteSpace="nowrap",t.overflow="hidden"),e.styles=xe(e.styles,t),m(e.element,t),e},htmlGetBBox:function(){var t=this,e=t.element;return"text"===e.nodeName&&(e.style.position=Vt),{x:e.offsetLeft,y:e.offsetTop,width:e.offsetWidth,height:e.offsetHeight}},htmlUpdateTransform:function(){if(!this.added)return void(this.alignOnAdd=!0);var t=this,e=t.renderer,i=t.element,n=t.translateX||0,r=t.translateY||0,s=t.x||0,a=t.y||0,l=t.textAlign||"left",h={left:0,center:.5,right:1}[l],c=t.shadows,d=t.styles;if(m(i,{marginLeft:n,marginTop:r}),c&&he(c,function(t){m(t,{marginLeft:n+1,marginTop:r+1})}),t.inverted&&he(i.childNodes,function(t){e.invertChild(t,i)}),"SPAN"===i.tagName){var u,f,g=t.rotation,y=o(t.textWidth),v=[g,l,i.innerHTML,t.textWidth,t.textAlign].join(",");v!==t.cTT&&(f=e.fontMetrics(i.style.fontSize).b,p(g)&&t.setSpanRotation(g,h,f),u=be(t.elemWidth,i.offsetWidth),u>y&&/[ \-]/.test(i.textContent||i.innerText)&&(m(i,{width:y+qt,display:"block",whiteSpace:d&&d.whiteSpace||"normal"}),u=y),t.getSpanCorrection(u,f,h,g,l)),m(i,{left:s+(t.xCorr||0)+qt,top:a+(t.yCorr||0)+qt}),It&&(f=i.offsetHeight),t.cTT=v}},setSpanRotation:function(t,e,i){var n={},o=Lt?"-ms-transform":It?"-webkit-transform":Ot?"MozTransform":Pt?"-o-transform":"";n[o]=n.transform="rotate("+t+"deg)",n[o+(Ot?"Origin":"-origin")]=n.transformOrigin=100*e+"% "+i+"px",m(this.element,n)},getSpanCorrection:function(t,e,i){this.xCorr=-t*i,this.yCorr=-e}}),xe(Te.prototype,{html:function(t,e,i){var n=this.createElement("span"),o=n.element,r=n.renderer;return n.textSetter=function(t){t!==o.innerHTML&&delete this.bBox,o.innerHTML=this.textStr=t,n.htmlUpdateTransform()},n.xSetter=n.ySetter=n.alignSetter=n.rotationSetter=function(t,e){"align"===e&&(e="textAlign"),n[e]=t,n.htmlUpdateTransform()},n.attr({text:t,x:mt(e),y:mt(i)}).css({position:Vt,fontFamily:this.style.fontFamily,fontSize:this.style.fontSize}),o.style.whiteSpace="nowrap",n.css=n.htmlCss,r.isSVG&&(n.add=function(t){var e,i,s=r.box.parentNode,a=[];if(this.parentGroup=t,t){if(e=t.div,!e){for(i=t;i;)a.push(i),i=i.parentGroup;he(a.reverse(),function(t){var i,n=u(t.element,"class");n&&(n={className:n}),e=t.div=t.div||y(jt,n,{position:Vt,left:(t.translateX||0)+qt,top:(t.translateY||0)+qt},e||s),i=e.style,xe(t,{translateXSetter:function(e,n){i.left=e+qt,t[n]=e,t.doTransform=!0},translateYSetter:function(e,n){i.top=e+qt,t[n]=e,t.doTransform=!0}}),he(["opacity","visibility"],function(e){ke(t,e+"Setter",function(t,e,n,o){t.call(this,e,n,o),i[n]=e})})})}}else e=s;return e.appendChild(o),n.added=!0,n.alignOnAdd&&n.htmlUpdateTransform(),n}),n}});var Ae,Ce;if(!Rt&&!Et){Ce={init:function(t,e){var i=this,n=["<",e,' filled="f" stroked="f"'],o=["position: ",Vt,";"],r=e===jt;("shape"===e||r)&&o.push("left:0;top:0;width:1px;height:1px;"),o.push("visibility: ",r?Ut:Zt),n.push(' style="',o.join(""),'"/>'),e&&(n=r||"span"===e||"img"===e?n.join(""):t.prepVML(n),i.element=y(n)),i.renderer=t},add:function(t){var e=this,i=e.renderer,n=e.element,o=i.box,r=t&&t.inverted,s=t?t.element||t:o;return t&&(this.parentGroup=t),r&&i.invertChild(n,s),s.appendChild(n),e.added=!0,e.alignOnAdd&&!e.deferUpdateTransform&&e.updateTransform(),e.onAdd&&e.onAdd(),e},updateTransform:H.prototype.htmlUpdateTransform,setSpanRotation:function(){var t=this.rotation,e=wt(t*At),i=St(t*At);m(this.element,{filter:t?["progid:DXImageTransform.Microsoft.Matrix(M11=",e,", M12=",-i,", M21=",i,", M22=",e,", sizingMethod='auto expand')"].join(""):$t})},getSpanCorrection:function(t,e,i,n,o){var r,s=n?wt(n*At):1,a=n?St(n*At):0,l=be(this.elemHeight,this.element.offsetHeight),h=o&&"left"!==o;this.xCorr=0>s&&-t,this.yCorr=0>a&&-l,r=0>s*a,this.xCorr+=a*e*(r?1-i:i),this.yCorr-=s*e*(n?r?i:1-i:1),h&&(this.xCorr-=t*i*(0>s?-1:1),n&&(this.yCorr-=l*i*(0>a?-1:1)),m(this.element,{textAlign:o}))},pathToVML:function(t){for(var e=t.length,i=[];e--;)l(t[e])?i[e]=mt(10*t[e])-5:"Z"===t[e]?i[e]="x":(i[e]=t[e],!t.isArc||"wa"!==t[e]&&"at"!==t[e]||(i[e+5]===i[e+7]&&(i[e+7]+=t[e+7]>t[e+5]?1:-1),i[e+6]===i[e+8]&&(i[e+8]+=t[e+8]>t[e+6]?1:-1)));return i.join(" ")||"x"},clip:function(t){var e,i,n=this;return t?(e=t.members,d(e,n),e.push(n),n.destroyClip=function(){d(e,n)},i=t.getCSS(n)):(n.destroyClip&&n.destroyClip(),i={clip:Mt?"inherit":"rect(auto)"}),n.css(i)},css:H.prototype.htmlCss,safeRemoveChild:function(t){t.parentNode&&I(t)},destroy:function(){return this.destroyClip&&this.destroyClip(),H.prototype.destroy.apply(this)},on:function(e,i){return this.element["on"+e]=function(){var e=t.event;e.target=e.srcElement,i(e)},this},cutOffPath:function(t,e){var i;return t=t.split(/[ ,]/),i=t.length,(9===i||11===i)&&(t[i-4]=t[i-2]=o(t[i-2])-10*e),t.join(" ")},shadow:function(t,e,i){var n,r,s,a,l,h,c,d=[],p=this.element,u=this.renderer,f=p.style,g=p.path;if(g&&"string"!=typeof g.value&&(g="x"),l=g,t){for(h=be(t.width,3),c=(t.opacity||.15)/h,n=1;3>=n;n++)a=2*h+1-2*n,i&&(l=this.cutOffPath(g.value,a+.5)),s=['<shape isShadow="true" strokeweight="',a,'" filled="false" path="',l,'" coordsize="10 10" style="',p.style.cssText,'" />'],r=y(u.prepVML(s),null,{left:o(f.left)+be(t.offsetX,1),top:o(f.top)+be(t.offsetY,1)}),i&&(r.cutOff=a+1),s=['<stroke color="',t.color||"black",'" opacity="',c*n,'"/>'],y(u.prepVML(s),null,null,r),e?e.element.appendChild(r):p.parentNode.insertBefore(r,p),d.push(r);this.shadows=d}return this},updateShadows:Wt,setAttr:function(t,e){Mt?this.element[t]=e:this.element.setAttribute(t,e)},classSetter:function(t){this.element.className=t},dashstyleSetter:function(t,e,i){var n=i.getElementsByTagName("stroke")[0]||y(this.renderer.prepVML(["<stroke/>"]),null,null,i);n[e]=t||"solid",this[e]=t},dSetter:function(t,e,i){var n,o=this.shadows;if(t=t||[],this.d=t.join&&t.join(" "),i.path=t=this.pathToVML(t),o)for(n=o.length;n--;)o[n].path=o[n].cutOff?this.cutOffPath(t,o[n].cutOff):t;this.setAttr(e,t)},fillSetter:function(t,e,i){var n=i.nodeName;"SPAN"===n?i.style.color=t:"IMG"!==n&&(i.filled=t!==$t,this.setAttr("fillcolor",this.renderer.color(t,i,e,this)))},"fill-opacitySetter":function(t,e,i){y(this.renderer.prepVML(["<",e.split("-")[0],' opacity="',t,'"/>']),null,null,i)},opacitySetter:Wt,rotationSetter:function(t,e,i){var n=i.style;this[e]=n[e]=t,n.left=-mt(St(t*At)+1)+qt,n.top=mt(wt(t*At))+qt},strokeSetter:function(t,e,i){this.setAttr("strokecolor",this.renderer.color(t,i,e,this))},"stroke-widthSetter":function(t,e,i){i.stroked=!!t,this[e]=t,l(t)&&(t+=qt),this.setAttr("strokeweight",t)},titleSetter:function(t,e){this.setAttr(e,t)},visibilitySetter:function(t,e,i){"inherit"===t&&(t=Zt),this.shadows&&he(this.shadows,function(i){i.style[e]=t}),"DIV"===i.nodeName&&(t=t===Ut?"-999em":0,Mt||(i.style[e]=t?Zt:Ut),e="top"),i.style[e]=t},xSetter:function(t,e,i){this[e]=t,"x"===e?e="left":"y"===e&&(e="top"),this.updateClipping?(this[e]=t,this.updateClipping()):i.style[e]=t},zIndexSetter:function(t,e,i){i.style[e]=t}},Ce["stroke-opacitySetter"]=Ce["fill-opacitySetter"],ut.VMLElement=Ce=v(H,Ce),Ce.prototype.ySetter=Ce.prototype.widthSetter=Ce.prototype.heightSetter=Ce.prototype.xSetter;var Pe={Element:Ce,isIE8:Ct.indexOf("MSIE 8.0")>-1,init:function(t,e,i,n){var o,r,s,a=this;if(a.alignedObjects=[],o=a.createElement(jt).css(xe(this.getStyle(n),{position:"relative"})),r=o.element,t.appendChild(o.element),a.isVML=!0,a.box=r,a.boxWrapper=o,a.gradients={},a.cache={},a.cacheKeys=[],a.setSize(e,i,!1),!ft.namespaces.hcv){ft.namespaces.add("hcv","urn:schemas-microsoft-com:vml"),s="hcv\\:fill, hcv\\:path, hcv\\:shape, hcv\\:stroke{ behavior:url(#default#VML); display: inline-block; } ";try{ft.createStyleSheet().cssText=s}catch(l){ft.styleSheets[0].cssText+=s}}},isHidden:function(){return!this.box.offsetWidth},clipRect:function(t,e,i,n){var o=this.createElement(),r=s(t);return xe(o,{members:[],count:0,left:(r?t.x:t)+1,top:(r?t.y:e)+1,width:(r?t.width:i)-1,height:(r?t.height:n)-1,getCSS:function(t){var e=t.element,i=e.nodeName,n="shape"===i,o=t.inverted,r=this,s=r.top-(n?e.offsetTop:0),a=r.left,l=a+r.width,h=s+r.height,c={clip:"rect("+mt(o?a:s)+"px,"+mt(o?h:l)+"px,"+mt(o?l:h)+"px,"+mt(o?s:a)+"px)"};return!o&&Mt&&"DIV"===i&&xe(c,{width:l+qt,height:h+qt}),c},updateClipping:function(){he(o.members,function(t){t.element&&t.css(o.getCSS(t))})}})},color:function(t,e,i,n){var o,r,s,a=this,l=/^rgba/,h=$t;if(t&&t.linearGradient?s="gradient":t&&t.radialGradient&&(s="pattern"),s){var c,d,p,u,f,g,m,v,x,b,k,w,S=t.linearGradient||t.radialGradient,T="",A=t.stops,C=[],P=function(){r=['<fill colors="'+C.join(",")+'" opacity="',v,'" o:opacity2="',m,'" type="',s,'" ',T,'focus="100%" method="any" />'],y(a.prepVML(r),null,null,e)};if(k=A[0],w=A[A.length-1],k[0]>0&&A.unshift([0,k[1]]),w[0]<1&&A.push([1,w[1]]),he(A,function(t,e){l.test(t[1])?(o=E(t[1]),c=o.get("rgb"),d=o.get("a")):(c=t[1],d=1),C.push(100*t[0]+"% "+c),e?(v=d,x=c):(m=d,b=c)}),"fill"===i)if("gradient"===s)p=S.x1||S[0]||0,u=S.y1||S[1]||0,f=S.x2||S[2]||0,g=S.y2||S[3]||0,T='angle="'+(90-180*gt.atan((g-u)/(f-p))/Tt)+'"',P();else{var L,M=S.r,I=2*M,O=2*M,D=S.cx,z=S.cy,R=e.radialReference,B=function(){R&&(L=n.getBBox(),D+=(R[0]-L.x)/L.width-.5,z+=(R[1]-L.y)/L.height-.5,I*=R[2]/L.width,O*=R[2]/L.height),T='src="'+V.global.VMLRadialGradientURL+'" size="'+I+","+O+'" origin="0.5,0.5" position="'+D+","+z+'" color2="'+b+'" ',P()};n.added?B():n.onAdd=B,h=x}else h=c}else if(l.test(t)&&"IMG"!==e.tagName)o=E(t),n[i+"-opacitySetter"](o.get("a"),i,e),h=o.get("rgb");else{var H=e.getElementsByTagName(i);H.length&&(H[0].opacity=1,H[0].type="solid"),h=t}return h},prepVML:function(t){var e="display:inline-block;behavior:url(#default#VML);",i=this.isIE8;return t=t.join(""),i?(t=t.replace("/>",' xmlns="urn:schemas-microsoft-com:vml" />'),t=-1===t.indexOf('style="')?t.replace("/>",' style="'+e+'" />'):t.replace('style="','style="'+e)):t=t.replace("<","<hcv:"),t},text:Te.prototype.html,path:function(t){var e={coordsize:"10 10"};return a(t)?e.d=t:s(t)&&xe(e,t),this.createElement("shape").attr(e)},circle:function(t,e,i){var n=this.symbol("circle");return s(t)&&(i=t.r,e=t.y,t=t.x),n.isCircle=!0,n.r=i,n.attr({x:t,y:e})},g:function(t){var e,i;return t&&(i={className:Kt+t,"class":Kt+t}),e=this.createElement(jt).attr(i)},image:function(t,e,i,n,o){var r=this.createElement("img").attr({src:t});return arguments.length>1&&r.attr({x:e,y:i,width:n,height:o}),r},createElement:function(t){return"rect"===t?this.symbol(t):Te.prototype.createElement.call(this,t)},invertChild:function(t,e){var i=this,n=e.style,r="IMG"===t.tagName&&t.style;m(t,{flip:"x",left:o(n.width)-(r?o(r.top):1),top:o(n.height)-(r?o(r.left):1),rotation:-90}),he(t.childNodes,function(e){i.invertChild(e,t)})},symbols:{arc:function(t,e,i,n,o){var r,s=o.start,a=o.end,l=o.r||i||n,h=o.innerR,c=wt(s),d=St(s),p=wt(a),u=St(a);return a-s===0?["x"]:(r=["wa",t-l,e-l,t+l,e+l,t+l*c,e+l*d,t+l*p,e+l*u],o.open&&!h&&r.push("e",Jt,t,e),r.push("at",t-h,e-h,t+h,e+h,t+h*p,e+h*u,t+h*c,e+h*d,"x","e"),r.isArc=!0,r)},circle:function(t,e,i,n,o){return o&&(i=n=2*o.r),o&&o.isCircle&&(t-=i/2,e-=n/2),["wa",t,e,t+i,e+n,t+i,e+n/2,t+i,e+n/2,"e"]},rect:function(t,e,i,n,o){return Te.prototype.symbols[p(o)&&o.r?"callout":"square"].call(0,t,e,i,n,o)}}};ut.VMLRenderer=Ae=function(){this.init.apply(this,arguments)},Ae.prototype=n(Te.prototype,Pe),Y=Ae}Te.prototype.measureSpanWidth=function(t,e){var i,n=ft.createElement("span"),o=ft.createTextNode(t);return n.appendChild(o),m(n,e),this.box.appendChild(n),i=n.offsetWidth,I(n),i};var Le,Me;Et&&(ut.CanVGRenderer=Le=function(){zt="http://www.w3.org/1999/xhtml"},Le.prototype.symbols={},Me=function(){function t(){var t,i=e.length;for(t=0;i>t;t++)e[t]();e=[]}var e=[];return{push:function(i,n){0===e.length&&X(n,t),e.push(i)}}}(),Y=Le),W.prototype={addLabel:function(){var t,e,i=this,o=i.axis,r=o.options,s=o.chart,a=o.categories,l=o.names,h=i.pos,d=r.labels,u=o.tickPositions,f=h===u[0],g=h===u[u.length-1],m=a?be(a[h],l[h],h):h,y=i.label,v=u.info;o.isDatetimeAxis&&v&&(e=r.dateTimeLabelFormats[v.higherRanks[h]||v.unitName]),i.isFirst=f,i.isLast=g,t=o.labelFormatter.call({axis:o,chart:s,isFirst:f,isLast:g,dateTimeLabelFormat:e,value:o.isLog?O(c(m)):m}),p(y)?y&&y.attr({text:t}):(i.label=y=p(t)&&d.enabled?s.renderer.text(t,0,0,d.useHTML).css(n(d.style)).add(o.labelGroup):null,i.labelLength=y&&y.getBBox().width,i.rotation=0)},getLabelSize:function(){return this.label?this.label.getBBox()[this.axis.horiz?"height":"width"]:0},handleOverflow:function(t){var e,i,n,o=this.axis,r=t.x,s=o.chart.chartWidth,a=o.chart.spacing,l=be(o.labelLeft,bt(o.pos,a[3])),h=be(o.labelRight,xt(o.pos+o.len,s-a[1])),c=this.label,d=this.rotation,p={left:0,center:.5,right:1}[o.labelAlign],u=c.getBBox().width,f=o.slotWidth,g=p,m=1,y={};d?0>d&&l>r-p*u?n=mt(r/wt(d*At)-l):d>0&&r+p*u>h&&(n=mt((s-r)/wt(d*At))):(e=r-p*u,i=r+(1-p)*u,l>e?f=t.x+f*(1-p)-l:i>h&&(f=h-t.x+f*p,m=-1),f=bt(o.slotWidth,f),f<o.slotWidth&&"center"===o.labelAlign&&(t.x+=m*(o.slotWidth-f-g*(o.slotWidth-bt(u,f)))),(u>f||o.autoRotation&&c.styles.width)&&(n=f)),n&&(y.width=n,o.options.labels.style.textOverflow||(y.textOverflow="ellipsis"),c.css(y))},getPosition:function(t,e,i,n){var o=this.axis,r=o.chart,s=n&&r.oldChartHeight||r.chartHeight;return{x:t?o.translate(e+i,null,null,n)+o.transB:o.left+o.offset+(o.opposite?(n&&r.oldChartWidth||r.chartWidth)-o.right-o.left:0),y:t?s-o.bottom+o.offset-(o.opposite?o.height:0):s-o.translate(e+i,null,null,n)-o.transB}},getLabelPosition:function(t,e,i,n,o,r,s,a){var l,h=this.axis,c=h.transA,d=h.reversed,u=h.staggerLines,f=h.tickRotCorr||{x:0,y:0},g=o.y;return p(g)||(g=2===h.side?f.y+8:g=wt(i.rotation*At)*(f.y-i.getBBox(!1,0).height/2)),t=t+o.x+f.x-(r&&n?r*c*(d?-1:1):0),e=e+g-(r&&!n?r*c*(d?1:-1):0),u&&(l=s/(a||1)%u,h.opposite&&(l=u-l-1),e+=l*(h.labelOffset/u)),{x:t,y:mt(e)}},getMarkPath:function(t,e,i,n,o,r){return r.crispLine([Jt,t,e,Qt,t+(o?0:-i),e+(o?i:0)],n)},render:function(t,e,i){var n,o,r,s=this,a=s.axis,l=a.options,h=a.chart,c=h.renderer,d=a.horiz,p=s.type,u=s.label,f=s.pos,g=l.labels,m=s.gridLine,y=p?p+"Grid":"grid",v=p?p+"Tick":"tick",x=l[y+"LineWidth"],b=l[y+"LineColor"],k=l[y+"LineDashStyle"],w=l[v+"Length"],S=be(l[v+"Width"],!p&&a.isXAxis?1:0),T=l[v+"Color"],A=l[v+"Position"],C=s.mark,P=g.step,L=!0,M=a.tickmarkOffset,I=s.getPosition(d,f,M,e),O=I.x,D=I.y,z=d&&O===a.pos+a.len||!d&&D===a.pos?-1:1;i=be(i,1),this.isActive=!0,x&&(n=a.getPlotLinePath(f+M,x*z,e,!0),m===F&&(r={stroke:b,"stroke-width":x},k&&(r.dashstyle=k),p||(r.zIndex=1),e&&(r.opacity=0),s.gridLine=m=x?c.path(n).attr(r).add(a.gridGroup):null),!e&&m&&n&&m[s.isNew?"attr":"animate"]({d:n,opacity:i})),S&&w&&("inside"===A&&(w=-w),a.opposite&&(w=-w),o=s.getMarkPath(O,D,w,S*z,d,c),C?C.animate({d:o,opacity:i}):s.mark=c.path(o).attr({stroke:T,"stroke-width":S,opacity:i}).add(a.axisGroup)),u&&!isNaN(O)&&(u.xy=I=s.getLabelPosition(O,D,u,d,g,M,t,P),s.isFirst&&!s.isLast&&!be(l.showFirstLabel,1)||s.isLast&&!s.isFirst&&!be(l.showLastLabel,1)?L=!1:!d||a.isRadial||g.step||g.rotation||e||0===i||s.handleOverflow(I),P&&t%P&&(L=!1),L&&!isNaN(I.y)?(I.opacity=i,u[s.isNew?"attr":"animate"](I),s.isNew=!1):u.attr("y",-9999))},destroy:function(){M(this,this.axis)}},ut.PlotLineOrBand=function(t,e){this.axis=t,e&&(this.options=e,this.id=e.id)},ut.PlotLineOrBand.prototype={render:function(){var t,e,i,o,r,s,a=this,l=a.axis,c=l.horiz,d=a.options,u=d.label,f=a.label,g=d.width,m=d.to,y=d.from,v=p(y)&&p(m),x=d.value,b=d.dashStyle,k=a.svgElem,w=[],S=d.color,T=d.zIndex,A=d.events,C={},M=l.chart.renderer;if(l.isLog&&(y=h(y),m=h(m),x=h(x)),g)w=l.getPlotLinePath(x,g),C={stroke:S,"stroke-width":g},b&&(C.dashstyle=b);else{if(!v)return;w=l.getPlotBandPath(y,m,d),S&&(C.fill=S),d.borderWidth&&(C.stroke=d.borderColor,C["stroke-width"]=d.borderWidth)}if(p(T)&&(C.zIndex=T),k)w?(k.show(),k.animate({d:w})):(k.hide(),f&&(a.label=f=f.destroy()));else if(w&&w.length&&(a.svgElem=k=M.path(w).attr(C).add(),A)){t=function(t){k.on(t,function(e){A[t].apply(a,[e])})};for(e in A)t(e)}return u&&p(u.text)&&w&&w.length&&l.width>0&&l.height>0&&!w.flat?(u=n({align:c&&v&&"center",x:c?!v&&4:10,verticalAlign:!c&&v&&"middle",y:c?v?16:10:v?6:-4,rotation:c&&!v&&90},u),f||(C={align:u.textAlign||u.align,rotation:u.rotation},p(T)&&(C.zIndex=T),a.label=f=M.text(u.text,0,0,u.useHTML).attr(C).css(u.style).add()),i=[w[1],w[4],v?w[6]:w[1]],o=[w[2],w[5],v?w[7]:w[2]],r=P(i),s=P(o),f.align(u,!1,{x:r,y:s,width:L(i)-r,height:L(o)-s}),f.show()):f&&f.hide(),a},destroy:function(){d(this.axis.plotLinesAndBands,this),delete this.axis,M(this)}},Z={getPlotBandPath:function(t,e){var i=this.getPlotLinePath(e,null,null,!0),n=this.getPlotLinePath(t,null,null,!0);return n&&i?(n.flat=n.toString()===i.toString(),n.push(i[4],i[5],i[1],i[2])):n=null,n},addPlotBand:function(t){return this.addPlotBandOrLine(t,"plotBands")},addPlotLine:function(t){return this.addPlotBandOrLine(t,"plotLines")},addPlotBandOrLine:function(t,e){var i=new ut.PlotLineOrBand(this,t).render(),n=this.userOptions;return i&&(e&&(n[e]=n[e]||[],n[e].push(t)),this.plotLinesAndBands.push(i)),i},removePlotBandOrLine:function(t){for(var e=this.plotLinesAndBands,i=this.options,n=this.userOptions,o=e.length;o--;)e[o].id===t&&e[o].destroy();he([i.plotLines||[],n.plotLines||[],i.plotBands||[],n.plotBands||[]],function(e){for(o=e.length;o--;)e[o].id===t&&d(e,e[o])})}};var Ie=ut.Axis=function(){this.init.apply(this,arguments)};Ie.prototype={defaultOptions:{dateTimeLabelFormats:{millisecond:"%H:%M:%S.%L",second:"%H:%M:%S",minute:"%H:%M",hour:"%H:%M",day:"%e. %b",week:"%e. %b",month:"%b '%y",year:"%Y"},endOnTick:!1,gridLineColor:"#D8D8D8",labels:{enabled:!0,style:{color:"#606060",cursor:"default",fontSize:"11px"},x:0,y:15},lineColor:"#C0D0E0",lineWidth:1,minPadding:.01,maxPadding:.01,minorGridLineColor:"#E0E0E0",minorGridLineWidth:1,minorTickColor:"#A0A0A0",minorTickLength:2,minorTickPosition:"outside",startOfWeek:1,startOnTick:!1,tickColor:"#C0D0E0",tickLength:10,tickmarkPlacement:"between",tickPixelInterval:100,tickPosition:"outside",title:{align:"middle",style:{color:"#707070"}},type:"linear"},defaultYAxisOptions:{endOnTick:!0,gridLineWidth:1,tickPixelInterval:72,showLastLabel:!0,labels:{x:-8,y:3},lineWidth:0,maxPadding:.05,minPadding:.05,startOnTick:!0,title:{rotation:270,text:"Values"},stackLabels:{enabled:!1,formatter:function(){return ut.numberFormat(this.total,-1)},style:n(we.line.dataLabels.style,{color:"#000000"})}},defaultLeftAxisOptions:{labels:{x:-15,y:null},title:{rotation:270}},defaultRightAxisOptions:{labels:{x:15,y:null},title:{rotation:90}},defaultBottomAxisOptions:{labels:{autoRotation:[-45],x:0,y:null},title:{rotation:0}},defaultTopAxisOptions:{labels:{autoRotation:[-45],x:0,y:-15},title:{rotation:0}},init:function(t,e){var i=e.isX,n=this;n.chart=t,n.horiz=t.inverted?!i:i,n.isXAxis=i,n.coll=i?"xAxis":"yAxis",n.opposite=e.opposite,n.side=e.side||(n.horiz?n.opposite?0:2:n.opposite?1:3),n.setOptions(e);var o=this.options,r=o.type,s="datetime"===r;n.labelFormatter=o.labels.formatter||n.defaultLabelFormatter,n.userOptions=e,n.minPixelPadding=0,n.reversed=o.reversed,n.visible=o.visible!==!1,n.zoomEnabled=o.zoomEnabled!==!1,n.categories=o.categories||"category"===r,n.names=n.names||[],n.isLog="logarithmic"===r,n.isDatetimeAxis=s,n.isLinked=p(o.linkedTo),n.ticks={},n.labelEdge=[],n.minorTicks={},n.plotLinesAndBands=[],n.alternateBands={},n.len=0,n.minRange=n.userMinRange=o.minRange||o.maxZoom,n.range=o.range,n.offset=o.offset||0,n.stacks={},n.oldStacks={},n.stacksTouched=0,n.max=null,n.min=null,n.crosshair=be(o.crosshair,f(t.options.tooltip.crosshairs)[i?0:1],!1);var a,l=n.options.events;-1===le(n,t.axes)&&(i&&!this.isColorAxis?t.axes.splice(t.xAxis.length,0,n):t.axes.push(n),t[n.coll].push(n)),n.series=n.series||[],t.inverted&&i&&n.reversed===F&&(n.reversed=!0),n.removePlotBand=n.removePlotBandOrLine,n.removePlotLine=n.removePlotBandOrLine;for(a in l)ue(n,a,l[a]);n.isLog&&(n.val2lin=h,n.lin2val=c)},setOptions:function(t){this.options=n(this.defaultOptions,this.isXAxis?{}:this.defaultYAxisOptions,[this.defaultTopAxisOptions,this.defaultRightAxisOptions,this.defaultBottomAxisOptions,this.defaultLeftAxisOptions][this.side],n(V[this.coll],t))},defaultLabelFormatter:function(){var t,e,i=this.axis,n=this.value,o=i.categories,r=this.dateTimeLabelFormat,s=V.lang.numericSymbols,a=s&&s.length,l=i.options.labels.format,h=i.isLog?n:i.tickInterval;if(l)e=S(l,this);else if(o)e=n;else if(r)e=_(r,n);else if(a&&h>=1e3)for(;a--&&e===F;)t=Math.pow(1e3,a+1),h>=t&&10*n%t===0&&null!==s[a]&&(e=ut.numberFormat(n/t,-1)+s[a]);return e===F&&(e=kt(n)>=1e4?ut.numberFormat(n,-1):ut.numberFormat(n,-1,F,"")),e},getSeriesExtremes:function(){var t=this,e=t.chart;t.hasVisibleSeries=!1,t.dataMin=t.dataMax=t.threshold=null,t.softThreshold=!t.isXAxis,t.buildStacks&&t.buildStacks(),he(t.series,function(i){if(i.visible||!e.options.chart.ignoreHiddenSeries){var n,o,r,s=i.options,a=s.threshold;t.hasVisibleSeries=!0,t.isLog&&0>=a&&(a=null),t.isXAxis?(n=i.xData,n.length&&(t.dataMin=bt(be(t.dataMin,n[0]),P(n)),t.dataMax=xt(be(t.dataMax,n[0]),L(n)))):(i.getExtremes(),r=i.dataMax,o=i.dataMin,p(o)&&p(r)&&(t.dataMin=bt(be(t.dataMin,o),o),t.dataMax=xt(be(t.dataMax,r),r)),p(a)&&(t.threshold=a),(!s.softThreshold||t.isLog)&&(t.softThreshold=!1))}})},translate:function(t,e,i,n,o,r){var s,a=this.linkedParent||this,h=1,c=0,d=n?a.oldTransA:a.transA,p=n?a.oldMin:a.min,u=a.minPixelPadding,f=(a.doPostTranslate||a.isLog&&o)&&a.lin2val;return d||(d=a.transA),i&&(h*=-1,c=a.len),a.reversed&&(h*=-1,c-=h*(a.sector||a.len)),e?(t=t*h+c,t-=u,s=t/d+p,f&&(s=a.lin2val(s))):(f&&(t=a.val2lin(t)),"between"===r&&(r=.5),s=h*(t-p)*d+c+h*u+(l(r)?d*r*a.pointRange:0)),s},toPixels:function(t,e){return this.translate(t,!1,!this.horiz,null,!0)+(e?0:this.pos)},toValue:function(t,e){return this.translate(t-(e?0:this.pos),!0,!this.horiz,null,!0)},getPlotLinePath:function(t,e,i,n,o){var r,s,a,l,h,c=this,d=c.chart,p=c.left,u=c.top,f=i&&d.oldChartHeight||d.chartHeight,g=i&&d.oldChartWidth||d.chartWidth,m=c.transB,y=function(t,e,i){return(e>t||t>i)&&(n?t=bt(xt(e,t),i):h=!0),t};return o=be(o,c.translate(t,null,null,i)),r=a=mt(o+m),s=l=mt(f-o-m),isNaN(o)?h=!0:c.horiz?(s=u,l=f-c.bottom,r=a=y(r,p,p+c.width)):(r=p,a=g-c.right,s=l=y(s,u,u+c.height)),h&&!n?null:d.renderer.crispLine([Jt,r,s,Qt,a,l],e||1)},getLinearTickPositions:function(t,e,i){var n,o,r=O(yt(e/t)*t),s=O(vt(i/t)*t),a=[];if(e===i&&l(e))return[e];for(n=r;s>=n&&(a.push(n),n=O(n+t),n!==o);)o=n;return a},getMinorTickPositions:function(){var t,e,i,n=this,o=n.options,r=n.tickPositions,s=n.minorTickInterval,a=[],l=n.pointRangePadding||0,h=n.min-l,c=n.max+l,d=c-h;if(d&&d/s<n.len/3)if(n.isLog)for(i=r.length,e=1;i>e;e++)a=a.concat(n.getLogTickPositions(s,r[e-1],r[e],!0));else if(n.isDatetimeAxis&&"auto"===o.minorTickInterval)a=a.concat(n.getTimeTicks(n.normalizeTimeTickInterval(s),h,c,o.startOfWeek));else for(t=h+(r[0]-h)%s;c>=t;t+=s)a.push(t);return 0!==a.length&&n.trimTicks(a,o.startOnTick,o.endOnTick),a},adjustForMinRange:function(){var t,e,i,n,o,r,s,a,l,h=this,c=h.options,d=h.min,u=h.max,f=h.dataMax-h.dataMin>=h.minRange;h.isXAxis&&h.minRange===F&&!h.isLog&&(p(c.min)||p(c.max)?h.minRange=null:(he(h.series,function(t){for(o=t.xData,r=t.xIncrement?1:o.length-1,i=r;i>0;i--)n=o[i]-o[i-1],(e===F||e>n)&&(e=n)}),h.minRange=bt(5*e,h.dataMax-h.dataMin))),u-d<h.minRange&&(l=h.minRange,t=(l-u+d)/2,s=[d-t,be(c.min,d-t)],f&&(s[2]=h.dataMin),d=L(s),a=[d+l,be(c.max,d+l)],f&&(a[2]=h.dataMax),u=P(a),l>u-d&&(s[0]=u-l,s[1]=be(c.min,u-l),d=L(s))),h.min=d,h.max=u},setAxisTranslation:function(t){var e,i,n=this,o=n.max-n.min,s=n.axisPointRange||0,a=0,l=0,h=n.linkedParent,c=!!n.categories,d=n.transA,u=n.isXAxis;(u||c||s)&&(h?(a=h.minPointOffset,l=h.pointRangePadding):(he(n.series,function(t){var i=t.closestPointRange;!t.noSharedTooltip&&p(i)&&(e=p(e)?bt(e,i):i)}),he(n.series,function(t){var i=c?1:u?be(t.options.pointRange,e,0):n.axisPointRange||0,o=t.options.pointPlacement;s=xt(s,i),n.single||(a=xt(a,r(o)?0:i/2),l=xt(l,"on"===o?0:i))})),i=n.ordinalSlope&&e?n.ordinalSlope/e:1,n.minPointOffset=a*=i,n.pointRangePadding=l*=i,n.pointRange=bt(s,o),u&&(n.closestPointRange=e)),t&&(n.oldTransA=d),n.translationSlope=n.transA=d=n.len/(o+l||1),n.transB=n.horiz?n.left:n.bottom,n.minPixelPadding=d*a},minFromRange:function(){return this.max-this.range},setTickInterval:function(t){var i,n,o,r,s,a,c,d=this,u=d.chart,f=d.options,g=d.isLog,m=d.isDatetimeAxis,y=d.isXAxis,v=d.isLinked,x=f.maxPadding,b=f.minPadding,k=f.tickInterval,w=f.tickPixelInterval,S=d.categories,C=d.threshold,P=d.softThreshold;m||S||v||this.getTickAmount(),a=be(d.userMin,f.min),c=be(d.userMax,f.max),v?(d.linkedParent=u[d.coll][f.linkedTo],n=d.linkedParent.getExtremes(),d.min=be(n.min,n.dataMin),d.max=be(n.max,n.dataMax),f.type!==d.linkedParent.options.type&&e(11,1)):(!P&&p(C)&&(d.dataMin>=C?(r=C,b=0):d.dataMax<=C&&(s=C,x=0)),d.min=be(a,r,d.dataMin),d.max=be(c,s,d.dataMax)),g&&(!t&&bt(d.min,be(d.dataMin,d.min))<=0&&e(10,1),d.min=O(h(d.min),15),d.max=O(h(d.max),15)),d.range&&p(d.max)&&(d.userMin=d.min=a=xt(d.min,d.minFromRange()),d.userMax=c=d.max,d.range=null),d.beforePadding&&d.beforePadding(),d.adjustForMinRange(),S||d.axisPointRange||d.usePercentage||v||!p(d.min)||!p(d.max)||(i=d.max-d.min,i&&(!p(a)&&b&&(d.min-=i*b),!p(c)&&x&&(d.max+=i*x))),l(f.floor)&&(d.min=xt(d.min,f.floor)),l(f.ceiling)&&(d.max=bt(d.max,f.ceiling)),P&&p(d.dataMin)&&(C=C||0,!p(a)&&d.min<C&&d.dataMin>=C?d.min=C:!p(c)&&d.max>C&&d.dataMax<=C&&(d.max=C)),
+	d.min===d.max||void 0===d.min||void 0===d.max?d.tickInterval=1:v&&!k&&w===d.linkedParent.options.tickPixelInterval?d.tickInterval=k=d.linkedParent.tickInterval:d.tickInterval=be(k,this.tickAmount?(d.max-d.min)/xt(this.tickAmount-1,1):void 0,S?1:(d.max-d.min)*w/xt(d.len,w)),y&&!t&&he(d.series,function(t){t.processData(d.min!==d.oldMin||d.max!==d.oldMax)}),d.setAxisTranslation(!0),d.beforeSetTickPositions&&d.beforeSetTickPositions(),d.postProcessTickInterval&&(d.tickInterval=d.postProcessTickInterval(d.tickInterval)),d.pointRange&&!k&&(d.tickInterval=xt(d.pointRange,d.tickInterval)),o=be(f.minTickInterval,d.isDatetimeAxis&&d.closestPointRange),!k&&d.tickInterval<o&&(d.tickInterval=o),m||g||k||(d.tickInterval=A(d.tickInterval,null,T(d.tickInterval),be(f.allowDecimals,!(d.tickInterval>.5&&d.tickInterval<5&&d.max>1e3&&d.max<9999)),!!this.tickAmount)),!this.tickAmount&&this.len&&(d.tickInterval=d.unsquish()),this.setTickPositions()},setTickPositions:function(){var t,e,i=this.options,n=i.tickPositions,o=i.tickPositioner,r=i.startOnTick,s=i.endOnTick;this.tickmarkOffset=this.categories&&"between"===i.tickmarkPlacement&&1===this.tickInterval?.5:0,this.minorTickInterval="auto"===i.minorTickInterval&&this.tickInterval?this.tickInterval/5:i.minorTickInterval,this.tickPositions=t=n&&n.slice(),t||(t=this.isDatetimeAxis?this.getTimeTicks(this.normalizeTimeTickInterval(this.tickInterval,i.units),this.min,this.max,i.startOfWeek,this.ordinalPositions,this.closestPointRange,!0):this.isLog?this.getLogTickPositions(this.tickInterval,this.min,this.max):this.getLinearTickPositions(this.tickInterval,this.min,this.max),t.length>this.len&&(t=[t[0],t.pop()]),this.tickPositions=t,o&&(o=o.apply(this,[this.min,this.max]),o&&(this.tickPositions=t=o))),this.isLinked||(this.trimTicks(t,r,s),this.min===this.max&&p(this.min)&&!this.tickAmount&&(e=!0,this.min-=.5,this.max+=.5),this.single=e,n||o||this.adjustTickAmount())},trimTicks:function(t,e,i){var n=t[0],o=t[t.length-1],r=this.minPointOffset||0;e?this.min=n:this.min-r>n&&t.shift(),i?this.max=o:this.max+r<o&&t.pop(),0===t.length&&p(n)&&t.push((o+n)/2)},alignToOthers:function(){var t,e={},i=this.options;return this.chart.options.chart.alignTicks!==!1&&i.alignTicks!==!1&&he(this.chart[this.coll],function(i){var n=i.options,o=i.horiz,r=[o?n.left:n.top,n.width,n.height,n.pane].join(",");i.series.length&&(e[r]?t=!0:e[r]=1)}),t},getTickAmount:function(){var t=this.options,e=t.tickAmount,i=t.tickPixelInterval;!p(t.tickInterval)&&this.len<i&&!this.isRadial&&!this.isLog&&t.startOnTick&&t.endOnTick&&(e=2),!e&&this.alignToOthers()&&(e=vt(this.len/i)+1),4>e&&(this.finalTickAmt=e,e=5),this.tickAmount=e},adjustTickAmount:function(){var t,e,i=this.tickInterval,n=this.tickPositions,o=this.tickAmount,r=this.finalTickAmt,s=n&&n.length;if(o>s){for(;n.length<o;)n.push(O(n[n.length-1]+i));this.transA*=(s-1)/(o-1),this.max=n[n.length-1]}else s>o&&(this.tickInterval*=2,this.setTickPositions());if(p(r)){for(t=e=n.length;t--;)(3===r&&t%2===1||2>=r&&t>0&&e-1>t)&&n.splice(t,1);this.finalTickAmt=F}},setScale:function(){var t,e,i=this;i.oldMin=i.min,i.oldMax=i.max,i.oldAxisLength=i.len,i.setAxisSize(),e=i.len!==i.oldAxisLength,he(i.series,function(e){(e.isDirtyData||e.isDirty||e.xAxis.isDirty)&&(t=!0)}),e||t||i.isLinked||i.forceRedraw||i.userMin!==i.oldUserMin||i.userMax!==i.oldUserMax||i.alignToOthers()?(i.resetStacks&&i.resetStacks(),i.forceRedraw=!1,i.getSeriesExtremes(),i.setTickInterval(),i.oldUserMin=i.userMin,i.oldUserMax=i.userMax,i.isDirty||(i.isDirty=e||i.min!==i.oldMin||i.max!==i.oldMax)):i.cleanStacks&&i.cleanStacks()},setExtremes:function(t,e,i,n,o){var r=this,s=r.chart;i=be(i,!0),he(r.series,function(t){delete t.kdTree}),o=xe(o,{min:t,max:e}),ge(r,"setExtremes",o,function(){r.userMin=t,r.userMax=e,r.eventArgs=o,i&&s.redraw(n)})},zoom:function(t,e){var i=this.dataMin,n=this.dataMax,o=this.options,r=bt(i,be(o.min,i)),s=xt(n,be(o.max,n));return this.allowZoomOutside||(p(i)&&r>=t&&(t=r),p(n)&&e>=s&&(e=s)),this.displayBtn=t!==F||e!==F,this.setExtremes(t,e,!1,F,{trigger:"zoom"}),!0},setAxisSize:function(){var t=this.chart,e=this.options,i=e.offsetLeft||0,n=e.offsetRight||0,o=this.horiz,r=be(e.width,t.plotWidth-i+n),s=be(e.height,t.plotHeight),a=be(e.top,t.plotTop),l=be(e.left,t.plotLeft+i),h=/%$/;h.test(s)&&(s=parseFloat(s)/100*t.plotHeight),h.test(a)&&(a=parseFloat(a)/100*t.plotHeight+t.plotTop),this.left=l,this.top=a,this.width=r,this.height=s,this.bottom=t.chartHeight-s-a,this.right=t.chartWidth-r-l,this.len=xt(o?r:s,0),this.pos=o?l:a},getExtremes:function(){var t=this,e=t.isLog;return{min:e?O(c(t.min)):t.min,max:e?O(c(t.max)):t.max,dataMin:t.dataMin,dataMax:t.dataMax,userMin:t.userMin,userMax:t.userMax}},getThreshold:function(t){var e=this,i=e.isLog,n=i?c(e.min):e.min,o=i?c(e.max):e.max;return null===t?t=0>o?o:n:n>t?t=n:t>o&&(t=o),e.translate(t,0,1,0,1)},autoLabelAlign:function(t){var e,i=(be(t,0)-90*this.side+720)%360;return e=i>15&&165>i?"right":i>195&&345>i?"left":"center"},unsquish:function(){var t,e,i,n=this.chart,o=this.ticks,r=this.options.labels,s=this.horiz,a=this.tickInterval,l=a,h=this.len/(((this.categories?1:0)+this.max-this.min)/a),c=r.rotation,d=n.renderer.fontMetrics(r.style.fontSize,o[0]&&o[0].label),u=Number.MAX_VALUE,f=function(t){var e=t/(h||1);return e=e>1?vt(e):1,e*a};return s?(i=!r.staggerLines&&!r.step&&(p(c)?[c]:h<be(r.autoRotationLimit,80)&&r.autoRotation),i&&he(i,function(i){var n;(i===c||i&&i>=-90&&90>=i)&&(e=f(kt(d.h/St(At*i))),n=e+kt(i/360),u>n&&(u=n,t=i,l=e))})):r.step||(l=f(d.h)),this.autoRotation=i,this.labelRotation=be(t,c),l},renderUnsquish:function(){var t,e,i,o,s=this.chart,a=s.renderer,l=this.tickPositions,h=this.ticks,c=this.options.labels,d=this.horiz,p=s.margin,u=this.categories?l.length:l.length-1,f=this.slotWidth=d&&(c.step||0)<2&&!c.rotation&&(this.staggerLines||1)*s.plotWidth/u||!d&&(p[3]&&p[3]-s.spacing[3]||.33*s.chartWidth),g=xt(1,mt(f-2*(c.padding||5))),m={},y=a.fontMetrics(c.style.fontSize,h[0]&&h[0].label),v=c.style.textOverflow,x=0;if(r(c.rotation)||(m.rotation=c.rotation||0),this.autoRotation)he(l,function(t){t=h[t],t&&t.labelLength>x&&(x=t.labelLength)}),x>g&&x>y.h?m.rotation=this.labelRotation:this.labelRotation=0;else if(f&&(t={width:g+qt},!v))for(t.textOverflow="clip",i=l.length;!d&&i--;)o=l[i],e=h[o].label,e&&("ellipsis"===e.styles.textOverflow&&e.css({textOverflow:"clip"}),(e.getBBox().height>this.len/l.length-(y.h-y.f)||h[o].labelLength>f)&&(e.specCss={textOverflow:"ellipsis"}));m.rotation&&(t={width:(x>.5*s.chartHeight?.33*s.chartHeight:s.chartHeight)+qt},v||(t.textOverflow="ellipsis")),this.labelAlign=m.align=c.align||this.autoLabelAlign(this.labelRotation),he(l,function(e){var i=h[e],o=i&&i.label;o&&(o.attr(m),t&&o.css(n(t,o.specCss)),delete o.specCss,i.rotation=m.rotation)}),this.tickRotCorr=a.rotCorr(y.b,this.labelRotation||0,0!==this.side)},hasData:function(){return this.hasVisibleSeries||p(this.min)&&p(this.max)&&!!this.tickPositions},getOffset:function(){var t,e,i,n,o,r,s,a=this,l=a.chart,h=l.renderer,c=a.options,d=a.tickPositions,u=a.ticks,f=a.horiz,g=a.side,m=l.inverted?[1,0,3,2][g]:g,y=0,v=0,x=c.title,b=c.labels,k=0,w=a.opposite,S=l.axisOffset,T=l.clipOffset,A=[-1,1,1,-1][g],C=a.axisParent;if(t=a.hasData(),a.showAxis=e=t||be(c.showEmpty,!0),a.staggerLines=a.horiz&&b.staggerLines,a.axisGroup||(a.gridGroup=h.g("grid").attr({zIndex:c.gridZIndex||1}).add(C),a.axisGroup=h.g("axis").attr({zIndex:c.zIndex||2}).add(C),a.labelGroup=h.g("axis-labels").attr({zIndex:b.zIndex||7}).addClass(Kt+a.coll.toLowerCase()+"-labels").add(C)),t||a.isLinked)he(d,function(t){u[t]?u[t].addLabel():u[t]=new W(a,t)}),a.renderUnsquish(),b.reserveSpace===!1||0!==g&&2!==g&&{1:"left",3:"right"}[g]!==a.labelAlign&&"center"!==a.labelAlign||he(d,function(t){k=xt(u[t].getLabelSize(),k)}),a.staggerLines&&(k*=a.staggerLines,a.labelOffset=k*(a.opposite?-1:1));else for(r in u)u[r].destroy(),delete u[r];x&&x.text&&x.enabled!==!1&&(a.axisTitle||(a.axisTitle=h.text(x.text,0,0,x.useHTML).attr({zIndex:7,rotation:x.rotation||0,align:x.textAlign||{low:w?"right":"left",middle:"center",high:w?"left":"right"}[x.align]}).addClass(Kt+this.coll.toLowerCase()+"-title").css(x.style).add(a.axisGroup),a.axisTitle.isNew=!0),e&&(y=a.axisTitle.getBBox()[f?"height":"width"],i=x.offset,v=p(i)?0:be(x.margin,f?5:10)),a.axisTitle[e?"show":"hide"](!0)),a.offset=A*be(c.offset,S[g]),a.tickRotCorr=a.tickRotCorr||{x:0,y:0},s=2===g?a.tickRotCorr.y:0,n=Math.abs(k)+v+(k&&A*(f?be(b.y,a.tickRotCorr.y+8):b.x)-s),a.axisTitleMargin=be(i,n),S[g]=xt(S[g],a.axisTitleMargin+y+A*a.offset,n),o=c.offset?0:2*yt(c.lineWidth/2),T[m]=xt(T[m],o)},getLinePath:function(t){var e=this.chart,i=this.opposite,n=this.offset,o=this.horiz,r=this.left+(i?this.width:0)+n,s=e.chartHeight-this.bottom-(i?this.height:0)+n;return i&&(t*=-1),e.renderer.crispLine([Jt,o?this.left:r,o?s:this.top,Qt,o?e.chartWidth-this.right:r,o?s:e.chartHeight-this.bottom],t)},getTitlePosition:function(){var t=this.horiz,e=this.left,i=this.top,n=this.len,r=this.options.title,s=t?e:i,a=this.opposite,l=this.offset,h=r.x||0,c=r.y||0,d=o(r.style.fontSize||12),p={low:s+(t?0:n),middle:s+n/2,high:s+(t?n:0)}[r.align],u=(t?i+this.height:e)+(t?1:-1)*(a?-1:1)*this.axisTitleMargin+(2===this.side?d:0);return{x:t?p+h:u+(a?this.width:0)+l+h,y:t?u+c-(a?this.height:0)+l:p+c}},render:function(){var t,e,i,n=this,o=n.chart,r=o.renderer,s=n.options,a=n.isLog,l=n.isLinked,h=n.tickPositions,d=n.axisTitle,u=n.ticks,f=n.minorTicks,m=n.alternateBands,y=s.stackLabels,v=s.alternateGridColor,x=n.tickmarkOffset,b=s.lineWidth,k=o.hasRendered,w=k&&p(n.oldMin)&&!isNaN(n.oldMin),S=n.showAxis,T=r.globalAnimation;n.labelEdge.length=0,n.overlap=!1,he([u,f,m],function(t){var e;for(e in t)t[e].isActive=!1}),(n.hasData()||l)&&(n.minorTickInterval&&!n.categories&&he(n.getMinorTickPositions(),function(t){f[t]||(f[t]=new W(n,t,"minor")),w&&f[t].isNew&&f[t].render(null,!0),f[t].render(null,!1,1)}),h.length&&(he(h,function(t,e){(!l||t>=n.min&&t<=n.max)&&(u[t]||(u[t]=new W(n,t)),w&&u[t].isNew&&u[t].render(e,!0,.1),u[t].render(e))}),x&&(0===n.min||n.single)&&(u[-1]||(u[-1]=new W(n,-1,null,!0)),u[-1].render(-1))),v&&he(h,function(t,r){i=h[r+1]!==F?h[r+1]+x:n.max-x,r%2===0&&t<n.max&&i<=n.max+(o.polar?-x:x)&&(m[t]||(m[t]=new ut.PlotLineOrBand(n)),e=t+x,m[t].options={from:a?c(e):e,to:a?c(i):i,color:v},m[t].render(),m[t].isActive=!0)}),n._addedPlotLB||(he((s.plotLines||[]).concat(s.plotBands||[]),function(t){n.addPlotBandOrLine(t)}),n._addedPlotLB=!0)),he([u,f,m],function(t){var e,i,n=[],r=T?T.duration||500:0,s=function(){for(i=n.length;i--;)t[n[i]]&&!t[n[i]].isActive&&(t[n[i]].destroy(),delete t[n[i]])};for(e in t)t[e].isActive||(t[e].render(e,!1,0),t[e].isActive=!1,n.push(e));g(s,t!==m&&o.hasRendered&&r?r:0)}),b&&(t=n.getLinePath(b),n.axisLine?n.axisLine.animate({d:t}):n.axisLine=r.path(t).attr({stroke:s.lineColor,"stroke-width":b,zIndex:7}).add(n.axisGroup),n.axisLine[S?"show":"hide"](!0)),d&&S&&(d[d.isNew?"attr":"animate"](n.getTitlePosition()),d.isNew=!1),y&&y.enabled&&n.renderStackTotals(),n.isDirty=!1},redraw:function(){this.visible&&(this.render(),he(this.plotLinesAndBands,function(t){t.render()})),he(this.series,function(t){t.isDirty=!0})},destroy:function(t){var e,i,n=this,o=n.stacks,r=n.plotLinesAndBands;t||fe(n);for(e in o)M(o[e]),o[e]=null;for(he([n.ticks,n.minorTicks,n.alternateBands],function(t){M(t)}),i=r.length;i--;)r[i].destroy();he(["stackTotalGroup","axisLine","axisTitle","axisGroup","cross","gridGroup","labelGroup"],function(t){n[t]&&(n[t]=n[t].destroy())}),this.cross&&this.cross.destroy()},drawCrosshair:function(t,e){var i,n,o,r,s,a=this.crosshair;if(!this.crosshair||(p(e)||!be(a.snap,!0))===!1||e&&e.series&&e.series[this.coll]!==this)this.hideCrosshair();else{if(be(a.snap,!0)?p(e)&&(n=this.isXAxis?e.plotX:this.len-e.plotY):n=this.horiz?t.chartX-this.pos:this.len-t.chartY+this.pos,i=this.isRadial?this.getPlotLinePath(this.isXAxis?e.x:be(e.stackY,e.y))||null:this.getPlotLinePath(null,null,null,null,n)||null,null===i)return void this.hideCrosshair();r=this.categories&&!this.isRadial,s=be(a.width,r?this.transA:1),this.cross?this.cross.attr({d:i,visibility:"visible","stroke-width":s}):(o={"stroke-width":s,stroke:a.color||(r?"rgba(155,200,255,0.2)":"#C0C0C0"),zIndex:be(a.zIndex,2)},a.dashStyle&&(o.dashstyle=a.dashStyle),this.cross=this.chart.renderer.path(i).attr(o).add())}},hideCrosshair:function(){this.cross&&this.cross.hide()}},xe(Ie.prototype,Z),Ie.prototype.getTimeTicks=function(t,e,i,n){var o,r,s=[],a={},l=V.global.useUTC,h=new q(e-k(e)),c=t.unitRange,d=t.count;if(p(e)){h[st](c>=K.second?0:d*yt(h.getMilliseconds()/d)),c>=K.second&&h[at](c>=K.minute?0:d*yt(h.getSeconds()/d)),c>=K.minute&&h[lt](c>=K.hour?0:d*yt(h[tt]()/d)),c>=K.hour&&h[ht](c>=K.day?0:d*yt(h[et]()/d)),c>=K.day&&h[ct](c>=K.month?1:d*yt(h[nt]()/d)),c>=K.month&&(h[dt](c>=K.year?0:d*yt(h[ot]()/d)),r=h[rt]()),c>=K.year&&(r-=r%d,h[pt](r)),c===K.week&&h[ct](h[nt]()-h[it]()+be(n,1)),o=1,(J||Q)&&(h=h.getTime(),h=new q(h+k(h))),r=h[rt]();for(var u=h.getTime(),f=h[ot](),g=h[nt](),m=(K.day+(l?k(h):60*h.getTimezoneOffset()*1e3))%K.day;i>u;)s.push(u),c===K.year?u=$(r+o*d,0):c===K.month?u=$(r,f+o*d):l||c!==K.day&&c!==K.week?u+=c*d:u=$(r,f,g+o*d*(c===K.day?1:7)),o++;s.push(u),he(ce(s,function(t){return c<=K.hour&&t%K.day===m}),function(t){a[t]="day"})}return s.info=xe(t,{higherRanks:a,totalRange:c*d}),s},Ie.prototype.normalizeTimeTickInterval=function(t,e){var i,n,o=e||[["millisecond",[1,2,5,10,20,25,50,100,200,500]],["second",[1,2,5,10,15,30]],["minute",[1,2,5,10,15,30]],["hour",[1,2,3,4,6,8,12]],["day",[1,2]],["week",[1,2]],["month",[1,2,3,4,6]],["year",null]],r=o[o.length-1],s=K[r[0]],a=r[1];for(n=0;n<o.length;n++)if(r=o[n],s=K[r[0]],a=r[1],o[n+1]){var l=(s*a[a.length-1]+K[o[n+1][0]])/2;if(l>=t)break}return s===K.year&&5*s>t&&(a=[1,2,5]),i=A(t/s,a,"year"===r[0]?xt(T(t/s),1):1),{unitRange:s,count:i,unitName:r[0]}},Ie.prototype.getLogTickPositions=function(t,e,i,n){var o=this,r=o.options,s=o.len,a=[];if(n||(o._minorAutoInterval=null),t>=.5)t=mt(t),a=o.getLinearTickPositions(t,e,i);else if(t>=.08){var l,d,p,u,f,g,m,y=yt(e);for(l=t>.3?[1,2,4]:t>.15?[1,2,4,6,8]:[1,2,3,4,5,6,7,8,9],d=y;i+1>d&&!m;d++)for(u=l.length,p=0;u>p&&!m;p++)f=h(c(d)*l[p]),f>e&&(!n||i>=g)&&g!==F&&a.push(g),g>i&&(m=!0),g=f}else{var v=c(e),x=c(i),b=r[n?"minorTickInterval":"tickInterval"],k="auto"===b?null:b,w=r.tickPixelInterval/(n?5:1),S=n?s/o.tickPositions.length:s;t=be(k,o._minorAutoInterval,(x-v)*w/(S||1)),t=A(t,null,T(t)),a=pe(o.getLinearTickPositions(t,v,x),h),n||(o._minorAutoInterval=t/5)}return n||(o.tickInterval=t),a};var Oe=ut.Tooltip=function(){this.init.apply(this,arguments)};Oe.prototype={init:function(t,e){var i=e.borderWidth,n=e.style,r=o(n.padding);this.chart=t,this.options=e,this.crosshairs=[],this.now={x:0,y:0},this.isHidden=!0,this.label=t.renderer.label("",0,0,e.shape||"callout",null,null,e.useHTML,null,"tooltip").attr({padding:r,fill:e.backgroundColor,"stroke-width":i,r:e.borderRadius,zIndex:8}).css(n).css({padding:0}).add().attr({y:-9999}),Et||this.label.shadow(e.shadow),this.shared=e.shared},destroy:function(){this.label&&(this.label=this.label.destroy()),clearTimeout(this.hideTimer),clearTimeout(this.tooltipTimeout)},move:function(t,e,i,n){var o=this,r=o.now,s=o.options.animation!==!1&&!o.isHidden&&(kt(t-r.x)>1||kt(e-r.y)>1),a=o.followPointer||o.len>1;xe(r,{x:s?(2*r.x+t)/3:t,y:s?(r.y+e)/2:e,anchorX:a?F:s?(2*r.anchorX+i)/3:i,anchorY:a?F:s?(r.anchorY+n)/2:n}),o.label.attr(r),s&&(clearTimeout(this.tooltipTimeout),this.tooltipTimeout=setTimeout(function(){o&&o.move(t,e,i,n)},32))},hide:function(t){var e=this;clearTimeout(this.hideTimer),t=be(t,this.options.hideDelay,500),this.isHidden||(this.hideTimer=g(function(){e.label[t?"fadeOut":"hide"](),e.isHidden=!0},t))},getAnchor:function(t,e){var i,n,o,r=this.chart,s=r.inverted,a=r.plotTop,l=r.plotLeft,h=0,c=0;return t=f(t),i=t[0].tooltipPos,this.followPointer&&e&&(e.chartX===F&&(e=r.pointer.normalize(e)),i=[e.chartX-r.plotLeft,e.chartY-a]),i||(he(t,function(t){n=t.series.yAxis,o=t.series.xAxis,h+=t.plotX+(!s&&o?o.left-l:0),c+=(t.plotLow?(t.plotLow+t.plotHigh)/2:t.plotY)+(!s&&n?n.top-a:0)}),h/=t.length,c/=t.length,i=[s?r.plotWidth-c:h,this.shared&&!s&&t.length>1&&e?e.chartY-a:s?r.plotHeight-h:c]),pe(i,mt)},getPosition:function(t,e,i){var n,o=this.chart,r=this.distance,s={},a=i.h||0,l=["y",o.chartHeight,e,i.plotY+o.plotTop,o.plotTop,o.plotTop+o.plotHeight],h=["x",o.chartWidth,t,i.plotX+o.plotLeft,o.plotLeft,o.plotLeft+o.plotWidth],c=be(i.ttBelow,o.inverted&&!i.negative||!o.inverted&&i.negative),d=function(t,e,i,n,o,l){var h=n-r>i,d=e>n+r+i,p=n-r-i,u=n+r;if(c&&d)s[t]=u;else if(!c&&h)s[t]=p;else if(h)s[t]=bt(l-i,0>p-a?p:p-a);else{if(!d)return!1;s[t]=xt(o,u+a+i>e?u:u+a)}},p=function(t,e,i,n){var o;return r>n||n>e-r?o=!1:i/2>n?s[t]=1:n>e-i/2?s[t]=e-i-2:s[t]=n-i/2,o},u=function(t){var e=l;l=h,h=e,n=t},f=function(){d.apply(0,l)!==!1?p.apply(0,h)!==!1||n||(u(!0),f()):n?s.x=s.y=0:(u(!0),f())};return(o.inverted||this.len>1)&&u(),f(),s},defaultFormatter:function(t){var e,i=this.points||f(this);return e=[t.tooltipFooterHeaderFormatter(i[0])],e=e.concat(t.bodyFormatter(i)),e.push(t.tooltipFooterHeaderFormatter(i[0],!0)),e.join("")},refresh:function(t,e){var i,n,o,r,s,a,l=this,h=l.chart,c=l.label,d=l.options,p={},u=[],g=d.formatter||l.defaultFormatter,m=h.hoverPoints,y=l.shared;clearTimeout(this.hideTimer),l.followPointer=f(t)[0].series.tooltipOptions.followPointer,o=l.getAnchor(t,e),i=o[0],n=o[1],!y||t.series&&t.series.noSharedTooltip?p=t.getLabelConfig():(h.hoverPoints=t,m&&he(m,function(t){t.setState()}),he(t,function(t){t.setState(ie),u.push(t.getLabelConfig())}),p={x:t[0].category,y:t[0].y},p.points=u,this.len=u.length,t=t[0]),r=g.call(p,l),a=t.series,this.distance=be(a.tooltipOptions.distance,16),r===!1?this.hide():(l.isHidden&&(ye(c),c.attr("opacity",1).show()),c.attr({text:r}),s=d.borderColor||t.color||a.color||"#606060",c.attr({stroke:s}),l.updatePosition({plotX:i,plotY:n,negative:t.negative,ttBelow:t.ttBelow,h:o[2]||0}),this.isHidden=!1),ge(h,"tooltipRefresh",{text:r,x:i+h.plotLeft,y:n+h.plotTop,borderColor:s})},updatePosition:function(t){var e=this.chart,i=this.label,n=(this.options.positioner||this.getPosition).call(this,i.width,i.height,t);this.move(mt(n.x),mt(n.y||0),t.plotX+e.plotLeft,t.plotY+e.plotTop)},getXDateFormat:function(t,e,i){var n,o,r,s=e.dateTimeLabelFormats,a=i&&i.closestPointRange,l="01-01 00:00:00.000",h={millisecond:15,second:12,minute:9,hour:6,day:3},c="millisecond";if(a){r=_("%m-%d %H:%M:%S.%L",t.x);for(o in K){if(a===K.week&&+_("%w",t.x)===i.options.startOfWeek&&r.substr(6)===l.substr(6)){o="week";break}if(K[o]>a){o=c;break}if(h[o]&&r.substr(h[o])!==l.substr(h[o]))break;"week"!==o&&(c=o)}o&&(n=s[o])}else n=s.day;return n||s.year},tooltipFooterHeaderFormatter:function(t,e){var i=e?"footer":"header",n=t.series,o=n.tooltipOptions,r=o.xDateFormat,s=n.xAxis,a=s&&"datetime"===s.options.type&&l(t.key),h=o[i+"Format"];return a&&!r&&(r=this.getXDateFormat(t,o,s)),a&&r&&(h=h.replace("{point.key}","{point.key:"+r+"}")),S(h,{point:t,series:n})},bodyFormatter:function(t){return pe(t,function(t){var e=t.series.tooltipOptions;return(e.pointFormatter||t.point.tooltipFormatter).call(t.point,e.pointFormat)})}};var De;N=ft&&ft.documentElement.ontouchstart!==F;var ze=ut.Pointer=function(t,e){this.init(t,e)};if(ze.prototype={init:function(t,e){var i,n,o=e.chart,r=o.events,s=Et?"":o.zoomType,a=t.inverted;this.options=e,this.chart=t,this.zoomX=i=/x/.test(s),this.zoomY=n=/y/.test(s),this.zoomHor=i&&!a||n&&a,this.zoomVert=n&&!a||i&&a,this.hasZoom=i||n,this.runChartClick=r&&!!r.click,this.pinchDown=[],this.lastValidTouch={},ut.Tooltip&&e.tooltip.enabled&&(t.tooltip=new Oe(t,e.tooltip),this.followTouchMove=be(e.tooltip.followTouchMove,!0)),this.setDOMEvents()},normalize:function(e,i){var n,o,r;return e=e||t.event,e.target||(e.target=e.srcElement),r=e.touches?e.touches.length?e.touches.item(0):e.changedTouches[0]:e,i||(this.chartPosition=i=de(this.chart.container)),r.pageX===F?(n=xt(e.x,e.clientX-i.left),o=e.y):(n=r.pageX-i.left,o=r.pageY-i.top),xe(e,{chartX:mt(n),chartY:mt(o)})},getCoordinates:function(t){var e={xAxis:[],yAxis:[]};return he(this.chart.axes,function(i){e[i.isXAxis?"xAxis":"yAxis"].push({axis:i,value:i.toValue(t[i.horiz?"chartX":"chartY"])})}),e},runPointActions:function(t){var e,i,n,o,r,s,a,l,h,c=this,d=c.chart,p=d.series,u=d.tooltip,f=u?u.shared:!1,g=d.hoverPoint,m=d.hoverSeries,y=Number.MAX_VALUE,v=[];if(!f&&!m)for(i=0;i<p.length;i++)(p[i].directTouch||!p[i].options.stickyTracking)&&(p=[]);if(r=m&&(f?m.noSharedTooltip:m.directTouch),r&&g?l=g:(he(p,function(e){o=e.noSharedTooltip&&f,s=!f&&e.directTouch,e.visible&&!o&&!s&&be(e.options.enableMouseTracking,!0)&&(h=e.searchPoint(t,!o&&1===e.kdDimensions),h&&v.push(h))}),he(v,function(t){a=f||1!==t.series.kdDimensions?t.distX:t.dist,t&&"number"==typeof a&&y>a&&(y=a,l=t)})),l&&(l!==this.prevKDPoint||u&&u.isHidden)){if(f&&!l.series.noSharedTooltip){for(i=v.length;i--;)(v[i].clientX!==l.clientX||v[i].series.noSharedTooltip)&&v.splice(i,1);v.length&&u&&u.refresh(v,t),he(v,function(e){e.onMouseOver(t,e!==(m&&m.directTouch&&g||l))})}else u&&u.refresh(l,t),m&&m.directTouch||l.onMouseOver(t);this.prevKDPoint=l}else e=m&&m.tooltipOptions.followPointer,u&&e&&!u.isHidden&&(n=u.getAnchor([{}],t),u.updatePosition({plotX:n[0],plotY:n[1]}));c._onDocumentMouseMove||(c._onDocumentMouseMove=function(t){Gt[De]&&Gt[De].pointer.onDocumentMouseMove(t)},ue(ft,"mousemove",c._onDocumentMouseMove)),he(d.axes,function(e){e.drawCrosshair(t,be(l,g))})},reset:function(t,e){var i=this,n=i.chart,o=n.hoverSeries,r=n.hoverPoint,s=n.hoverPoints,a=n.tooltip,l=a&&a.shared?s:r;t=t&&a&&l,t&&he(f(l),function(e){void 0===e.plotX&&(t=!1)}),t?(a.refresh(l),r&&(r.setState(r.state,!0),he(n.axes,function(t){be(t.options.crosshair&&t.options.crosshair.snap,!0)?t.drawCrosshair(null,r):t.hideCrosshair()}))):(r&&r.onMouseOut(),s&&he(s,function(t){t.setState()}),o&&o.onMouseOut(),a&&a.hide(e),i._onDocumentMouseMove&&(fe(ft,"mousemove",i._onDocumentMouseMove),i._onDocumentMouseMove=null),he(n.axes,function(t){t.hideCrosshair()}),i.hoverX=n.hoverPoints=n.hoverPoint=null)},scaleGroups:function(t,e){var i,n=this.chart;he(n.series,function(o){i=t||o.getPlotBox(),o.xAxis&&o.xAxis.zoomEnabled&&(o.group.attr(i),o.markerGroup&&(o.markerGroup.attr(i),o.markerGroup.clip(e?n.clipRect:null)),o.dataLabelsGroup&&o.dataLabelsGroup.attr(i))}),n.clipRect.attr(e||n.clipBox)},dragStart:function(t){var e=this.chart;e.mouseIsDown=t.type,e.cancelClick=!1,e.mouseDownX=this.mouseDownX=t.chartX,e.mouseDownY=this.mouseDownY=t.chartY},drag:function(t){var e,i,n=this.chart,o=n.options.chart,r=t.chartX,s=t.chartY,a=this.zoomHor,l=this.zoomVert,h=n.plotLeft,c=n.plotTop,d=n.plotWidth,p=n.plotHeight,u=this.selectionMarker,f=this.mouseDownX,g=this.mouseDownY,m=o.panKey&&t[o.panKey+"Key"];u&&u.touch||(h>r?r=h:r>h+d&&(r=h+d),c>s?s=c:s>c+p&&(s=c+p),this.hasDragged=Math.sqrt(Math.pow(f-r,2)+Math.pow(g-s,2)),this.hasDragged>10&&(e=n.isInsidePlot(f-h,g-c),n.hasCartesianSeries&&(this.zoomX||this.zoomY)&&e&&!m&&(u||(this.selectionMarker=u=n.renderer.rect(h,c,a?1:d,l?1:p,0).attr({fill:o.selectionMarkerFill||"rgba(69,114,167,0.25)",zIndex:7}).add())),u&&a&&(i=r-f,u.attr({width:kt(i),x:(i>0?0:i)+f})),u&&l&&(i=s-g,u.attr({height:kt(i),y:(i>0?0:i)+g})),e&&!u&&o.panning&&n.pan(t,o.panning)))},drop:function(t){var e=this,i=this.chart,n=this.hasPinched;if(this.selectionMarker){var o,r={xAxis:[],yAxis:[]},s=this.selectionMarker,a=s.attr?s.attr("x"):s.x,l=s.attr?s.attr("y"):s.y,h=s.attr?s.attr("width"):s.width,c=s.attr?s.attr("height"):s.height;(this.hasDragged||n)&&(he(i.axes,function(i){if(i.zoomEnabled&&p(i.min)&&(n||e[{xAxis:"zoomX",yAxis:"zoomY"}[i.coll]])){var s=i.horiz,d="touchend"===t.type?i.minPixelPadding:0,u=i.toValue((s?a:l)+d),f=i.toValue((s?a+h:l+c)-d);r[i.coll].push({axis:i,min:bt(u,f),max:xt(u,f)}),o=!0}}),o&&ge(i,"selection",r,function(t){i.zoom(xe(t,n?{animation:!1}:null))})),this.selectionMarker=this.selectionMarker.destroy(),n&&this.scaleGroups()}i&&(m(i.container,{cursor:i._cursor}),i.cancelClick=this.hasDragged>10,i.mouseIsDown=this.hasDragged=this.hasPinched=!1,this.pinchDown=[])},onContainerMouseDown:function(t){t=this.normalize(t),t.preventDefault&&t.preventDefault(),this.dragStart(t)},onDocumentMouseUp:function(t){Gt[De]&&Gt[De].pointer.drop(t)},onDocumentMouseMove:function(t){var e=this.chart,i=this.chartPosition;t=this.normalize(t,i),!i||this.inClass(t.target,"highcharts-tracker")||e.isInsidePlot(t.chartX-e.plotLeft,t.chartY-e.plotTop)||this.reset()},onContainerMouseLeave:function(){var t=Gt[De];t&&(t.pointer.reset(),t.pointer.chartPosition=null)},onContainerMouseMove:function(t){var e=this.chart;De=e.index,t=this.normalize(t),t.returnValue=!1,"mousedown"===e.mouseIsDown&&this.drag(t),!this.inClass(t.target,"highcharts-tracker")&&!e.isInsidePlot(t.chartX-e.plotLeft,t.chartY-e.plotTop)||e.openMenu||this.runPointActions(t)},inClass:function(t,e){for(var i;t;){if(i=u(t,"class")){if(-1!==i.indexOf(e))return!0;if(-1!==i.indexOf(Kt+"container"))return!1}t=t.parentNode}},onTrackerMouseOut:function(t){var e=this.chart.hoverSeries,i=t.relatedTarget||t.toElement;!e||e.options.stickyTracking||this.inClass(i,Kt+"tooltip")||this.inClass(i,Kt+"series-"+e.index)||e.onMouseOut()},onContainerClick:function(t){var e=this.chart,i=e.hoverPoint,n=e.plotLeft,o=e.plotTop;t=this.normalize(t),e.cancelClick||(i&&this.inClass(t.target,Kt+"tracker")?(ge(i.series,"click",xe(t,{point:i})),e.hoverPoint&&i.firePointEvent("click",t)):(xe(t,this.getCoordinates(t)),e.isInsidePlot(t.chartX-n,t.chartY-o)&&ge(e,"click",t)))},setDOMEvents:function(){var t=this,e=t.chart.container;e.onmousedown=function(e){t.onContainerMouseDown(e)},e.onmousemove=function(e){t.onContainerMouseMove(e)},e.onclick=function(e){t.onContainerClick(e)},ue(e,"mouseleave",t.onContainerMouseLeave),1===Ft&&ue(ft,"mouseup",t.onDocumentMouseUp),N&&(e.ontouchstart=function(e){t.onContainerTouchStart(e)},e.ontouchmove=function(e){t.onContainerTouchMove(e)},1===Ft&&ue(ft,"touchend",t.onDocumentTouchEnd))},destroy:function(){var t;fe(this.chart.container,"mouseleave",this.onContainerMouseLeave),Ft||(fe(ft,"mouseup",this.onDocumentMouseUp),fe(ft,"touchend",this.onDocumentTouchEnd)),clearInterval(this.tooltipTimeout);for(t in this)this[t]=null}},xe(ut.Pointer.prototype,{pinchTranslate:function(t,e,i,n,o,r){(this.zoomHor||this.pinchHor)&&this.pinchTranslateDirection(!0,t,e,i,n,o,r),(this.zoomVert||this.pinchVert)&&this.pinchTranslateDirection(!1,t,e,i,n,o,r)},pinchTranslateDirection:function(t,e,i,n,o,r,s,a){var l,h,c,d,p,u,f=this.chart,g=t?"x":"y",m=t?"X":"Y",y="chart"+m,v=t?"width":"height",x=f["plot"+(t?"Left":"Top")],b=a||1,k=f.inverted,w=f.bounds[t?"h":"v"],S=1===e.length,T=e[0][y],A=i[0][y],C=!S&&e[1][y],P=!S&&i[1][y],L=function(){!S&&kt(T-C)>20&&(b=a||kt(A-P)/kt(T-C)),c=(x-A)/b+T,l=f["plot"+(t?"Width":"Height")]/b};L(),h=c,h<w.min?(h=w.min,d=!0):h+l>w.max&&(h=w.max-l,d=!0),d?(A-=.8*(A-s[g][0]),S||(P-=.8*(P-s[g][1])),L()):s[g]=[A,P],k||(r[g]=c-x,r[v]=l),u=k?t?"scaleY":"scaleX":"scale"+m,p=k?1/b:b,o[v]=l,o[g]=h,n[u]=b,n["translate"+m]=p*x+(A-p*T)},pinch:function(t){var e=this,i=e.chart,n=e.pinchDown,o=t.touches,r=o.length,s=e.lastValidTouch,a=e.hasZoom,l=e.selectionMarker,h={},c=1===r&&(e.inClass(t.target,Kt+"tracker")&&i.runTrackerClick||e.runChartClick),d={};r>1&&(e.initiated=!0),a&&e.initiated&&!c&&t.preventDefault(),pe(o,function(t){return e.normalize(t)}),"touchstart"===t.type?(he(o,function(t,e){n[e]={chartX:t.chartX,chartY:t.chartY}}),s.x=[n[0].chartX,n[1]&&n[1].chartX],s.y=[n[0].chartY,n[1]&&n[1].chartY],he(i.axes,function(t){if(t.zoomEnabled){var e=i.bounds[t.horiz?"h":"v"],n=t.minPixelPadding,o=t.toPixels(be(t.options.min,t.dataMin)),r=t.toPixels(be(t.options.max,t.dataMax)),s=bt(o,r),a=xt(o,r);e.min=bt(t.pos,s-n),e.max=xt(t.pos+t.len,a+n)}}),e.res=!0):n.length&&(l||(e.selectionMarker=l=xe({destroy:Wt,touch:!0},i.plotBox)),e.pinchTranslate(n,o,h,l,d,s),e.hasPinched=a,e.scaleGroups(h,d),!a&&e.followTouchMove&&1===r?this.runPointActions(e.normalize(t)):e.res&&(e.res=!1,this.reset(!1,0)))},touch:function(t,e){var i=this.chart;De=i.index,1===t.touches.length?(t=this.normalize(t),i.isInsidePlot(t.chartX-i.plotLeft,t.chartY-i.plotTop)&&!i.openMenu?(e&&this.runPointActions(t),this.pinch(t)):e&&this.reset()):2===t.touches.length&&this.pinch(t)},onContainerTouchStart:function(t){this.touch(t,!0)},onContainerTouchMove:function(t){this.touch(t)},onDocumentTouchEnd:function(t){Gt[De]&&Gt[De].pointer.drop(t)}}),t.PointerEvent||t.MSPointerEvent){var Re={},Be=!!t.PointerEvent,Ee=function(){var t,e=[];e.item=function(t){return this[t]};for(t in Re)Re.hasOwnProperty(t)&&e.push({pageX:Re[t].pageX,pageY:Re[t].pageY,target:Re[t].target});return e},He=function(t,e,i,n){var o;"touch"!==t.pointerType&&t.pointerType!==t.MSPOINTER_TYPE_TOUCH||!Gt[De]||(n(t),o=Gt[De].pointer,o[e]({type:i,target:t.currentTarget,preventDefault:Wt,touches:Ee()}))};xe(ze.prototype,{onContainerPointerDown:function(t){He(t,"onContainerTouchStart","touchstart",function(t){Re[t.pointerId]={pageX:t.pageX,pageY:t.pageY,target:t.currentTarget}})},onContainerPointerMove:function(t){He(t,"onContainerTouchMove","touchmove",function(t){Re[t.pointerId]={pageX:t.pageX,pageY:t.pageY},Re[t.pointerId].target||(Re[t.pointerId].target=t.currentTarget)})},onDocumentPointerUp:function(t){He(t,"onDocumentTouchEnd","touchend",function(t){delete Re[t.pointerId]})},batchMSEvents:function(t){t(this.chart.container,Be?"pointerdown":"MSPointerDown",this.onContainerPointerDown),t(this.chart.container,Be?"pointermove":"MSPointerMove",this.onContainerPointerMove),t(ft,Be?"pointerup":"MSPointerUp",this.onDocumentPointerUp)}}),ke(ze.prototype,"init",function(t,e,i){t.call(this,e,i),this.hasZoom&&m(e.container,{"-ms-touch-action":$t,"touch-action":$t})}),ke(ze.prototype,"setDOMEvents",function(t){t.apply(this),(this.hasZoom||this.followTouchMove)&&this.batchMSEvents(ue)}),ke(ze.prototype,"destroy",function(t){this.batchMSEvents(fe),t.call(this)})}var Xe=ut.Legend=function(t,e){this.init(t,e)};Xe.prototype={init:function(t,e){var i,o=this,r=e.itemStyle,s=e.itemMarginTop||0;this.options=e,e.enabled&&(o.itemStyle=r,o.itemHiddenStyle=n(r,e.itemHiddenStyle),o.itemMarginTop=s,o.padding=i=be(e.padding,8),o.initialItemX=i,o.initialItemY=i-5,o.maxItemWidth=0,o.chart=t,o.itemHeight=0,o.symbolWidth=be(e.symbolWidth,16),o.pages=[],o.render(),ue(o.chart,"endResize",function(){o.positionCheckboxes()}))},colorizeItem:function(t,e){var i,n,o=this,r=o.options,s=t.legendItem,a=t.legendLine,l=t.legendSymbol,h=o.itemHiddenStyle.color,c=e?r.itemStyle.color:h,d=e?t.legendColor||t.color||"#CCC":h,p=t.options&&t.options.marker,u={fill:d};if(s&&s.css({fill:c,color:c}),a&&a.attr({stroke:d}),l){if(p&&l.isMarker){u.stroke=d,p=t.convertAttribs(p);for(i in p)n=p[i],n!==F&&(u[i]=n)}l.attr(u)}},positionItem:function(t){var e=this,i=e.options,n=i.symbolPadding,o=!i.rtl,r=t._legendItemPos,s=r[0],a=r[1],l=t.checkbox,h=t.legendGroup;h&&h.element&&h.translate(o?s:e.legendWidth-s-2*n-4,a),l&&(l.x=s,l.y=a)},destroyItem:function(t){var e=t.checkbox;he(["legendItem","legendLine","legendSymbol","legendGroup"],function(e){t[e]&&(t[e]=t[e].destroy())}),e&&I(t.checkbox)},destroy:function(){var t=this,e=t.group,i=t.box;i&&(t.box=i.destroy()),e&&(t.group=e.destroy())},positionCheckboxes:function(t){var e,i=this.group.alignAttr,n=this.clipHeight||this.legendHeight,o=this.titleHeight;i&&(e=i.translateY,he(this.allItems,function(r){var s,a=r.checkbox;a&&(s=e+o+a.y+(t||0)+3,m(a,{left:i.translateX+r.checkboxOffset+a.x-20+qt,top:s+qt,display:s>e-6&&e+n-6>s?"":$t}))}))},renderTitle:function(){var t,e=this.options,i=this.padding,n=e.title,o=0;n.text&&(this.title||(this.title=this.chart.renderer.label(n.text,i-3,i-4,null,null,null,null,null,"legend-title").attr({zIndex:1}).css(n.style).add(this.group)),t=this.title.getBBox(),o=t.height,this.offsetWidth=t.width,this.contentGroup.attr({translateY:o})),this.titleHeight=o},setText:function(t){var e=this.options;t.legendItem.attr({text:e.labelFormat?S(e.labelFormat,t):e.labelFormatter.call(t)
+	})},renderItem:function(t){var e,i,o,r=this,s=r.chart,a=s.renderer,l=r.options,h="horizontal"===l.layout,c=r.symbolWidth,d=l.symbolPadding,p=r.itemStyle,u=r.itemHiddenStyle,f=r.padding,g=h?be(l.itemDistance,20):0,m=!l.rtl,y=l.width,v=l.itemMarginBottom||0,x=r.itemMarginTop,b=r.initialItemX,k=t.legendItem,w=t.series&&t.series.drawLegendSymbol?t.series:t,S=w.options,T=r.createCheckboxForItem&&S&&S.showCheckbox,A=l.useHTML;k||(t.legendGroup=a.g("legend-item").attr({zIndex:1}).add(r.scrollGroup),t.legendItem=k=a.text("",m?c+d:-d,r.baseline||0,A).css(n(t.visible?p:u)).attr({align:m?"left":"right",zIndex:2}).add(t.legendGroup),r.baseline||(r.fontMetrics=a.fontMetrics(p.fontSize,k),r.baseline=r.fontMetrics.f+3+x,k.attr("y",r.baseline)),w.drawLegendSymbol(r,t),r.setItemEvents&&r.setItemEvents(t,k,A,p,u),r.colorizeItem(t,t.visible),T&&r.createCheckboxForItem(t)),r.setText(t),i=k.getBBox(),o=t.checkboxOffset=l.itemWidth||t.legendItemWidth||c+d+i.width+g+(T?20:0),r.itemHeight=e=mt(t.legendItemHeight||i.height),h&&r.itemX-b+o>(y||s.chartWidth-2*f-b-l.x)&&(r.itemX=b,r.itemY+=x+r.lastLineHeight+v,r.lastLineHeight=0),r.maxItemWidth=xt(r.maxItemWidth,o),r.lastItemY=x+r.itemY+v,r.lastLineHeight=xt(e,r.lastLineHeight),t._legendItemPos=[r.itemX,r.itemY],h?r.itemX+=o:(r.itemY+=x+e+v,r.lastLineHeight=e),r.offsetWidth=y||xt((h?r.itemX-b-g:o)+f,r.offsetWidth)},getAllItems:function(){var t=[];return he(this.chart.series,function(e){var i=e.options;be(i.showInLegend,p(i.linkedTo)?!1:F,!0)&&(t=t.concat(e.legendItems||("point"===i.legendType?e.data:e)))}),t},adjustMargins:function(t,e){var i=this.chart,n=this.options,o=n.align.charAt(0)+n.verticalAlign.charAt(0)+n.layout.charAt(0);this.display&&!n.floating&&he([/(lth|ct|rth)/,/(rtv|rm|rbv)/,/(rbh|cb|lbh)/,/(lbv|lm|ltv)/],function(r,s){r.test(o)&&!p(t[s])&&(i[oe[s]]=xt(i[oe[s]],i.legend[(s+1)%2?"legendHeight":"legendWidth"]+[1,-1,-1,1][s]*n[s%2?"x":"y"]+be(n.margin,12)+e[s]))})},render:function(){var t,e,i,n,o=this,r=o.chart,s=r.renderer,a=o.group,l=o.box,h=o.options,c=o.padding,d=h.borderWidth,p=h.backgroundColor;o.itemX=o.initialItemX,o.itemY=o.initialItemY,o.offsetWidth=0,o.lastItemY=0,a||(o.group=a=s.g("legend").attr({zIndex:7}).add(),o.contentGroup=s.g().attr({zIndex:1}).add(a),o.scrollGroup=s.g().add(o.contentGroup)),o.renderTitle(),t=o.getAllItems(),C(t,function(t,e){return(t.options&&t.options.legendIndex||0)-(e.options&&e.options.legendIndex||0)}),h.reversed&&t.reverse(),o.allItems=t,o.display=e=!!t.length,o.lastLineHeight=0,he(t,function(t){o.renderItem(t)}),i=(h.width||o.offsetWidth)+c,n=o.lastItemY+o.lastLineHeight+o.titleHeight,n=o.handleOverflow(n),n+=c,(d||p)&&(l?i>0&&n>0&&(l[l.isNew?"attr":"animate"](l.crisp({width:i,height:n})),l.isNew=!1):(o.box=l=s.rect(0,0,i,n,h.borderRadius,d||0).attr({stroke:h.borderColor,"stroke-width":d||0,fill:p||$t}).add(a).shadow(h.shadow),l.isNew=!0),l[e?"show":"hide"]()),o.legendWidth=i,o.legendHeight=n,he(t,function(t){o.positionItem(t)}),e&&a.align(xe({width:i,height:n},h),!0,"spacingBox"),r.isResizing||this.positionCheckboxes()},handleOverflow:function(t){var e,i,n=this,o=this.chart,r=o.renderer,s=this.options,a=s.y,l="top"===s.verticalAlign,h=o.spacingBox.height+(l?-a:a)-this.padding,c=s.maxHeight,d=this.clipRect,p=s.navigation,u=be(p.animation,!0),f=p.arrowSize||12,g=this.nav,m=this.pages,y=this.padding,v=this.allItems,x=function(t){d.attr({height:t}),n.contentGroup.div&&(n.contentGroup.div.style.clip="rect("+y+"px,9999px,"+(y+t)+"px,0)")};return"horizontal"===s.layout&&(h/=2),c&&(h=bt(h,c)),m.length=0,t>h?(this.clipHeight=e=xt(h-20-this.titleHeight-y,0),this.currentPage=be(this.currentPage,1),this.fullHeight=t,he(v,function(t,n){var o=t._legendItemPos[1],r=mt(t.legendItem.getBBox().height),s=m.length;(!s||o-m[s-1]>e&&(i||o)!==m[s-1])&&(m.push(i||o),s++),n===v.length-1&&o+r-m[s-1]>e&&m.push(o),o!==i&&(i=o)}),d||(d=n.clipRect=r.clipRect(0,y,9999,0),n.contentGroup.clip(d)),x(e),g||(this.nav=g=r.g().attr({zIndex:1}).add(this.group),this.up=r.symbol("triangle",0,0,f,f).on("click",function(){n.scroll(-1,u)}).add(g),this.pager=r.text("",15,10).css(p.style).add(g),this.down=r.symbol("triangle-down",0,0,f,f).on("click",function(){n.scroll(1,u)}).add(g)),n.scroll(0),t=h):g&&(x(o.chartHeight),g.hide(),this.scrollGroup.attr({translateY:1}),this.clipHeight=0),t},scroll:function(t,e){var i,n=this.pages,o=n.length,r=this.currentPage+t,s=this.clipHeight,a=this.options.navigation,l=a.activeColor,h=a.inactiveColor,c=this.pager,d=this.padding;r>o&&(r=o),r>0&&(e!==F&&D(e,this.chart),this.nav.attr({translateX:d,translateY:s+this.padding+7+this.titleHeight,visibility:Zt}),this.up.attr({fill:1===r?h:l}).css({cursor:1===r?"default":"pointer"}),c.attr({text:r+"/"+o}),this.down.attr({x:18+this.pager.getBBox().width,fill:r===o?h:l}).css({cursor:r===o?"default":"pointer"}),i=-n[r-1]+this.initialItemY,this.scrollGroup.animate({translateY:i}),this.currentPage=r,this.positionCheckboxes(i))}};var We=ut.LegendSymbolMixin={drawRectangle:function(t,e){var i=t.options.symbolHeight||t.fontMetrics.f;e.legendSymbol=this.chart.renderer.rect(0,t.baseline-i+1,t.symbolWidth,i,t.options.symbolRadius||0).attr({zIndex:3}).add(e.legendGroup)},drawLineMarker:function(t){var e,i,n,o=this.options,r=o.marker,s=t.symbolWidth,a=this.chart.renderer,l=this.legendGroup,h=t.baseline-mt(.3*t.fontMetrics.b);o.lineWidth&&(n={"stroke-width":o.lineWidth},o.dashStyle&&(n.dashstyle=o.dashStyle),this.legendLine=a.path([Jt,0,h,Qt,s,h]).attr(n).add(l)),r&&r.enabled!==!1&&(e=r.radius,this.legendSymbol=i=a.symbol(this.symbol,s/2-e,h-e,2*e,2*e,r).add(l),i.isMarker=!0)}};(/Trident\/7\.0/.test(Ct)||Ot)&&ke(Xe.prototype,"positionItem",function(t,e){var i=this,n=function(){e._legendItemPos&&t.call(i,e)};n(),setTimeout(n)});var Ge=ut.Chart=function(){this.getArgs.apply(this,arguments)};ut.chart=function(t,e,i){return new Ge(t,e,i)},Ge.prototype={callbacks:[],getArgs:function(){var t=[].slice.call(arguments);(r(t[0])||t[0].nodeName)&&(this.renderTo=t.shift()),this.init(t[0],t[1])},init:function(t,e){var i,o=t.series;t.series=null,i=n(V,t),i.series=t.series=o,this.userOptions=t;var r=i.chart;this.margin=this.splashArray("margin",r),this.spacing=this.splashArray("spacing",r);var s=r.events;this.bounds={h:{},v:{}},this.callback=e,this.isResizing=0,this.options=i,this.axes=[],this.series=[],this.hasCartesianSeries=r.showAxes;var a,l=this;if(l.index=Gt.length,Gt.push(l),Ft++,r.reflow!==!1&&ue(l,"load",function(){l.initReflow()}),s)for(a in s)ue(l,a,s[a]);l.xAxis=[],l.yAxis=[],l.animation=Et?!1:be(r.animation,!0),l.pointCount=l.colorCounter=l.symbolCounter=0,l.firstRender()},initSeries:function(t){var i,n=this,o=n.options.chart,r=t.type||o.type||o.defaultSeriesType,s=se[r];return s||e(17,!0),i=new s,i.init(this,t),i},isInsidePlot:function(t,e,i){var n=i?e:t,o=i?t:e;return n>=0&&n<=this.plotWidth&&o>=0&&o<=this.plotHeight},redraw:function(t){var e,i,n,o=this,r=o.axes,s=o.series,a=o.pointer,l=o.legend,h=o.isDirtyLegend,c=o.hasCartesianSeries,d=o.isDirtyBox,p=s.length,u=p,f=o.renderer,g=f.isHidden(),m=[];for(D(t,o),g&&o.cloneRenderTo(),o.layOutTitles();u--;)if(n=s[u],n.options.stacking&&(e=!0,n.isDirty)){i=!0;break}if(i)for(u=p;u--;)n=s[u],n.options.stacking&&(n.isDirty=!0);he(s,function(t){t.isDirty&&"point"===t.options.legendType&&(t.updateTotals&&t.updateTotals(),h=!0)}),h&&l.options.enabled&&(l.render(),o.isDirtyLegend=!1),e&&o.getStacks(),c&&(o.isResizing||(o.maxTicks=null,he(r,function(t){t.setScale()}))),o.getMargins(),c&&(he(r,function(t){t.isDirty&&(d=!0)}),he(r,function(t){var i=t.min+","+t.max;t.extKey!==i&&(t.extKey=i,m.push(function(){ge(t,"afterSetExtremes",xe(t.eventArgs,t.getExtremes())),delete t.eventArgs})),(d||e)&&t.redraw()})),d&&o.drawChartBox(),he(s,function(t){t.isDirty&&t.visible&&(!t.isCartesian||t.xAxis)&&t.redraw()}),a&&a.reset(!0),f.draw(),ge(o,"redraw"),g&&o.cloneRenderTo(!0),he(m,function(t){t.call()})},get:function(t){var e,i,n,o=this,r=o.axes,s=o.series;for(e=0;e<r.length;e++)if(r[e].options.id===t)return r[e];for(e=0;e<s.length;e++)if(s[e].options.id===t)return s[e];for(e=0;e<s.length;e++)for(n=s[e].points||[],i=0;i<n.length;i++)if(n[i].id===t)return n[i];return null},getAxes:function(){var t,e=this,i=this.options,n=i.xAxis=f(i.xAxis||{}),o=i.yAxis=f(i.yAxis||{});he(n,function(t,e){t.index=e,t.isX=!0}),he(o,function(t,e){t.index=e}),t=n.concat(o),he(t,function(t){new Ie(e,t)})},getSelectedPoints:function(){var t=[];return he(this.series,function(e){t=t.concat(ce(e.points||[],function(t){return t.selected}))}),t},getSelectedSeries:function(){return ce(this.series,function(t){return t.selected})},setTitle:function(t,e,i){var o,r,s=this,a=s.options;o=a.title=n(a.title,t),r=a.subtitle=n(a.subtitle,e),he([["title",t,o],["subtitle",e,r]],function(t){var e=t[0],i=s[e],n=t[1],o=t[2];i&&n&&(s[e]=i=i.destroy()),o&&o.text&&!i&&(s[e]=s.renderer.text(o.text,0,0,o.useHTML).attr({align:o.align,"class":Kt+e,zIndex:o.zIndex||4}).css(o.style).add())}),s.layOutTitles(i)},layOutTitles:function(t){var e,i=0,n=this.title,o=this.subtitle,r=this.options,s=r.title,a=r.subtitle,l=this.renderer,h=this.spacingBox.width-44;n&&(n.css({width:(s.width||h)+qt}).align(xe({y:l.fontMetrics(s.style.fontSize,n).b-3},s),!1,"spacingBox"),s.floating||s.verticalAlign||(i=n.getBBox().height)),o&&(o.css({width:(a.width||h)+qt}).align(xe({y:i+(s.margin-13)+l.fontMetrics(a.style.fontSize,n).b},a),!1,"spacingBox"),a.floating||a.verticalAlign||(i=vt(i+o.getBBox().height))),e=this.titleOffset!==i,this.titleOffset=i,!this.isDirtyBox&&e&&(this.isDirtyBox=e,this.hasRendered&&be(t,!0)&&this.isDirtyBox&&this.redraw())},getChartSize:function(){var t=this,e=t.options.chart,i=e.width,n=e.height,o=t.renderToClone||t.renderTo;p(i)||(t.containerWidth=ae(o,"width")),p(n)||(t.containerHeight=ae(o,"height")),t.chartWidth=xt(0,i||t.containerWidth||600),t.chartHeight=xt(0,be(n,t.containerHeight>19?t.containerHeight:400))},cloneRenderTo:function(t){var e=this.renderToClone,i=this.container;t?e&&(this.renderTo.appendChild(i),I(e),delete this.renderToClone):(i&&i.parentNode===this.renderTo&&this.renderTo.removeChild(i),this.renderToClone=e=this.renderTo.cloneNode(0),m(e,{position:Vt,top:"-9999px",display:"block"}),e.style.setProperty&&e.style.setProperty("display","block","important"),ft.body.appendChild(e),i&&e.appendChild(i))},getContainer:function(){var t,i,n,s,a,l=this,h=l.options,c=h.chart,d=l.renderTo,p="data-highcharts-chart",f="highcharts-"+Xt++;d||(l.renderTo=d=c.renderTo),r(d)&&(l.renderTo=d=ft.getElementById(d)),d||e(13,!0),s=o(u(d,p)),!isNaN(s)&&Gt[s]&&Gt[s].hasRendered&&Gt[s].destroy(),u(d,p,l.index),d.innerHTML="",c.skipClone||d.offsetWidth||l.cloneRenderTo(),l.getChartSize(),i=l.chartWidth,n=l.chartHeight,l.container=t=y(jt,{className:Kt+"container"+(c.className?" "+c.className:""),id:f},xe({position:_t,overflow:Ut,width:i+qt,height:n+qt,textAlign:"left",lineHeight:"normal",zIndex:0,"-webkit-tap-highlight-color":"rgba(0,0,0,0)"},c.style),l.renderToClone||d),l._cursor=t.style.cursor,a=ut[c.renderer]||Y,l.renderer=new a(t,i,n,c.style,c.forExport,h.exporting&&h.exporting.allowHTML),Et&&l.renderer.create(l,t,i,n),l.renderer.chartIndex=l.index},getMargins:function(t){var e=this,i=e.spacing,n=e.margin,o=e.titleOffset;e.resetMargins(),o&&!p(n[0])&&(e.plotTop=xt(e.plotTop,o+e.options.title.margin+i[0])),e.legend.adjustMargins(n,i),e.extraBottomMargin&&(e.marginBottom+=e.extraBottomMargin),e.extraTopMargin&&(e.plotTop+=e.extraTopMargin),t||this.getAxisMargins()},getAxisMargins:function(){var t=this,e=t.axisOffset=[0,0,0,0],i=t.margin;t.hasCartesianSeries&&he(t.axes,function(t){t.visible&&t.getOffset()}),he(oe,function(n,o){p(i[o])||(t[n]+=e[o])}),t.setChartSize()},reflow:function(e){var i=this,n=i.options.chart,o=i.renderTo,r=n.width||ae(o,"width"),s=n.height||ae(o,"height"),a=e?e.target:t;i.hasUserSize||i.isPrinting||!r||!s||a!==t&&a!==ft||((r!==i.containerWidth||s!==i.containerHeight)&&(clearTimeout(i.reflowTimeout),i.reflowTimeout=g(function(){i.container&&(i.setSize(r,s,!1),i.hasUserSize=null)},e?100:0)),i.containerWidth=r,i.containerHeight=s)},initReflow:function(){var e=this,i=function(t){e.reflow(t)};ue(t,"resize",i),ue(e,"destroy",function(){fe(t,"resize",i)})},setSize:function(t,e,i){var n,o,r,s=this,a=s.renderer;s.isResizing+=1,D(i,s),s.oldChartHeight=s.chartHeight,s.oldChartWidth=s.chartWidth,p(t)&&(s.chartWidth=n=xt(0,mt(t)),s.hasUserSize=!!n),p(e)&&(s.chartHeight=o=xt(0,mt(e))),r=a.globalAnimation,(r?me:m)(s.container,{width:n+qt,height:o+qt},r),s.setChartSize(!0),a.setSize(n,o,i),s.maxTicks=null,he(s.axes,function(t){t.isDirty=!0,t.setScale()}),he(s.series,function(t){t.isDirty=!0}),s.isDirtyLegend=!0,s.isDirtyBox=!0,s.layOutTitles(),s.getMargins(),s.redraw(i),s.oldChartHeight=null,ge(s,"resize"),r=a.globalAnimation,g(function(){s&&ge(s,"endResize",null,function(){s.isResizing-=1})},r===!1?0:r&&r.duration||500)},setChartSize:function(t){var e,i,n,o,r,s,a,l=this,h=l.inverted,c=l.renderer,d=l.chartWidth,p=l.chartHeight,u=l.options.chart,f=l.spacing,g=l.clipOffset;l.plotLeft=n=mt(l.plotLeft),l.plotTop=o=mt(l.plotTop),l.plotWidth=r=xt(0,mt(d-n-l.marginRight)),l.plotHeight=s=xt(0,mt(p-o-l.marginBottom)),l.plotSizeX=h?s:r,l.plotSizeY=h?r:s,l.plotBorderWidth=u.plotBorderWidth||0,l.spacingBox=c.spacingBox={x:f[3],y:f[0],width:d-f[3]-f[1],height:p-f[0]-f[2]},l.plotBox=c.plotBox={x:n,y:o,width:r,height:s},a=2*yt(l.plotBorderWidth/2),e=vt(xt(a,g[3])/2),i=vt(xt(a,g[0])/2),l.clipBox={x:e,y:i,width:yt(l.plotSizeX-xt(a,g[1])/2-e),height:xt(0,yt(l.plotSizeY-xt(a,g[2])/2-i))},t||he(l.axes,function(t){t.setAxisSize(),t.setAxisTranslation()})},resetMargins:function(){var t=this;he(oe,function(e,i){t[e]=be(t.margin[i],t.spacing[i])}),t.axisOffset=[0,0,0,0],t.clipOffset=[0,0,0,0]},drawChartBox:function(){var t,e,i=this,n=i.options.chart,o=i.renderer,r=i.chartWidth,s=i.chartHeight,a=i.chartBackground,l=i.plotBackground,h=i.plotBorder,c=i.plotBGImage,d=n.borderWidth||0,p=n.backgroundColor,u=n.plotBackgroundColor,f=n.plotBackgroundImage,g=n.plotBorderWidth||0,m=i.plotLeft,y=i.plotTop,v=i.plotWidth,x=i.plotHeight,b=i.plotBox,k=i.clipRect,w=i.clipBox;t=d+(n.shadow?8:0),(d||p)&&(a?a.animate(a.crisp({width:r-t,height:s-t})):(e={fill:p||$t},d&&(e.stroke=n.borderColor,e["stroke-width"]=d),i.chartBackground=o.rect(t/2,t/2,r-t,s-t,n.borderRadius,d).attr(e).addClass(Kt+"background").add().shadow(n.shadow))),u&&(l?l.animate(b):i.plotBackground=o.rect(m,y,v,x,0).attr({fill:u}).add().shadow(n.plotShadow)),f&&(c?c.animate(b):i.plotBGImage=o.image(f,m,y,v,x).add()),k?k.animate({width:w.width,height:w.height}):i.clipRect=o.clipRect(w),g&&(h?h.animate(h.crisp({x:m,y:y,width:v,height:x,strokeWidth:-g})):i.plotBorder=o.rect(m,y,v,x,0,-g).attr({stroke:n.plotBorderColor,"stroke-width":g,fill:$t,zIndex:1}).add()),i.isDirtyBox=!1},propFromSeries:function(){var t,e,i,n=this,o=n.options.chart,r=n.options.series;he(["inverted","angular","polar"],function(s){for(t=se[o.type||o.defaultSeriesType],i=n[s]||o[s]||t&&t.prototype[s],e=r&&r.length;!i&&e--;)t=se[r[e].type],t&&t.prototype[s]&&(i=!0);n[s]=i})},linkSeries:function(){var t=this,e=t.series;he(e,function(t){t.linkedSeries.length=0}),he(e,function(e){var i=e.options.linkedTo;r(i)&&(i=":previous"===i?t.series[e.index-1]:t.get(i),i&&(i.linkedSeries.push(e),e.linkedParent=i,e.visible=be(e.options.visible,i.options.visible,e.visible)))})},renderSeries:function(){he(this.series,function(t){t.translate(),t.render()})},renderLabels:function(){var t=this,e=t.options.labels;e.items&&he(e.items,function(i){var n=xe(e.style,i.style),r=o(n.left)+t.plotLeft,s=o(n.top)+t.plotTop+12;delete n.left,delete n.top,t.renderer.text(i.html,r,s).attr({zIndex:2}).css(n).add()})},render:function(){var t,e,i,n,o=this,r=o.axes,s=o.renderer,a=o.options;o.setTitle(),o.legend=new Xe(o,a.legend),o.getStacks&&o.getStacks(),o.getMargins(!0),o.setChartSize(),t=o.plotWidth,e=o.plotHeight=o.plotHeight-21,he(r,function(t){t.setScale()}),o.getAxisMargins(),i=t/o.plotWidth>1.1,n=e/o.plotHeight>1.05,(i||n)&&(o.maxTicks=null,he(r,function(t){(t.horiz&&i||!t.horiz&&n)&&t.setTickInterval(!0)}),o.getMargins()),o.drawChartBox(),o.hasCartesianSeries&&he(r,function(t){t.visible&&t.render()}),o.seriesGroup||(o.seriesGroup=s.g("series-group").attr({zIndex:3}).add()),o.renderSeries(),o.renderLabels(),o.showCredits(a.credits),o.hasRendered=!0},showCredits:function(e){e.enabled&&!this.credits&&(this.credits=this.renderer.text(e.text,0,0).on("click",function(){e.href&&(t.location.href=e.href)}).attr({align:e.position.align,zIndex:8}).css(e.style).add().align(e.position))},destroy:function(){var t,e=this,i=e.axes,n=e.series,o=e.container,r=o&&o.parentNode;for(ge(e,"destroy"),Gt[e.index]=F,Ft--,e.renderTo.removeAttribute("data-highcharts-chart"),fe(e),t=i.length;t--;)i[t]=i[t].destroy();for(t=n.length;t--;)n[t]=n[t].destroy();he(["title","subtitle","chartBackground","plotBackground","plotBGImage","plotBorder","seriesGroup","clipRect","credits","pointer","scroller","rangeSelector","legend","resetZoomButton","tooltip","renderer"],function(t){var i=e[t];i&&i.destroy&&(e[t]=i.destroy())}),o&&(o.innerHTML="",fe(o),r&&I(o));for(t in e)delete e[t]},isReadyToRender:function(){var e=this;return!Rt&&t==t.top&&"complete"!==ft.readyState||Et&&!t.canvg?(Et?Me.push(function(){e.firstRender()},e.options.global.canvasToolsURL):ft.attachEvent("onreadystatechange",function(){ft.detachEvent("onreadystatechange",e.firstRender),"complete"===ft.readyState&&e.firstRender()}),!1):!0},firstRender:function(){var t=this,e=t.options,i=t.callback;t.isReadyToRender()&&(t.getContainer(),ge(t,"init"),t.resetMargins(),t.setChartSize(),t.propFromSeries(),t.getAxes(),he(e.series||[],function(e){t.initSeries(e)}),t.linkSeries(),ge(t,"beforeRender"),ut.Pointer&&(t.pointer=new ze(t,e)),t.render(),t.renderer.draw(),i&&i.apply(t,[t]),he(t.callbacks,function(e){t.index!==F&&e.apply(t,[t])}),ge(t,"load"),t.cloneRenderTo(!0))},splashArray:function(t,e){var i=e[t],n=s(i)?i:[i,i,i,i];return[be(e[t+"Top"],n[0]),be(e[t+"Right"],n[1]),be(e[t+"Bottom"],n[2]),be(e[t+"Left"],n[3])]}};var Fe=ut.CenteredSeriesMixin={getCenter:function(){var t,e,i,n=this.options,o=this.chart,r=2*(n.slicedOffset||0),s=o.plotWidth-2*r,a=o.plotHeight-2*r,l=n.center,h=[be(l[0],"50%"),be(l[1],"50%"),n.size||"100%",n.innerSize||0],c=bt(s,a);for(e=0;4>e;++e)i=h[e],t=2>e||2===e&&/%$/.test(i),h[e]=b(i,[s,a,c,h[2]][e])+(t?r:0);return h[3]>h[2]&&(h[3]=h[2]),h}},Ye=function(){};Ye.prototype={init:function(t,e,i){var n,o=this;return o.series=t,o.color=t.color,o.applyOptions(e,i),o.pointAttr={},t.options.colorByPoint&&(n=t.options.colors||t.chart.options.colors,o.color=o.color||n[t.colorCounter++],t.colorCounter===n.length&&(t.colorCounter=0)),t.chart.pointCount++,o},applyOptions:function(t,e){var i=this,n=i.series,o=n.options.pointValKey||n.pointValKey;return t=Ye.prototype.optionsToObject.call(this,t),xe(i,t),i.options=i.options?xe(i.options,t):t,o&&(i.y=i[o]),i.x===F&&n&&(i.x=e===F?n.autoIncrement():e),i},optionsToObject:function(t){var e,i={},n=this.series,o=n.options.keys,r=o||n.pointArrayMap||["y"],s=r.length,l=0,h=0;if("number"==typeof t||null===t)i[r[0]]=t;else if(a(t))for(!o&&t.length>s&&(e=typeof t[0],"string"===e?i.name=t[0]:"number"===e&&(i.x=t[0]),l++);s>h;)o&&void 0===t[l]||(i[r[h]]=t[l]),l++,h++;else"object"==typeof t&&(i=t,t.dataLabels&&(n._hasPointLabels=!0),t.marker&&(n._hasPointMarkers=!0));return i},destroy:function(){var t,e=this,i=e.series,n=i.chart,o=n.hoverPoints;n.pointCount--,o&&(e.setState(),d(o,e),o.length||(n.hoverPoints=null)),e===n.hoverPoint&&e.onMouseOut(),(e.graphic||e.dataLabel)&&(fe(e),e.destroyElements()),e.legendItem&&n.legend.destroyItem(e);for(t in e)e[t]=null},destroyElements:function(){for(var t,e=this,i=["graphic","dataLabel","dataLabelUpper","connector","shadowGroup"],n=6;n--;)t=i[n],e[t]&&(e[t]=e[t].destroy())},getLabelConfig:function(){return{x:this.category,y:this.y,color:this.color,key:this.name||this.category,series:this.series,point:this,percentage:this.percentage,total:this.total||this.stackTotal}},tooltipFormatter:function(t){var e=this.series,i=e.tooltipOptions,n=be(i.valueDecimals,""),o=i.valuePrefix||"",r=i.valueSuffix||"";return he(e.pointArrayMap||["y"],function(e){e="{point."+e,(o||r)&&(t=t.replace(e+"}",o+e+"}"+r)),t=t.replace(e+"}",e+":,."+n+"f}")}),S(t,{point:this,series:this.series})},firePointEvent:function(t,e,i){var n=this,o=this.series,r=o.options;(r.point.events[t]||n.options&&n.options.events&&n.options.events[t])&&this.importEvents(),"click"===t&&r.allowPointSelect&&(i=function(t){n.select&&n.select(null,t.ctrlKey||t.metaKey||t.shiftKey)}),ge(this,t,e,i)},visible:!0};var Ne=ut.Series=function(){};Ne.prototype={isCartesian:!0,type:"line",pointClass:Ye,sorted:!0,requireSorting:!0,pointAttrToOptions:{stroke:"lineColor","stroke-width":"lineWidth",fill:"fillColor",r:"radius"},directTouch:!1,axisTypes:["xAxis","yAxis"],colorCounter:0,parallelArrays:["x","y"],init:function(t,e){var i,n,o=this,r=t.series,s=function(t,e){return be(t.options.index,t._i)-be(e.options.index,e._i)};o.chart=t,o.options=e=o.setOptions(e),o.linkedSeries=[],o.bindAxes(),xe(o,{name:e.name,state:ee,pointAttr:{},visible:e.visible!==!1,selected:e.selected===!0}),Et&&(e.animation=!1),n=e.events;for(i in n)ue(o,i,n[i]);(n&&n.click||e.point&&e.point.events&&e.point.events.click||e.allowPointSelect)&&(t.runTrackerClick=!0),o.getColor(),o.getSymbol(),he(o.parallelArrays,function(t){o[t+"Data"]=[]}),o.setData(e.data,!1),o.isCartesian&&(t.hasCartesianSeries=!0),r.push(o),o._i=r.length-1,C(r,s),this.yAxis&&C(this.yAxis.series,s),he(r,function(t,e){t.index=e,t.name=t.name||"Series "+(e+1)})},bindAxes:function(){var t,i=this,n=i.options,o=i.chart;he(i.axisTypes||[],function(r){he(o[r],function(e){t=e.options,(n[r]===t.index||n[r]!==F&&n[r]===t.id||n[r]===F&&0===t.index)&&(e.series.push(i),i[r]=e,e.isDirty=!0)}),i[r]||i.optionalAxis===r||e(18,!0)})},updateParallelArrays:function(t,e){var i=t.series,n=arguments,o="number"==typeof e?function(n){var o="y"===n&&i.toYData?i.toYData(t):t[n];i[n+"Data"][e]=o}:function(t){Array.prototype[e].apply(i[t+"Data"],Array.prototype.slice.call(n,2))};he(i.parallelArrays,o)},autoIncrement:function(){var t,e,i=this.options,n=this.xIncrement,o=i.pointIntervalUnit;return n=be(n,i.pointStart,0),this.pointInterval=e=be(this.pointInterval,i.pointInterval,1),("month"===o||"year"===o)&&(t=new q(n),t="month"===o?+t[dt](t[ot]()+e):+t[pt](t[rt]()+e),e=t-n),this.xIncrement=n+e,n},getSegments:function(){var t,e=this,i=-1,n=[],o=e.points,r=o.length;if(r)if(e.options.connectNulls){for(t=r;t--;)null===o[t].y&&o.splice(t,1);o.length&&(n=[o])}else he(o,function(t,e){null===t.y?(e>i+1&&n.push(o.slice(i+1,e)),i=e):e===r-1&&n.push(o.slice(i+1,e+1))});e.segments=n},setOptions:function(t){var e,i,o=this.chart,r=o.options,s=r.plotOptions,a=o.userOptions||{},l=a.plotOptions||{},h=s[this.type];return this.userOptions=t,e=n(h,s.series,t),this.tooltipOptions=n(V.tooltip,V.plotOptions[this.type].tooltip,a.tooltip,l.series&&l.series.tooltip,l[this.type]&&l[this.type].tooltip,t.tooltip),null===h.marker&&delete e.marker,this.zoneAxis=e.zoneAxis,i=this.zones=(e.zones||[]).slice(),!e.negativeColor&&!e.negativeFillColor||e.zones||i.push({value:e[this.zoneAxis+"Threshold"]||e.threshold||0,color:e.negativeColor,fillColor:e.negativeFillColor}),i.length&&p(i[i.length-1].value)&&i.push({color:this.color,fillColor:this.fillColor}),e},getCyclic:function(t,e,i){var n,o=this.userOptions,r="_"+t+"Index",s=t+"Counter";e||(p(o[r])?n=o[r]:(o[r]=n=this.chart[s]%i.length,this.chart[s]+=1),e=i[n]),this[t]=e},getColor:function(){this.options.colorByPoint?this.options.color=null:this.getCyclic("color",this.options.color||we[this.type].color,this.chart.options.colors)},getSymbol:function(){var t=this.options.marker;this.getCyclic("symbol",t.symbol,this.chart.options.symbols),/^url/.test(this.symbol)&&(t.radius=0)},drawLegendSymbol:We.drawLineMarker,setData:function(t,i,n,o){var s,h,c,d=this,u=d.points,f=u&&u.length||0,g=d.options,m=d.chart,y=null,v=d.xAxis,x=v&&!!v.categories,b=g.turboThreshold,k=this.xData,w=this.yData,S=d.pointArrayMap,T=S&&S.length;if(t=t||[],s=t.length,i=be(i,!0),o!==!1&&s&&f===s&&!d.cropped&&!d.hasGroupedData&&d.visible)he(t,function(t,e){u[e].update&&t!==g.data[e]&&u[e].update(t,!1,null,!1)});else{if(d.xIncrement=null,d.colorCounter=0,he(this.parallelArrays,function(t){d[t+"Data"].length=0}),b&&s>b){for(h=0;null===y&&s>h;)y=t[h],h++;if(l(y)){var A=be(g.pointStart,0),C=be(g.pointInterval,1);for(h=0;s>h;h++)k[h]=A,w[h]=t[h],A+=C;d.xIncrement=A}else if(a(y))if(T)for(h=0;s>h;h++)c=t[h],k[h]=c[0],w[h]=c.slice(1,T+1);else for(h=0;s>h;h++)c=t[h],k[h]=c[0],w[h]=c[1];else e(12)}else for(h=0;s>h;h++)t[h]!==F&&(c={series:d},d.pointClass.prototype.applyOptions.apply(c,[t[h]]),d.updateParallelArrays(c,h),x&&p(c.name)&&(v.names[c.x]=c.name));for(r(w[0])&&e(14,!0),d.data=[],d.options.data=t,h=f;h--;)u[h]&&u[h].destroy&&u[h].destroy();v&&(v.minRange=v.userMinRange),d.isDirty=d.isDirtyData=m.isDirtyBox=!0,n=!1}"point"===g.legendType&&(this.processData(),this.generatePoints()),i&&m.redraw(n)},processData:function(t){var i,n,o,r,s,a,l,h,c=this,d=c.xData,p=c.yData,u=d.length,f=0,g=c.xAxis,m=c.options,y=m.cropThreshold,v=c.getExtremesFromAll||m.getExtremesFromAll,x=c.isCartesian;if(x&&!c.isDirty&&!g.isDirty&&!c.yAxis.isDirty&&!t)return!1;for(g&&(a=g.getExtremes(),l=a.min,h=a.max),x&&c.sorted&&!v&&(!y||u>y||c.forceCrop)&&(d[u-1]<l||d[0]>h?(d=[],p=[]):(d[0]<l||d[u-1]>h)&&(i=this.cropData(c.xData,c.yData,l,h),d=i.xData,p=i.yData,f=i.start,n=!0)),s=d.length-1;s>=0;s--)o=d[s]-d[s-1],o>0&&(r===F||r>o)?r=o:0>o&&c.requireSorting&&e(15);c.cropped=n,c.cropStart=f,c.processedXData=d,c.processedYData=p,c.closestPointRange=r},cropData:function(t,e,i,n){var o,r,s=t.length,a=0,l=s,h=be(this.cropShoulder,1);for(o=0;s>o;o++)if(t[o]>=i){a=xt(0,o-h);break}for(r=o;s>r;r++)if(t[r]>n){l=r+h;break}return{xData:t.slice(a,l),yData:e.slice(a,l),start:a,end:l}},generatePoints:function(){var t,e,i,n,o=this,r=o.options,s=r.data,a=o.data,l=o.processedXData,h=o.processedYData,c=o.pointClass,d=l.length,p=o.cropStart||0,u=o.hasGroupedData,g=[];if(!a&&!u){var m=[];m.length=s.length,a=o.data=m}for(n=0;d>n;n++)e=p+n,u?g[n]=(new c).init(o,[l[n]].concat(f(h[n]))):(a[e]?i=a[e]:s[e]!==F&&(a[e]=i=(new c).init(o,s[e],l[n])),g[n]=i),g[n].index=e;if(a&&(d!==(t=a.length)||u))for(n=0;t>n;n++)n!==p||u||(n+=d),a[n]&&(a[n].destroyElements(),a[n].plotX=F);o.data=a,o.points=g},getExtremes:function(t){var e,i,n,o,r,s,a,l=this.xAxis,h=this.yAxis,c=this.processedXData,d=[],p=0,u=l.getExtremes(),f=u.min,g=u.max;for(t=t||this.stackedYData||this.processedYData,e=t.length,s=0;e>s;s++)if(o=c[s],r=t[s],i=null!==r&&r!==F&&(!h.isLog||r.length||r>0),n=this.getExtremesFromAll||this.options.getExtremesFromAll||this.cropped||(c[s+1]||o)>=f&&(c[s-1]||o)<=g,i&&n)if(a=r.length)for(;a--;)null!==r[a]&&(d[p++]=r[a]);else d[p++]=r;this.dataMin=P(d),this.dataMax=L(d)},translate:function(){this.processedXData||this.processData(),this.generatePoints();var t,i,n,o,r,s=this,a=s.options,h=a.stacking,c=s.xAxis,d=c.categories,u=s.yAxis,f=s.points,g=f.length,m=!!s.modifyValue,y=a.pointPlacement,v="between"===y||l(y),x=a.threshold,b=a.startFromThreshold?x:0,k=Number.MAX_VALUE;for(t=0;g>t;t++){var w,S,T=f[t],A=T.x,C=T.y,P=T.low,L=h&&u.stacks[(s.negStacks&&(b?0:x)>C?"-":"")+s.stackKey];u.isLog&&null!==C&&0>=C&&(T.y=C=null,e(10)),T.plotX=i=bt(xt(-1e5,c.translate(A,0,0,0,1,y,"flags"===this.type)),1e5),h&&s.visible&&L&&L[A]&&(r=s.getStackIndicator(r,A,s.index),w=L[A],S=w.points[r.key],P=S[0],C=S[1],P===b&&(P=be(x,u.min)),u.isLog&&0>=P&&(P=null),T.total=T.stackTotal=w.total,T.percentage=w.total&&T.y/w.total*100,T.stackY=C,w.setOffset(s.pointXOffset||0,s.barW||0)),T.yBottom=p(P)?u.translate(P,0,1,0,1):null,m&&(C=s.modifyValue(C,T)),T.plotY=n="number"==typeof C&&C!==1/0?bt(xt(-1e5,u.translate(C,0,1,0,1)),1e5):F,T.isInside=n!==F&&n>=0&&n<=u.len&&i>=0&&i<=c.len,T.clientX=v?c.translate(A,0,0,0,1):i,T.negative=T.y<(x||0),T.category=d&&d[T.x]!==F?d[T.x]:T.x,t&&(k=bt(k,kt(i-o))),o=i}s.closestPointRangePx=k,s.getSegments()},setClip:function(t){var e=this.chart,i=this.options,n=e.renderer,o=e.inverted,r=this.clipBox,s=r||e.clipBox,a=this.sharedClipKey||["_sharedClip",t&&t.duration,t&&t.easing,s.height,i.xAxis,i.yAxis].join(","),l=e[a],h=e[a+"m"];l||(t&&(s.width=0,e[a+"m"]=h=n.clipRect(-99,o?-e.plotLeft:-e.plotTop,99,o?e.chartWidth:e.chartHeight)),e[a]=l=n.clipRect(s)),t&&(l.count+=1),i.clip!==!1&&(this.group.clip(t||r?l:e.clipRect),this.markerGroup.clip(h),this.sharedClipKey=a),t||(l.count-=1,l.count<=0&&a&&e[a]&&(r||(e[a]=e[a].destroy()),e[a+"m"]&&(e[a+"m"]=e[a+"m"].destroy())))},animate:function(t){var e,i,n=this,o=n.chart,r=n.options.animation;r&&!s(r)&&(r=we[n.type].animation),t?n.setClip(r):(i=this.sharedClipKey,e=o[i],e&&e.animate({width:o.plotSizeX},r),o[i+"m"]&&o[i+"m"].animate({width:o.plotSizeX+99},r),n.animate=null)},afterAnimate:function(){this.setClip(),ge(this,"afterAnimate")},drawPoints:function(){var t,e,i,n,o,r,s,a,l,h,c,d,p,u=this,f=u.points,g=u.chart,m=u.options,y=m.marker,v=u.pointAttr[""],x=u.markerGroup,b=u.xAxis,k=be(y.enabled,b.isRadial,u.closestPointRangePx>2*y.radius);if(y.enabled!==!1||u._hasPointMarkers)for(n=f.length;n--;)o=f[n],e=yt(o.plotX),i=o.plotY,l=o.graphic,h=o.marker||{},c=!!o.marker,d=k&&h.enabled===F||h.enabled,p=o.isInside,d&&i!==F&&!isNaN(i)&&null!==o.y?(t=o.pointAttr[o.selected?ne:ee]||v,r=t.r,s=be(h.symbol,u.symbol),a=0===s.indexOf("url"),l?l[p?"show":"hide"](!0).animate(xe({x:e-r,y:i-r},l.symbolName?{width:2*r,height:2*r}:{})):p&&(r>0||a)&&(o.graphic=l=g.renderer.symbol(s,e-r,i-r,2*r,2*r,c?h:y).attr(t).add(x))):l&&(o.graphic=l.destroy())},convertAttribs:function(t,e,i,n){var o,r,s=this.pointAttrToOptions,a={};t=t||{},e=e||{},i=i||{},n=n||{};for(o in s)r=s[o],a[o]=be(t[r],e[o],i[o],n[o]);return a},getAttribs:function(){var t,e,i,n,o,r,s,a,l=this,h=l.options,c=we[l.type].marker?h.marker:h,d=c.states,u=d[ie],f=l.color,g=l.options.negativeColor,m={stroke:f,fill:f},y=l.points||[],v=[],x=l.pointAttrToOptions,b=l.hasPointSpecificOptions,k=c.lineColor,w=c.fillColor,S=h.turboThreshold,T=l.zones,A=l.zoneAxis||"y";if(h.marker?(u.radius=u.radius||c.radius+u.radiusPlus,u.lineWidth=u.lineWidth||c.lineWidth+u.lineWidthPlus):(u.color=u.color||E(u.color||f).brighten(u.brightness).get(),u.negativeColor=u.negativeColor||E(u.negativeColor||g).brighten(u.brightness).get()),v[ee]=l.convertAttribs(c,m),he([ie,ne],function(t){v[t]=l.convertAttribs(d[t],v[ee])}),l.pointAttr=v,e=y.length,!S||S>e||b)for(;e--;){if(o=y[e],c=o.options&&o.options.marker||o.options,c&&c.enabled===!1&&(c.radius=0),T.length){for(i=0,n=T[i];o[A]>=n.value;)n=T[++i];o.color=o.fillColor=be(n.color,l.color)}if(b=h.colorByPoint||o.color,o.options)for(a in x)p(c[x[a]])&&(b=!0);b?(c=c||{},r=[],d=c.states||{},t=d[ie]=d[ie]||{},(!h.marker||o.negative&&!t.fillColor&&!u.fillColor)&&(t[l.pointAttrToOptions.fill]=t.color||!o.options.color&&u[o.negative&&g?"negativeColor":"color"]||E(o.color).brighten(t.brightness||u.brightness).get()),s={color:o.color},w||(s.fillColor=o.color),k||(s.lineColor=o.color),c.hasOwnProperty("color")&&!c.color&&delete c.color,r[ee]=l.convertAttribs(xe(s,c),v[ee]),r[ie]=l.convertAttribs(d[ie],v[ie],r[ee]),r[ne]=l.convertAttribs(d[ne],v[ne],r[ee])):r=v,o.pointAttr=r}},destroy:function(){var t,e,i,n,o,r=this,s=r.chart,a=/AppleWebKit\/533/.test(Ct),l=r.data||[];for(ge(r,"destroy"),fe(r),he(r.axisTypes||[],function(t){o=r[t],o&&(d(o.series,r),o.isDirty=o.forceRedraw=!0)}),r.legendItem&&r.chart.legend.destroyItem(r),e=l.length;e--;)i=l[e],i&&i.destroy&&i.destroy();r.points=null,clearTimeout(r.animationTimeout);for(n in r)r[n]instanceof H&&!r[n].survive&&(t=a&&"group"===n?"hide":"destroy",r[n][t]());s.hoverSeries===r&&(s.hoverSeries=null),d(s.series,r);for(n in r)delete r[n]},getSegmentPath:function(t){var e=this,i=[],n=e.options.step;return he(t,function(o,r){var s,a=o.plotX,l=o.plotY;e.getPointSpline?i.push.apply(i,e.getPointSpline(t,o,r)):(i.push(r?Qt:Jt),n&&r&&(s=t[r-1],"right"===n?i.push(s.plotX,l,Qt):"center"===n?i.push((s.plotX+a)/2,s.plotY,Qt,(s.plotX+a)/2,l,Qt):i.push(a,s.plotY,Qt)),
+	i.push(o.plotX,o.plotY))}),i},getGraphPath:function(){var t,e=this,i=[],n=[];return he(e.segments,function(o){t=e.getSegmentPath(o),o.length>1?i=i.concat(t):n.push(o[0])}),e.singlePoints=n,e.graphPath=i,i},drawGraph:function(){var t=this,e=this.options,i=[["graph",e.lineColor||this.color,e.dashStyle]],n=e.lineWidth,o="square"!==e.linecap,r=this.getGraphPath(),s=this.fillGraph&&this.color||$t,a=this.zones;he(a,function(n,o){i.push(["zoneGraph"+o,n.color||t.color,n.dashStyle||e.dashStyle])}),he(i,function(i,a){var l,h=i[0],c=t[h];c?c.animate({d:r}):(n||s)&&r.length&&(l={stroke:i[1],"stroke-width":n,fill:s,zIndex:1},i[2]?l.dashstyle=i[2]:o&&(l["stroke-linecap"]=l["stroke-linejoin"]="round"),t[h]=t.chart.renderer.path(r).attr(l).add(t.group).shadow(2>a&&e.shadow))})},applyZones:function(){var t,e,i,n,o,r,s,a=this,l=this.chart,h=l.renderer,c=this.zones,d=this.clips||[],p=this.graph,u=this.area,f=xt(l.chartWidth,l.chartHeight),g=this[(this.zoneAxis||"y")+"Axis"],m=g.reversed,y=l.inverted,v=g.horiz,x=!1;c.length&&(p||u)&&g.min!==F&&(p&&p.hide(),u&&u.hide(),n=g.getExtremes(),he(c,function(c,b){t=m?v?l.plotWidth:0:v?0:g.toPixels(n.min),t=bt(xt(be(e,t),0),f),e=bt(xt(mt(g.toPixels(be(c.value,n.max),!0)),0),f),x&&(t=e=g.toPixels(n.max)),o=Math.abs(t-e),r=bt(t,e),s=xt(t,e),g.isXAxis?(i={x:y?s:r,y:0,width:o,height:f},v||(i.x=l.plotHeight-i.x)):(i={x:0,y:y?s:r,width:f,height:o},v&&(i.y=l.plotWidth-i.y)),l.inverted&&h.isVML&&(i=g.isXAxis?{x:0,y:m?r:s,height:i.width,width:l.chartWidth}:{x:i.y-l.plotLeft-l.spacingBox.x,y:0,width:i.height,height:l.chartHeight}),d[b]?d[b].animate(i):(d[b]=h.clipRect(i),p&&a["zoneGraph"+b].clip(d[b]),u&&a["zoneArea"+b].clip(d[b])),x=c.value>n.max}),this.clips=d)},invertGroups:function(){function t(){var t={width:e.yAxis.len,height:e.xAxis.len};he(["group","markerGroup"],function(i){e[i]&&e[i].attr(t).invert()})}var e=this,i=e.chart;e.xAxis&&(ue(i,"resize",t),ue(e,"destroy",function(){fe(i,"resize",t)}),t(),e.invertGroups=t)},plotGroup:function(t,e,i,n,o){var r=this[t],s=!r;return s&&(this[t]=r=this.chart.renderer.g(e).attr({zIndex:n||.1}).add(o),r.addClass("highcharts-series-"+this.index)),r.attr({visibility:i})[s?"attr":"animate"](this.getPlotBox()),r},getPlotBox:function(){var t=this.chart,e=this.xAxis,i=this.yAxis;return t.inverted&&(e=i,i=this.xAxis),{translateX:e?e.left:t.plotLeft,translateY:i?i.top:t.plotTop,scaleX:1,scaleY:1}},render:function(){var t,e=this,i=e.chart,n=e.options,o=n.animation,r=o&&!!e.animate&&i.renderer.isSVG&&be(o.duration,500)||0,s=e.visible?"inherit":"hidden",a=n.zIndex,l=e.hasRendered,h=i.seriesGroup;t=e.plotGroup("group","series",s,a,h),e.markerGroup=e.plotGroup("markerGroup","markers",s,a,h),r&&e.animate(!0),e.getAttribs(),t.inverted=e.isCartesian?i.inverted:!1,e.drawGraph&&(e.drawGraph(),e.applyZones()),he(e.points,function(t){t.redraw&&t.redraw()}),e.drawDataLabels&&e.drawDataLabels(),e.visible&&e.drawPoints(),e.drawTracker&&e.options.enableMouseTracking!==!1&&e.drawTracker(),i.inverted&&e.invertGroups(),n.clip===!1||e.sharedClipKey||l||t.clip(i.clipRect),r&&e.animate(),l||(e.animationTimeout=g(function(){e.afterAnimate()},r)),e.isDirty=e.isDirtyData=!1,e.hasRendered=!0},redraw:function(){var t=this,e=t.chart,i=t.isDirtyData,n=t.isDirty,o=t.group,r=t.xAxis,s=t.yAxis;o&&(e.inverted&&o.attr({width:e.plotWidth,height:e.plotHeight}),o.animate({translateX:be(r&&r.left,e.plotLeft),translateY:be(s&&s.top,e.plotTop)})),t.translate(),t.render(),i&&ge(t,"updatedData"),(n||i)&&delete this.kdTree},kdDimensions:1,kdAxisArray:["clientX","plotY"],searchPoint:function(t,e){var i=this,n=i.xAxis,o=i.yAxis,r=i.chart.inverted;return this.searchKDTree({clientX:r?n.len-t.chartY+n.pos:t.chartX-n.pos,plotY:r?o.len-t.chartX+o.pos:t.chartY-o.pos},e)},buildKDTree:function(){function t(e,n,o){var r,s,a=e&&e.length;return a?(r=i.kdAxisArray[n%o],e.sort(function(t,e){return t[r]-e[r]}),s=Math.floor(a/2),{point:e[s],left:t(e.slice(0,s),n+1,o),right:t(e.slice(s+1),n+1,o)}):void 0}function e(){var e=ce(i.points||[],function(t){return null!==t.y});i.kdTree=t(e,n,n)}var i=this,n=i.kdDimensions;delete i.kdTree,g(e,i.options.kdNow?0:1)},searchKDTree:function(t,e){function i(t,e){var i=p(t[r])&&p(e[r])?Math.pow(t[r]-e[r],2):null,n=p(t[s])&&p(e[s])?Math.pow(t[s]-e[s],2):null,o=(i||0)+(n||0);e.dist=p(o)?Math.sqrt(o):Number.MAX_VALUE,e.distX=p(i)?Math.sqrt(i):Number.MAX_VALUE}function n(t,e,r,s){var l,h,c,d,p,u=e.point,f=o.kdAxisArray[r%s],g=u;return i(t,u),l=t[f]-u[f],h=0>l?"left":"right",c=0>l?"right":"left",e[h]&&(d=n(t,e[h],r+1,s),g=d[a]<g[a]?d:u),e[c]&&Math.sqrt(l*l)<g[a]&&(p=n(t,e[c],r+1,s),g=p[a]<g[a]?p:g),g}var o=this,r=this.kdAxisArray[0],s=this.kdAxisArray[1],a=e?"distX":"dist";return this.kdTree||this.buildKDTree(),this.kdTree?n(t,this.kdTree,this.kdDimensions,this.kdDimensions):void 0}},G.prototype={destroy:function(){M(this,this.axis)},render:function(t){var e=this.options,i=e.format,n=i?S(i,this):e.formatter.call(this);this.label?this.label.attr({text:n,visibility:"hidden"}):this.label=this.axis.chart.renderer.text(n,null,null,e.useHTML).css(e.style).attr({align:this.textAlign,rotation:e.rotation,visibility:Ut}).add(t)},setOffset:function(t,e){var i,n=this,o=n.axis,r=o.chart,s=r.inverted,a=o.reversed,l=this.isNegative&&!a||!this.isNegative&&a,h=o.translate(o.usePercentage?100:this.total,0,0,0,1),c=o.translate(0),d=kt(h-c),p=r.xAxis[0].translate(this.x)+t,u=r.plotHeight,f={x:s?l?h:h-d:p,y:s?u-p-e:l?u-h-d:u-h,width:s?d:e,height:s?e:d},g=this.label;g&&(g.align(this.alignOptions,null,f),i=g.alignAttr,g[this.options.crop===!1||r.isInsidePlot(i.x,i.y)?"show":"hide"](!0))}},Ge.prototype.getStacks=function(){var t=this;he(t.yAxis,function(t){t.stacks&&t.hasVisibleSeries&&(t.oldStacks=t.stacks)}),he(t.series,function(e){!e.options.stacking||e.visible!==!0&&t.options.chart.ignoreHiddenSeries!==!1||(e.stackKey=e.type+be(e.options.stack,""))})},Ie.prototype.buildStacks=function(){var t=this.series,e=be(this.options.reversedStacks,!0),i=t.length;if(!this.isXAxis){for(this.usePercentage=!1;i--;)t[e?i:t.length-i-1].setStackedPoints();if(this.usePercentage)for(i=0;i<t.length;i++)t[i].setPercentStacks()}},Ie.prototype.renderStackTotals=function(){var t,e,i,n=this,o=n.chart,r=o.renderer,s=n.stacks,a=n.stackTotalGroup;a||(n.stackTotalGroup=a=r.g("stack-labels").attr({visibility:Zt,zIndex:6}).add()),a.translate(o.plotLeft,o.plotTop);for(t in s){e=s[t];for(i in e)e[i].render(a)}},Ie.prototype.resetStacks=function(){var t,e,i=this.stacks;if(!this.isXAxis)for(t in i)for(e in i[t])i[t][e].touched<this.stacksTouched?(i[t][e].destroy(),delete i[t][e]):(i[t][e].total=null,i[t][e].cum=0)},Ie.prototype.cleanStacks=function(){var t,e,i;if(!this.isXAxis){this.oldStacks&&(t=this.stacks=this.oldStacks);for(e in t)for(i in t[e])t[e][i].cum=t[e][i].total}},Ne.prototype.setStackedPoints=function(){if(this.options.stacking&&(this.visible===!0||this.chart.options.chart.ignoreHiddenSeries===!1)){var t,e,i,n,o,r,s,a,l,h=this,c=h.processedXData,d=h.processedYData,p=[],u=d.length,f=h.options,g=f.threshold,m=f.startFromThreshold?g:0,y=f.stack,v=f.stacking,x=h.stackKey,b="-"+x,k=h.negStacks,w=h.yAxis,S=w.stacks,T=w.oldStacks;for(w.stacksTouched+=1,s=0;u>s;s++)a=c[s],l=d[s],t=h.getStackIndicator(t,a,h.index),r=t.key,e=k&&(m?0:g)>l,o=e?b:x,S[o]||(S[o]={}),S[o][a]||(T[o]&&T[o][a]?(S[o][a]=T[o][a],S[o][a].total=null):S[o][a]=new G(w,w.options.stackLabels,e,a,y)),i=S[o][a],i.points[r]=[be(i.cum,m)],i.touched=w.stacksTouched,t.index>0&&h.singleStacks===!1&&(i.points[r][0]=i.points[h.index+","+a+",0"][0]),"percent"===v?(n=e?x:b,k&&S[n]&&S[n][a]?(n=S[n][a],i.total=n.total=xt(n.total,i.total)+kt(l)||0):i.total=O(i.total+(kt(l)||0))):i.total=O(i.total+(l||0)),i.cum=be(i.cum,m)+(l||0),i.points[r].push(i.cum),p[s]=i.cum;"percent"===v&&(w.usePercentage=!0),this.stackedYData=p,w.oldStacks={}}},Ne.prototype.setPercentStacks=function(){var t,e=this,i=e.stackKey,n=e.yAxis.stacks,o=e.processedXData;he([i,"-"+i],function(i){for(var r,s,a,l,h=o.length;h--;)r=o[h],t=e.getStackIndicator(t,r,e.index),s=n[i]&&n[i][r],a=s&&s.points[t.key],a&&(l=s.total?100/s.total:0,a[0]=O(a[0]*l),a[1]=O(a[1]*l),e.stackedYData[h]=a[1])})},Ne.prototype.getStackIndicator=function(t,e,i){return p(t)&&t.x===e?t.index++:t={x:e,index:0},t.key=[i,e,t.index].join(","),t},xe(Ge.prototype,{addSeries:function(t,e,i){var n,o=this;return t&&(e=be(e,!0),ge(o,"addSeries",{options:t},function(){n=o.initSeries(t),o.isDirtyLegend=!0,o.linkSeries(),e&&o.redraw(i)})),n},addAxis:function(t,e,i,o){var r=e?"xAxis":"yAxis",s=this.options;new Ie(this,n(t,{index:this[r].length,isX:e})),s[r]=f(s[r]||{}),s[r].push(t),be(i,!0)&&this.redraw(o)},showLoading:function(t){var e=this,i=e.options,n=e.loadingDiv,o=i.loading,r=function(){n&&m(n,{left:e.plotLeft+qt,top:e.plotTop+qt,width:e.plotWidth+qt,height:e.plotHeight+qt})};n||(e.loadingDiv=n=y(jt,{className:Kt+"loading"},xe(o.style,{zIndex:10,display:$t}),e.container),e.loadingSpan=y("span",null,o.labelStyle,n),ue(e,"redraw",r)),e.loadingSpan.innerHTML=t||i.lang.loading,e.loadingShown||(m(n,{opacity:0,display:""}),me(n,{opacity:o.style.opacity},{duration:o.showDuration||0}),e.loadingShown=!0),r()},hideLoading:function(){var t=this.options,e=this.loadingDiv;e&&me(e,{opacity:0},{duration:t.loading.hideDuration||100,complete:function(){m(e,{display:$t})}}),this.loadingShown=!1}}),xe(Ye.prototype,{update:function(t,e,i,n){function o(){l.applyOptions(t),null===l.y&&c&&(l.graphic=c.destroy()),s(t)&&!a(t)&&(l.redraw=function(){c&&c.element&&t&&t.marker&&t.marker.symbol&&(l.graphic=c.destroy()),t&&t.dataLabels&&l.dataLabel&&(l.dataLabel=l.dataLabel.destroy()),l.redraw=null}),r=l.index,h.updateParallelArrays(l,r),u&&l.name&&(u[l.x]=l.name),p.data[r]=s(p.data[r])?l.options:t,h.isDirty=h.isDirtyData=!0,!h.fixedBox&&h.hasCartesianSeries&&(d.isDirtyBox=!0),"point"===p.legendType&&(d.isDirtyLegend=!0),e&&d.redraw(i)}var r,l=this,h=l.series,c=l.graphic,d=h.chart,p=h.options,u=h.xAxis&&h.xAxis.names;e=be(e,!0),n===!1?o():l.firePointEvent("update",{options:t},o)},remove:function(t,e){this.series.removePoint(le(this,this.series.data),t,e)}}),xe(Ne.prototype,{addPoint:function(t,e,i,n){var o,r,s,a,l=this,h=l.options,c=l.data,d=l.graph,p=l.area,u=l.chart,f=l.xAxis&&l.xAxis.names,g=d&&d.shift||0,m=["graph","area"],y=h.data,v=l.xData;if(D(n,u),i){for(s=l.zones.length;s--;)m.push("zoneGraph"+s,"zoneArea"+s);he(m,function(t){l[t]&&(l[t].shift=g+(h.step?2:1))})}if(p&&(p.isArea=!0),e=be(e,!0),o={series:l},l.pointClass.prototype.applyOptions.apply(o,[t]),a=o.x,s=v.length,l.requireSorting&&a<v[s-1])for(r=!0;s&&v[s-1]>a;)s--;l.updateParallelArrays(o,"splice",s,0,0),l.updateParallelArrays(o,s),f&&o.name&&(f[a]=o.name),y.splice(s,0,t),r&&(l.data.splice(s,0,null),l.processData()),"point"===h.legendType&&l.generatePoints(),i&&(c[0]&&c[0].remove?c[0].remove(!1):(c.shift(),l.updateParallelArrays(o,"shift"),y.shift())),l.isDirty=!0,l.isDirtyData=!0,e&&(l.getAttribs(),u.redraw())},removePoint:function(t,e,i){var n=this,o=n.data,r=o[t],s=n.points,a=n.chart,l=function(){o.length===s.length&&s.splice(t,1),o.splice(t,1),n.options.data.splice(t,1),n.updateParallelArrays(r||{series:n},"splice",t,1),r&&r.destroy(),n.isDirty=!0,n.isDirtyData=!0,e&&a.redraw()};D(i,a),e=be(e,!0),r?r.firePointEvent("remove",null,l):l()},remove:function(t,e){var i=this,n=i.chart;ge(i,"remove",null,function(){i.destroy(),n.isDirtyLegend=n.isDirtyBox=!0,n.linkSeries(),be(t,!0)&&n.redraw(e)})},update:function(t,e){var i,o=this,r=this.chart,s=this.userOptions,a=this.type,l=se[a].prototype,h=["group","markerGroup","dataLabelsGroup"];(t.type&&t.type!==a||void 0!==t.zIndex)&&(h.length=0),he(h,function(t){h[t]=o[t],delete o[t]}),t=n(s,{animation:!1,index:this.index,pointStart:this.xData[0]},{data:this.options.data},t),this.remove(!1);for(i in l)this[i]=F;xe(this,se[t.type||a].prototype),he(h,function(t){o[t]=h[t]}),this.init(r,t),r.linkSeries(),be(e,!0)&&r.redraw(!1)}}),xe(Ie.prototype,{update:function(t,e){var i=this.chart;t=i.options[this.coll][this.options.index]=n(this.userOptions,t),this.destroy(!0),this._addedPlotLB=this.chart._labelPanes=F,this.init(i,xe(t,{events:F})),i.isDirtyBox=!0,be(e,!0)&&i.redraw()},remove:function(t){for(var e=this.chart,i=this.coll,n=this.series,o=n.length;o--;)n[o]&&n[o].remove(!1);d(e.axes,this),d(e[i],this),e.options[i].splice(this.options.index,1),he(e[i],function(t,e){t.options.index=e}),this.destroy(),e.isDirtyBox=!0,be(t,!0)&&e.redraw()},setTitle:function(t,e){this.update({title:t},e)},setCategories:function(t,e){this.update({categories:t},e)}});var je=v(Ne);se.line=je,we.area=n(Se,{softThreshold:!1,threshold:0});var Ve=v(Ne,{type:"area",singleStacks:!1,getSegments:function(){var t,e,i,n,o,r=this,s=[],a=[],l=[],h=this.xAxis,c=this.yAxis,d=c.stacks[this.stackKey],p={},u=this.points,f=this.options.connectNulls;if(this.options.stacking&&!this.cropped){for(n=0;n<u.length;n++)p[u[n].x]=u[n];for(o in d)null!==d[o].total&&l.push(+o);l.sort(function(t,e){return t-e}),he(l,function(o){var s,l=null,u=f&&(!p[o]||null===p[o].y);if(!u)if(p[o])a.push(p[o]);else{for(n=r.index;n<=c.series.length;n++)if(i=r.getStackIndicator(null,o,n),s=d[o].points[i.key]){l=s[1];break}t=h.translate(o),e=c.getThreshold(l),a.push({y:null,plotX:t,clientX:t,plotY:e,yBottom:e,onMouseOver:Wt})}}),a.length&&s.push(a)}else Ne.prototype.getSegments.call(this),s=this.segments;this.segments=s},getSegmentPath:function(t){var e,i,n=Ne.prototype.getSegmentPath.call(this,t),o=[].concat(n),r=this.options,s=n.length,a=this.yAxis.getThreshold(r.threshold);if(3===s&&o.push(Qt,n[1],n[2]),r.stacking&&!this.closedStacks)for(e=t.length-1;e>=0;e--)i=be(t[e].yBottom,a),e<t.length-1&&r.step&&o.push(t[e+1].plotX,i),o.push(t[e].plotX,i);else this.closeSegment(o,t,a);return this.areaPath=this.areaPath.concat(o),n},closeSegment:function(t,e,i){t.push(Qt,e[e.length-1].plotX,i,Qt,e[0].plotX,i)},drawGraph:function(){this.areaPath=[],Ne.prototype.drawGraph.apply(this);var t=this,e=this.areaPath,i=this.options,n=this.zones,o=[["area",this.color,i.fillColor]];he(n,function(e,n){o.push(["zoneArea"+n,e.color||t.color,e.fillColor||i.fillColor])}),he(o,function(n){var o,r=n[0],s=t[r];s?s.animate({d:e}):(o={fill:n[2]||n[1],zIndex:0},n[2]||(o["fill-opacity"]=i.fillOpacity||.75),t[r]=t.chart.renderer.path(e).attr(o).add(t.group))})},drawLegendSymbol:We.drawRectangle});se.area=Ve,we.spline=n(Se);var _e=v(Ne,{type:"spline",getPointSpline:function(t,e,i){var n,o,r,s,a,l=1.5,h=l+1,c=e.plotX,d=e.plotY,p=t[i-1],u=t[i+1];if(p&&u){var f,g=p.plotX,m=p.plotY,y=u.plotX,v=u.plotY;n=(l*c+g)/h,o=(l*d+m)/h,r=(l*c+y)/h,s=(l*d+v)/h,f=(s-o)*(r-c)/(r-n)+d-s,o+=f,s+=f,o>m&&o>d?(o=xt(m,d),s=2*d-o):m>o&&d>o&&(o=bt(m,d),s=2*d-o),s>v&&s>d?(s=xt(v,d),o=2*d-s):v>s&&d>s&&(s=bt(v,d),o=2*d-s),e.rightContX=r,e.rightContY=s}return i?(a=["C",p.rightContX||p.plotX,p.rightContY||p.plotY,n||c,o||d,c,d],p.rightContX=p.rightContY=null):a=[Jt,c,d],a}});se.spline=_e,we.areaspline=n(we.area);var Ue=Ve.prototype,Ke=v(_e,{type:"areaspline",closedStacks:!0,getSegmentPath:Ue.getSegmentPath,closeSegment:Ue.closeSegment,drawGraph:Ue.drawGraph,drawLegendSymbol:We.drawRectangle});se.areaspline=Ke,we.column=n(Se,{borderColor:"#FFFFFF",borderRadius:0,groupPadding:.2,marker:null,pointPadding:.1,minPointLength:0,cropThreshold:50,pointRange:null,states:{hover:{brightness:.1,shadow:!1,halo:!1},select:{color:"#C0C0C0",borderColor:"#000000",shadow:!1}},dataLabels:{align:null,verticalAlign:null,y:null},softThreshold:!1,startFromThreshold:!0,stickyTracking:!1,tooltip:{distance:6},threshold:0});var Ze=v(Ne,{type:"column",pointAttrToOptions:{stroke:"borderColor",fill:"color",r:"borderRadius"},cropShoulder:0,directTouch:!0,trackerGroups:["group","dataLabelsGroup"],negStacks:!0,init:function(){Ne.prototype.init.apply(this,arguments);var t=this,e=t.chart;e.hasRendered&&he(e.series,function(e){e.type===t.type&&(e.isDirty=!0)})},getColumnMetrics:function(){var t,e=this,i=e.options,n=e.xAxis,o=e.yAxis,r=n.reversed,s={},a=0;i.grouping===!1?a=1:he(e.chart.series,function(i){var n,r=i.options,l=i.yAxis;i.type===e.type&&i.visible&&o.len===l.len&&o.pos===l.pos&&(r.stacking?(t=i.stackKey,s[t]===F&&(s[t]=a++),n=s[t]):r.grouping!==!1&&(n=a++),i.columnIndex=n)});var l=bt(kt(n.transA)*(n.ordinalSlope||i.pointRange||n.closestPointRange||n.tickInterval||1),n.len),h=l*i.groupPadding,c=l-2*h,d=c/a,p=bt(i.maxPointWidth||n.len,be(i.pointWidth,d*(1-2*i.pointPadding))),u=(d-p)/2,f=(e.columnIndex||0)+(r?1:0),g=u+(h+f*d-l/2)*(r?-1:1);return e.columnMetrics={width:p,offset:g},e.columnMetrics},crispCol:function(t,e,i,n){var o,r,s,a=this.chart,l=this.borderWidth,h=-(l%2?.5:0),c=l%2?.5:1;return a.inverted&&a.renderer.isVML&&(c+=1),o=Math.round(t+i)+h,t=Math.round(t)+h,i=o-t,r=Math.round(e+n)+c,s=kt(e)<=.5&&r>.5,e=Math.round(e)+c,n=r-e,s&&(e-=1,n+=1),{x:t,y:e,width:i,height:n}},translate:function(){var t=this,e=t.chart,i=t.options,n=t.borderWidth=be(i.borderWidth,t.closestPointRange*t.xAxis.transA<2?0:1),o=t.yAxis,r=i.threshold,s=t.translatedThreshold=o.getThreshold(r),a=be(i.minPointLength,5),l=t.getColumnMetrics(),h=l.width,c=t.barW=xt(h,1+2*n),d=t.pointXOffset=l.offset;e.inverted&&(s-=.5),i.pointPadding&&(c=vt(c)),Ne.prototype.translate.apply(t),he(t.points,function(i){var n,r=bt(be(i.yBottom,s),9e4),l=999+kt(r),p=bt(xt(-l,i.plotY),o.len+l),u=i.plotX+d,f=c,g=bt(p,r),m=xt(p,r)-g;kt(m)<a&&a&&(m=a,n=!o.reversed&&!i.negative||o.reversed&&i.negative,g=kt(g-s)>a?r-a:s-(n?a:0)),i.barX=u,i.pointWidth=h,i.tooltipPos=e.inverted?[o.len+o.pos-e.plotLeft-p,t.xAxis.len-u-f/2,m]:[u+f/2,p+o.pos-e.plotTop,m],i.shapeType="rect",i.shapeArgs=t.crispCol(u,g,f,m)})},getSymbol:Wt,drawLegendSymbol:We.drawRectangle,drawGraph:Wt,drawPoints:function(){var t,e,i=this,o=this.chart,r=i.options,s=o.renderer,a=r.animationLimit||250;he(i.points,function(l){var h,c=l.plotY,d=l.graphic;c===F||isNaN(c)||null===l.y?d&&(l.graphic=d.destroy()):(t=l.shapeArgs,h=p(i.borderWidth)?{"stroke-width":i.borderWidth}:{},e=l.pointAttr[l.selected?ne:ee]||i.pointAttr[ee],d?(ye(d),d.attr(h).attr(e)[o.pointCount<a?"animate":"attr"](n(t))):l.graphic=d=s[l.shapeType](t).attr(h).attr(e).add(l.group||i.group).shadow(r.shadow,null,r.stacking&&!r.borderRadius))})},animate:function(t){var e,i=this,n=this.yAxis,o=i.options,r=this.chart.inverted,s={};Rt&&(t?(s.scaleY=.001,e=bt(n.pos+n.len,xt(n.pos,n.toPixels(o.threshold))),r?s.translateX=e-n.len:s.translateY=e,i.group.attr(s)):(s.scaleY=1,s[r?"translateX":"translateY"]=n.pos,i.group.animate(s,i.options.animation),i.animate=null))},remove:function(){var t=this,e=t.chart;e.hasRendered&&he(e.series,function(e){e.type===t.type&&(e.isDirty=!0)}),Ne.prototype.remove.apply(t,arguments)}});se.column=Ze,we.bar=n(we.column);var qe=v(Ze,{type:"bar",inverted:!0});se.bar=qe,we.scatter=n(Se,{lineWidth:0,marker:{enabled:!0},tooltip:{headerFormat:'<span style="color:{point.color}">●</span> <span style="font-size: 10px;"> {series.name}</span><br/>',pointFormat:"x: <b>{point.x}</b><br/>y: <b>{point.y}</b><br/>"}});var $e=v(Ne,{type:"scatter",sorted:!1,requireSorting:!1,noSharedTooltip:!0,trackerGroups:["group","markerGroup","dataLabelsGroup"],takeOrdinalPosition:!1,kdDimensions:2,drawGraph:function(){this.options.lineWidth&&Ne.prototype.drawGraph.call(this)}});se.scatter=$e,we.pie=n(Se,{borderColor:"#FFFFFF",borderWidth:1,center:[null,null],clip:!1,colorByPoint:!0,dataLabels:{distance:30,enabled:!0,formatter:function(){return null===this.y?void 0:this.point.name},x:0},ignoreHiddenPoint:!0,legendType:"point",marker:null,size:null,showInLegend:!1,slicedOffset:10,states:{hover:{brightness:.1,shadow:!1}},stickyTracking:!1,tooltip:{followPointer:!0}});var Je=v(Ye,{init:function(){Ye.prototype.init.apply(this,arguments);var t,e=this;return e.name=be(e.name,"Slice"),t=function(t){e.slice("select"===t.type)},ue(e,"select",t),ue(e,"unselect",t),e},setVisible:function(t,e){var i=this,n=i.series,o=n.chart,r=n.options.ignoreHiddenPoint;e=be(e,r),t!==i.visible&&(i.visible=i.options.visible=t=t===F?!i.visible:t,n.options.data[le(i,n.data)]=i.options,he(["graphic","dataLabel","connector","shadowGroup"],function(e){i[e]&&i[e][t?"show":"hide"](!0)}),i.legendItem&&o.legend.colorizeItem(i,t),t||"hover"!==i.state||i.setState(""),r&&(n.isDirty=!0),e&&o.redraw())},slice:function(t,e,i){var n,o=this,r=o.series,s=r.chart;D(i,s),e=be(e,!0),o.sliced=o.options.sliced=t=p(t)?t:!o.sliced,r.options.data[le(o,r.data)]=o.options,n=t?o.slicedTranslation:{translateX:0,translateY:0},o.graphic.animate(n),o.shadowGroup&&o.shadowGroup.animate(n)},haloPath:function(t){var e=this.shapeArgs,i=this.series.chart;return this.sliced||!this.visible?[]:this.series.chart.renderer.symbols.arc(i.plotLeft+e.x,i.plotTop+e.y,e.r+t,e.r+t,{innerR:this.shapeArgs.r,start:e.start,end:e.end})}}),Qe={type:"pie",isCartesian:!1,pointClass:Je,requireSorting:!1,directTouch:!0,noSharedTooltip:!0,trackerGroups:["group","dataLabelsGroup"],axisTypes:[],pointAttrToOptions:{stroke:"borderColor","stroke-width":"borderWidth",fill:"color"},animate:function(t){var e=this,i=e.points,n=e.startAngleRad;t||(he(i,function(t){var i=t.graphic,o=t.shapeArgs;i&&(i.attr({r:t.startR||e.center[3]/2,start:n,end:n}),i.animate({r:o.r,start:o.start,end:o.end},e.options.animation))}),e.animate=null)},updateTotals:function(){var t,e,i=0,n=this.points,o=n.length,r=this.options.ignoreHiddenPoint;for(t=0;o>t;t++)e=n[t],i+=r&&!e.visible?0:e.y;for(this.total=i,t=0;o>t;t++)e=n[t],e.percentage=i>0&&(e.visible||!r)?e.y/i*100:0,e.total=i},generatePoints:function(){Ne.prototype.generatePoints.call(this),this.updateTotals()},translate:function(t){this.generatePoints();var e,i,n,o,r,s,a,l=this,h=0,c=1e3,d=l.options,p=d.slicedOffset,u=p+d.borderWidth,f=d.startAngle||0,g=l.startAngleRad=Tt/180*(f-90),m=l.endAngleRad=Tt/180*(be(d.endAngle,f+360)-90),y=m-g,v=l.points,x=d.dataLabels.distance,b=d.ignoreHiddenPoint,k=v.length;for(t||(l.center=t=l.getCenter()),l.getX=function(e,i){return n=gt.asin(bt((e-t[1])/(t[2]/2+x),1)),t[0]+(i?-1:1)*(wt(n)*(t[2]/2+x))},s=0;k>s;s++)a=v[s],e=g+h*y,(!b||a.visible)&&(h+=a.percentage/100),i=g+h*y,a.shapeType="arc",a.shapeArgs={x:t[0],y:t[1],r:t[2]/2,innerR:t[3]/2,start:mt(e*c)/c,end:mt(i*c)/c},n=(i+e)/2,n>1.5*Tt?n-=2*Tt:-Tt/2>n&&(n+=2*Tt),a.slicedTranslation={translateX:mt(wt(n)*p),translateY:mt(St(n)*p)},o=wt(n)*t[2]/2,r=St(n)*t[2]/2,a.tooltipPos=[t[0]+.7*o,t[1]+.7*r],a.half=-Tt/2>n||n>Tt/2?1:0,a.angle=n,u=bt(u,x/2),a.labelPos=[t[0]+o+wt(n)*x,t[1]+r+St(n)*x,t[0]+o+wt(n)*u,t[1]+r+St(n)*u,t[0]+o,t[1]+r,0>x?"center":a.half?"right":"left",n]},drawGraph:null,drawPoints:function(){var t,e,i,n,o,r,s=this,a=s.chart,l=a.renderer,h=s.options.shadow;h&&!s.shadowGroup&&(s.shadowGroup=l.g("shadow").add(s.group)),he(s.points,function(a){null!==a.y&&(e=a.graphic,o=a.shapeArgs,i=a.shadowGroup,n=a.pointAttr[a.selected?ne:ee],n.stroke||(n.stroke=n.fill),h&&!i&&(i=a.shadowGroup=l.g("shadow").add(s.shadowGroup)),t=a.sliced?a.slicedTranslation:{translateX:0,translateY:0},i&&i.attr(t),e?e.setRadialReference(s.center).attr(n).animate(xe(o,t)):(r={"stroke-linejoin":"round"},a.visible||(r.visibility="hidden"),a.graphic=e=l[a.shapeType](o).setRadialReference(s.center).attr(n).attr(r).attr(t).add(s.group).shadow(h,i)))})},searchPoint:Wt,sortByAngle:function(t,e){t.sort(function(t,i){return void 0!==t.angle&&(i.angle-t.angle)*e})},drawLegendSymbol:We.drawRectangle,getCenter:Fe.getCenter,getSymbol:Wt};Qe=v(Ne,Qe),se.pie=Qe,Ne.prototype.drawDataLabels=function(){var t,e,i,o,r=this,s=r.options,a=s.cursor,l=s.dataLabels,h=r.points,c=r.hasRendered||0,d=r.chart.renderer;(l.enabled||r._hasPointLabels)&&(r.dlProcessOptions&&r.dlProcessOptions(l),o=r.plotGroup("dataLabelsGroup","data-labels",l.defer?Ut:Zt,l.zIndex||6),be(l.defer,!0)&&(o.attr({opacity:+c}),c||ue(r,"afterAnimate",function(){r.visible&&o.show(),o[s.animation?"animate":"attr"]({opacity:1},{duration:200})})),e=l,he(h,function(h){var c,u,f,g,m,y,v=h.dataLabel,x=h.connector,b=!0,k={};if(t=h.dlOptions||h.options&&h.options.dataLabels,c=be(t&&t.enabled,e.enabled)&&null!==h.y,v&&!c)h.dataLabel=v.destroy();else if(c){if(l=n(e,t),y=l.style,m=l.rotation,u=h.getLabelConfig(),i=l.format?S(l.format,u):l.formatter.call(u,l),y.color=be(l.color,y.color,r.color,"black"),v)p(i)?(v.attr({text:i}),b=!1):(h.dataLabel=v=v.destroy(),x&&(h.connector=x.destroy()));else if(p(i)){f={fill:l.backgroundColor,stroke:l.borderColor,"stroke-width":l.borderWidth,r:l.borderRadius||0,rotation:m,padding:l.padding,zIndex:1},"contrast"===y.color&&(k.color=l.inside||l.distance<0||s.stacking?d.getContrast(h.color||r.color):"#000000"),a&&(k.cursor=a);for(g in f)f[g]===F&&delete f[g];v=h.dataLabel=d[m?"text":"label"](i,0,-9999,l.shape,null,null,l.useHTML).attr(f).css(xe(y,k)).add(o).shadow(l.shadow)}v&&r.alignDataLabel(h,v,l,null,b)}}))},Ne.prototype.alignDataLabel=function(t,e,i,n,o){var r,s,a=this.chart,l=a.inverted,h=be(t.plotX,-9999),c=be(t.plotY,-9999),d=e.getBBox(),p=a.renderer.fontMetrics(i.style.fontSize).b,u=this.visible&&(t.series.forceDL||a.isInsidePlot(h,mt(c),l)||n&&a.isInsidePlot(h,l?n.x+1:n.y+n.height-1,l));u&&(n=xe({x:l?a.plotWidth-c:h,y:mt(l?a.plotHeight-h:c),width:0,height:0},n),xe(i,{width:d.width,height:d.height}),i.rotation?(r=a.renderer.rotCorr(p,i.rotation),e[o?"attr":"animate"]({x:n.x+i.x+n.width/2+r.x,y:n.y+i.y+n.height/2}).attr({align:i.align})):(e.align(i,null,n),s=e.alignAttr,"justify"===be(i.overflow,"justify")?this.justifyDataLabel(e,i,s,d,n,o):be(i.crop,!0)&&(u=a.isInsidePlot(s.x,s.y)&&a.isInsidePlot(s.x+d.width,s.y+d.height)),i.shape&&e.attr({anchorX:t.plotX,anchorY:t.plotY}))),u||(ye(e),e.attr({y:-9999}),e.placed=!1)},Ne.prototype.justifyDataLabel=function(t,e,i,n,o,r){var s,a,l=this.chart,h=e.align,c=e.verticalAlign,d=t.box?0:t.padding||0;s=i.x+d,0>s&&("right"===h?e.align="left":e.x=-s,a=!0),s=i.x+n.width-d,s>l.plotWidth&&("left"===h?e.align="right":e.x=l.plotWidth-s,a=!0),s=i.y+d,0>s&&("bottom"===c?e.verticalAlign="top":e.y=-s,a=!0),s=i.y+n.height-d,s>l.plotHeight&&("top"===c?e.verticalAlign="bottom":e.y=l.plotHeight-s,a=!0),a&&(t.placed=!r,t.align(e,null,o))},se.pie&&(se.pie.prototype.drawDataLabels=function(){var t,e,i,n,o,r,s,a,l,h,c,d,p,u=this,f=u.data,g=u.chart,m=u.options.dataLabels,y=be(m.connectorPadding,10),v=be(m.connectorWidth,1),x=g.plotWidth,b=g.plotHeight,k=be(m.softConnector,!0),w=m.distance,S=u.center,T=S[2]/2,A=S[1],C=w>0,P=[[],[]],M=[0,0,0,0],I=function(t,e){return e.y-t.y};if(u.visible&&(m.enabled||u._hasPointLabels)){for(Ne.prototype.drawDataLabels.apply(u),he(f,function(t){t.dataLabel&&t.visible&&P[t.half].push(t)}),d=2;d--;){var O,D,z,R,B=[],E=[],H=P[d],X=H.length;if(X){for(u.sortByAngle(H,d-.5),p=s=0;!s&&H[p];)s=H[p]&&H[p].dataLabel&&(H[p].dataLabel.getBBox().height||21),p++;if(w>0){for(z=bt(A+T+w,g.plotHeight),D=xt(0,A-T-w);z>=D;D+=s)B.push(D);if(O=B.length,X>O){for(c=[].concat(H),c.sort(I),p=X;p--;)c[p].rank=p;for(p=X;p--;)H[p].rank>=O&&H.splice(p,1);X=H.length}for(p=0;X>p;p++){t=H[p],r=t.labelPos;var W,G,F=9999;for(G=0;O>G;G++)W=kt(B[G]-r[1]),F>W&&(F=W,R=G);if(p>R&&null!==B[p])R=p;else if(X-p+R>O&&null!==B[p])for(R=O-X+p;null===B[R];)R++;else for(;null===B[R];)R++;E.push({i:R,y:B[R]}),B[R]=null}E.sort(I)}for(p=0;X>p;p++){var Y,N;t=H[p],r=t.labelPos,n=t.dataLabel,h=t.visible===!1?Ut:"inherit",N=r[1],w>0?(Y=E.pop(),R=Y.i,l=Y.y,(N>l&&null!==B[R+1]||l>N&&null!==B[R-1])&&(l=bt(xt(0,N),g.plotHeight))):l=N,a=m.justify?S[0]+(d?-1:1)*(T+w):u.getX(l===A-T-w||l===A+T+w?N:l,d),n._attr={visibility:h,align:r[6]},n._pos={x:a+m.x+({left:y,right:-y}[r[6]]||0),y:l+m.y-10},n.connX=a,n.connY=l,null===this.options.size&&(o=n.width,y>a-o?M[3]=xt(mt(o-a+y),M[3]):a+o>x-y&&(M[1]=xt(mt(a+o-x+y),M[1])),0>l-s/2?M[0]=xt(mt(-l+s/2),M[0]):l+s/2>b&&(M[2]=xt(mt(l+s/2-b),M[2])))}}}(0===L(M)||this.verifyDataLabelOverflow(M))&&(this.placeDataLabels(),C&&v&&he(this.points,function(t){e=t.connector,r=t.labelPos,n=t.dataLabel,n&&n._pos&&t.visible?(h=n._attr.visibility,a=n.connX,l=n.connY,i=k?[Jt,a+("left"===r[6]?5:-5),l,"C",a,l,2*r[2]-r[4],2*r[3]-r[5],r[2],r[3],Qt,r[4],r[5]]:[Jt,a+("left"===r[6]?5:-5),l,Qt,r[2],r[3],Qt,r[4],r[5]],e?(e.animate({d:i}),e.attr("visibility",h)):t.connector=e=u.chart.renderer.path(i).attr({"stroke-width":v,stroke:m.connectorColor||t.color||"#606060",visibility:h}).add(u.dataLabelsGroup)):e&&(t.connector=e.destroy())}))}},se.pie.prototype.placeDataLabels=function(){he(this.points,function(t){var e,i=t.dataLabel;i&&t.visible&&(e=i._pos,e?(i.attr(i._attr),i[i.moved?"animate":"attr"](e),i.moved=!0):i&&i.attr({y:-9999}))})},se.pie.prototype.alignDataLabel=Wt,se.pie.prototype.verifyDataLabelOverflow=function(t){var e,i=this.center,n=this.options,o=n.center,r=n.minSize||80,s=r;return null!==o[0]?s=xt(i[2]-xt(t[1],t[3]),r):(s=xt(i[2]-t[1]-t[3],r),i[0]+=(t[3]-t[1])/2),null!==o[1]?s=xt(bt(s,i[2]-xt(t[0],t[2])),r):(s=xt(bt(s,i[2]-t[0]-t[2]),r),i[1]+=(t[0]-t[2])/2),s<i[2]?(i[2]=s,i[3]=Math.min(b(n.innerSize||0,s),s),this.translate(i),he(this.points,function(t){t.dataLabel&&(t.dataLabel._pos=null)}),this.drawDataLabels&&this.drawDataLabels()):e=!0,e}),se.column&&(se.column.prototype.alignDataLabel=function(t,e,i,o,r){var s,a=this.chart.inverted,l=t.series,h=t.dlBox||t.shapeArgs,c=be(t.below,t.plotY>be(this.translatedThreshold,l.yAxis.len)),d=be(i.inside,!!this.options.stacking);h&&(o=n(h),o.y<0&&(o.height+=o.y,o.y=0),s=o.y+o.height-l.yAxis.len,s>0&&(o.height-=s),a&&(o={x:l.yAxis.len-o.y-o.height,y:l.xAxis.len-o.x-o.width,width:o.height,height:o.width}),d||(a?(o.x+=c?0:o.width,o.width=0):(o.y+=c?o.height:0,o.height=0))),i.align=be(i.align,!a||d?"center":c?"right":"left"),i.verticalAlign=be(i.verticalAlign,a||d?"middle":c?"top":"bottom"),Ne.prototype.alignDataLabel.call(this,t,e,i,o,r)}),function(t){var e=t.Chart,i=t.each,n=t.pick,o=t.addEvent;e.prototype.callbacks.push(function(t){function e(){var e=[];i(t.series,function(t){var o=t.options.dataLabels,r=t.dataLabelCollections||["dataLabel"];(o.enabled||t._hasPointLabels)&&!o.allowOverlap&&t.visible&&i(r,function(o){i(t.points,function(t){t[o]&&(t[o].labelrank=n(t.labelrank,t.shapeArgs&&t.shapeArgs.height),e.push(t[o]))})})}),t.hideOverlappingLabels(e)}e(),o(t,"redraw",e)}),e.prototype.hideOverlappingLabels=function(t){var e,n,o,r,s,a,l,h,c,d=t.length,p=function(t,e,i,n,o,r,s,a){return!(o>t+i||t>o+s||r>e+n||e>r+a)};for(n=0;d>n;n++)e=t[n],e&&(e.oldOpacity=e.opacity,e.newOpacity=1);for(t.sort(function(t,e){return(e.labelrank||0)-(t.labelrank||0)}),n=0;d>n;n++)for(r=t[n],o=n+1;d>o;++o)s=t[o],r&&s&&r.placed&&s.placed&&0!==r.newOpacity&&0!==s.newOpacity&&(l=r.alignAttr,h=s.alignAttr,c=2*(r.box?0:r.padding),a=p(l.x,l.y,r.width-c,r.height-c,h.x,h.y,s.width-c,s.height-c),a&&((r.labelrank<s.labelrank?r:s).newOpacity=0));i(t,function(t){var e,i;t&&(i=t.newOpacity,t.oldOpacity!==i&&t.placed&&(i?t.show(!0):e=function(){t.hide()},t.alignAttr.opacity=i,t[t.isOld?"animate":"attr"](t.alignAttr,null,e)),t.isOld=!0)})}}(ut);var ti=ut.TrackerMixin={drawTrackerPoint:function(){var t=this,e=t.chart,i=e.pointer,n=t.options.cursor,o=n&&{cursor:n},r=function(t){for(var i,n=t.target;n&&!i;)i=n.point,n=n.parentNode;i!==F&&i!==e.hoverPoint&&i.onMouseOver(t)};he(t.points,function(t){t.graphic&&(t.graphic.element.point=t),t.dataLabel&&(t.dataLabel.element.point=t)}),t._hasTracking||(he(t.trackerGroups,function(e){t[e]&&(t[e].addClass(Kt+"tracker").on("mouseover",r).on("mouseout",function(t){i.onTrackerMouseOut(t)}).css(o),N&&t[e].on("touchstart",r))}),t._hasTracking=!0)},drawTrackerGraph:function(){var t,e,i=this,n=i.options,o=n.trackByArea,r=[].concat(o?i.areaPath:i.graphPath),s=r.length,a=i.chart,l=a.pointer,h=a.renderer,c=a.options.tooltip.snap,d=i.tracker,p=n.cursor,u=p&&{cursor:p},f=i.singlePoints,g=function(){a.hoverSeries!==i&&i.onMouseOver()},m="rgba(192,192,192,"+(Rt?1e-4:.002)+")";if(s&&!o)for(e=s+1;e--;)r[e]===Jt&&r.splice(e+1,0,r[e+1]-c,r[e+2],Qt),(e&&r[e]===Jt||e===s)&&r.splice(e,0,Qt,r[e-2]+c,r[e-1]);for(e=0;e<f.length;e++)t=f[e],r.push(Jt,t.plotX-c,t.plotY,Qt,t.plotX+c,t.plotY);d?d.attr({d:r}):(i.tracker=h.path(r).attr({"stroke-linejoin":"round",visibility:i.visible?Zt:Ut,stroke:m,fill:o?m:$t,"stroke-width":n.lineWidth+(o?0:2*c),zIndex:2}).add(i.group),he([i.tracker,i.markerGroup],function(t){
+	t.addClass(Kt+"tracker").on("mouseover",g).on("mouseout",function(t){l.onTrackerMouseOut(t)}).css(u),N&&t.on("touchstart",g)}))}};return se.column&&(Ze.prototype.drawTracker=ti.drawTrackerPoint),se.pie&&(se.pie.prototype.drawTracker=ti.drawTrackerPoint),se.scatter&&($e.prototype.drawTracker=ti.drawTrackerPoint),xe(Xe.prototype,{setItemEvents:function(t,e,i,n,o){var r=this;(i?e:t.legendGroup).on("mouseover",function(){t.setState(ie),e.css(r.options.itemHoverStyle)}).on("mouseout",function(){e.css(t.visible?n:o),t.setState()}).on("click",function(e){var i="legendItemClick",n=function(){t.setVisible&&t.setVisible()};e={browserEvent:e},t.firePointEvent?t.firePointEvent(i,e,n):ge(t,i,e,n)})},createCheckboxForItem:function(t){var e=this;t.checkbox=y("input",{type:"checkbox",checked:t.selected,defaultChecked:t.selected},e.options.itemCheckboxStyle,e.chart.container),ue(t.checkbox,"click",function(e){var i=e.target;ge(t.series||t,"checkboxClick",{checked:i.checked,item:t},function(){t.select()})})}}),V.legend.itemStyle.cursor="pointer",xe(Ge.prototype,{showResetZoom:function(){function t(){e.zoomOut()}var e=this,i=V.lang,n=e.options.chart.resetZoomButton,o=n.theme,r=o.states,s="chart"===n.relativeTo?null:"plotBox";this.resetZoomButton=e.renderer.button(i.resetZoom,null,null,t,o,r&&r.hover).attr({align:n.position.align,title:i.resetZoomTitle}).add().align(n.position,!1,s)},zoomOut:function(){var t=this;ge(t,"selection",{resetSelection:!0},function(){t.zoom()})},zoom:function(t){var e,i,n=this,o=n.pointer,r=!1;!t||t.resetSelection?he(n.axes,function(t){e=t.zoom()}):he(t.xAxis.concat(t.yAxis),function(t){var i=t.axis,n=i.isXAxis;(o[n?"zoomX":"zoomY"]||o[n?"pinchX":"pinchY"])&&(e=i.zoom(t.min,t.max),i.displayBtn&&(r=!0))}),i=n.resetZoomButton,r&&!i?n.showResetZoom():!r&&s(i)&&(n.resetZoomButton=i.destroy()),e&&n.redraw(be(n.options.chart.animation,t&&t.animation,n.pointCount<100))},pan:function(t,e){var i,n=this,o=n.hoverPoints;o&&he(o,function(t){t.setState()}),he("xy"===e?[1,0]:[1],function(e){var o=t[e?"chartX":"chartY"],r=n[e?"xAxis":"yAxis"][0],s=n[e?"mouseDownX":"mouseDownY"],a=(r.pointRange||0)/2,l=r.getExtremes(),h=r.toValue(s-o,!0)+a,c=r.toValue(s+n[e?"plotWidth":"plotHeight"]-o,!0)-a,d=s>o;r.series.length&&(d||h>bt(l.dataMin,l.min))&&(!d||c<xt(l.dataMax,l.max))&&(r.setExtremes(h,c,!1,!1,{trigger:"pan"}),i=!0),n[e?"mouseDownX":"mouseDownY"]=o}),i&&n.redraw(!1),m(n.container,{cursor:"move"})}}),xe(Ye.prototype,{select:function(t,e){var i=this,n=i.series,o=n.chart;t=be(t,!i.selected),i.firePointEvent(t?"select":"unselect",{accumulate:e},function(){i.selected=i.options.selected=t,n.options.data[le(i,n.data)]=i.options,i.setState(t&&ne),e||he(o.getSelectedPoints(),function(t){t.selected&&t!==i&&(t.selected=t.options.selected=!1,n.options.data[le(t,n.data)]=t.options,t.setState(ee),t.firePointEvent("unselect"))})})},onMouseOver:function(t,e){var i=this,n=i.series,o=n.chart,r=o.tooltip,s=o.hoverPoint;o.hoverSeries!==n&&n.onMouseOver(),s&&s!==i&&s.onMouseOut(),i.series&&(i.firePointEvent("mouseOver"),!r||r.shared&&!n.noSharedTooltip||r.refresh(i,t),i.setState(ie),e||(o.hoverPoint=i))},onMouseOut:function(){var t=this.series.chart,e=t.hoverPoints;this.firePointEvent("mouseOut"),e&&-1!==le(this,e)||(this.setState(),t.hoverPoint=null)},importEvents:function(){if(!this.hasImportedEvents){var t,e=this,i=n(e.series.options.point,e.options),o=i.events;e.events=o;for(t in o)ue(e,t,o[t]);this.hasImportedEvents=!0}},setState:function(t,e){var i,o,r,s,a=this,l=yt(a.plotX),h=a.plotY,c=a.series,d=c.options.states,p=we[c.type].marker&&c.options.marker,u=p&&!p.enabled,f=p&&p.states[t],g=f&&f.enabled===!1,m=c.stateMarkerGraphic,y=a.marker||{},v=c.chart,x=c.halo;t=t||ee,s=a.pointAttr[t]||c.pointAttr[t],t===a.state&&!e||a.selected&&t!==ne||d[t]&&d[t].enabled===!1||t&&(g||u&&f.enabled===!1)||t&&y.states&&y.states[t]&&y.states[t].enabled===!1||(a.graphic?(i=p&&a.graphic.symbolName&&s.r,a.graphic.attr(n(s,i?{x:l-i,y:h-i,width:2*i,height:2*i}:{})),m&&m.hide()):(t&&f&&(i=f.radius,r=y.symbol||c.symbol,m&&m.currentSymbol!==r&&(m=m.destroy()),m?m[e?"animate":"attr"]({x:l-i,y:h-i}):r&&(c.stateMarkerGraphic=m=v.renderer.symbol(r,l-i,h-i,2*i,2*i).attr(s).add(c.markerGroup),m.currentSymbol=r)),m&&(m[t&&v.isInsidePlot(l,h,v.inverted)?"show":"hide"](),m.element.point=a)),o=d[t]&&d[t].halo,o&&o.size?(x||(c.halo=x=v.renderer.path().add(v.seriesGroup)),x.attr(xe({fill:a.color||c.color,"fill-opacity":o.opacity},o.attributes))[e?"animate":"attr"]({d:a.haloPath(o.size)})):x&&x.attr({d:[]}),a.state=t)},haloPath:function(t){var e=this.series,i=e.chart,n=e.getPlotBox(),o=i.inverted,r=Math.floor(this.plotX);return i.renderer.symbols.circle(n.translateX+(o?e.yAxis.len-this.plotY:r)-t,n.translateY+(o?e.xAxis.len-r:this.plotY)-t,2*t,2*t)}}),xe(Ne.prototype,{onMouseOver:function(){var t=this,e=t.chart,i=e.hoverSeries;i&&i!==t&&i.onMouseOut(),t.options.events.mouseOver&&ge(t,"mouseOver"),t.setState(ie),e.hoverSeries=t},onMouseOut:function(){var t=this,e=t.options,i=t.chart,n=i.tooltip,o=i.hoverPoint;i.hoverSeries=null,o&&o.onMouseOut(),t&&e.events.mouseOut&&ge(t,"mouseOut"),!n||e.stickyTracking||n.shared&&!t.noSharedTooltip||n.hide(),t.setState()},setState:function(t){var e,i=this,n=i.options,o=i.graph,r=n.states,s=n.lineWidth,a=0;if(t=t||ee,i.state!==t){if(i.state=t,r[t]&&r[t].enabled===!1)return;if(t&&(s=r[t].lineWidth||s+(r[t].lineWidthPlus||0)),o&&!o.dashstyle)for(e={"stroke-width":s},o.attr(e);i["zoneGraph"+a];)i["zoneGraph"+a].attr(e),a+=1}},setVisible:function(t,e){var i,n=this,o=n.chart,r=n.legendItem,s=o.options.chart.ignoreHiddenSeries,a=n.visible;n.visible=t=n.userOptions.visible=t===F?!a:t,i=t?"show":"hide",he(["group","dataLabelsGroup","markerGroup","tracker"],function(t){n[t]&&n[t][i]()}),(o.hoverSeries===n||(o.hoverPoint&&o.hoverPoint.series)===n)&&n.onMouseOut(),r&&o.legend.colorizeItem(n,t),n.isDirty=!0,n.options.stacking&&he(o.series,function(t){t.options.stacking&&t.visible&&(t.isDirty=!0)}),he(n.linkedSeries,function(e){e.setVisible(t,!1)}),s&&(o.isDirtyBox=!0),e!==!1&&o.redraw(),ge(n,i)},show:function(){this.setVisible(!0)},hide:function(){this.setVisible(!1)},select:function(t){var e=this;e.selected=t=t===F?!e.selected:t,e.checkbox&&(e.checkbox.checked=t),ge(e,t?"select":"unselect")},drawTracker:ti.drawTrackerGraph}),xe(ut,{Color:E,Point:Ye,Tick:W,Renderer:Y,SVGElement:H,SVGRenderer:Te,arrayMin:P,arrayMax:L,charts:Gt,dateFormat:_,error:e,format:S,pathAnim:U,getOptions:B,hasBidiBug:Bt,isTouchDevice:Dt,setOptions:R,addEvent:ue,removeEvent:fe,createElement:y,discardElement:I,css:m,each:he,map:pe,merge:n,splat:f,stableSort:C,extendClass:v,pInt:o,svg:Rt,canvas:Et,vml:!Rt&&!Et,product:Yt,version:Nt}),ut})}])});
 
 /***/ }
 /******/ ]);
