@@ -19,7 +19,7 @@ export class HabitBox extends React.Component {
       currentSelectedTab: ((new Date).getDay() - 1),
       date: new Date,
       goals: [],
-      autoHideDuration: 4000,
+      autoHideDuration: 5000,
       message: 'Added habit and schedules',
       snackbarOpen: false
     };
@@ -175,7 +175,7 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Habit marked as missed'})
+        this.setState({message: 'Habit marked as missed' })
         this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {

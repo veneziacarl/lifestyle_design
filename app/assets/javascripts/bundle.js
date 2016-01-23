@@ -28944,7 +28944,7 @@
 	      currentSelectedTab: new Date().getDay() - 1,
 	      date: new Date(),
 	      goals: [],
-	      autoHideDuration: 4000,
+	      autoHideDuration: 5000,
 	      message: 'Added habit and schedules',
 	      snackbarOpen: false
 	    };
