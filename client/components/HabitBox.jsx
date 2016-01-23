@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Snackbar } from 'material-ui';
 import {render} from 'react-dom';
 import $ from 'jquery';
 
@@ -17,7 +18,10 @@ export class HabitBox extends React.Component {
       schedules: [],
       currentSelectedTab: ((new Date).getDay() - 1),
       date: new Date,
-      goals: []
+      goals: [],
+      autoHideDuration: 5000,
+      message: 'Added habit and schedules',
+      snackbarOpen: false
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
@@ -26,6 +30,7 @@ export class HabitBox extends React.Component {
     this.handleScheduleComplete = this.handleScheduleComplete.bind(this);
     this.handleScheduleMiss = this.handleScheduleMiss.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
     this.addDays = this.addDays.bind(this);
     this.findDayInWeek = this.findDayInWeek.bind(this);
   }
@@ -39,6 +44,9 @@ export class HabitBox extends React.Component {
   createDay (schedule) {
     var date = new Date(schedule.date);
     var day = date.getDay();
+    if (day == 0) {
+      day = day + 7
+    }
     return day;
   }
 
@@ -68,6 +76,8 @@ export class HabitBox extends React.Component {
            schedulesArray.unshift(info.schedules[i]);
         }
         this.setState({schedules: schedulesArray});
+        this.setState({message: 'Created habit and schedules'})
+        this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -90,6 +100,8 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
+        this.setState({message: 'Deleted schedule'})
+        this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -113,6 +125,8 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
+        this.setState({message: 'Updated schedule'})
+        this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -136,6 +150,8 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
+        this.setState({message: 'Habit completed. Good work!'})
+        this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -159,6 +175,8 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
+        this.setState({message: 'Habit marked as missed' })
+        this.setState({snackbarOpen: true })
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -175,6 +193,12 @@ export class HabitBox extends React.Component {
     var today_tab = this.state.date.getDay()
     this.handleOpenTab(today_tab)
   }
+
+  handleRequestClose () {
+    this.setState({
+      snackbarOpen: false,
+    });
+  };
 
   loadHabits () {
     $.ajax({
@@ -249,6 +273,15 @@ export class HabitBox extends React.Component {
         </div>
         <div>
           <HabitForm goals={this.state.goals} onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
+        </div>
+        <div>
+          <Snackbar
+            style={{textAlign: 'center'}}
+            open={this.state.snackbarOpen}
+            message={this.state.message}
+            autoHideDuration={this.state.autoHideDuration}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
       </div>
     );

@@ -28903,6 +28903,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _materialUi = __webpack_require__(163);
+
 	var _reactDom = __webpack_require__(159);
 
 	var _jquery = __webpack_require__(160);
@@ -28941,7 +28943,10 @@
 	      schedules: [],
 	      currentSelectedTab: new Date().getDay() - 1,
 	      date: new Date(),
-	      goals: []
+	      goals: [],
+	      autoHideDuration: 5000,
+	      message: 'Added habit and schedules',
+	      snackbarOpen: false
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
@@ -28950,6 +28955,7 @@
 	    _this.handleScheduleComplete = _this.handleScheduleComplete.bind(_this);
 	    _this.handleScheduleMiss = _this.handleScheduleMiss.bind(_this);
 	    _this.handleOpenTab = _this.handleOpenTab.bind(_this);
+	    _this.handleRequestClose = _this.handleRequestClose.bind(_this);
 	    _this.addDays = _this.addDays.bind(_this);
 	    _this.findDayInWeek = _this.findDayInWeek.bind(_this);
 	    return _this;
@@ -28967,6 +28973,9 @@
 	    value: function createDay(schedule) {
 	      var date = new Date(schedule.date);
 	      var day = date.getDay();
+	      if (day == 0) {
+	        day = day + 7;
+	      }
 	      return day;
 	    }
 	  }, {
@@ -29000,6 +29009,8 @@
 	            schedulesArray.unshift(info.schedules[i]);
 	          }
 	          this.setState({ schedules: schedulesArray });
+	          this.setState({ message: 'Created habit and schedules' });
+	          this.setState({ snackbarOpen: true });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29025,6 +29036,8 @@
 	            }
 	          }
 	          this.setState({ schedules: schedulesArray });
+	          this.setState({ message: 'Deleted schedule' });
+	          this.setState({ snackbarOpen: true });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29051,6 +29064,8 @@
 	            }
 	          }
 	          this.setState({ schedules: schedulesArray });
+	          this.setState({ message: 'Updated schedule' });
+	          this.setState({ snackbarOpen: true });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29077,6 +29092,8 @@
 	            }
 	          }
 	          this.setState({ schedules: schedulesArray });
+	          this.setState({ message: 'Habit completed. Good work!' });
+	          this.setState({ snackbarOpen: true });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29103,6 +29120,8 @@
 	            }
 	          }
 	          this.setState({ schedules: schedulesArray });
+	          this.setState({ message: 'Habit marked as missed' });
+	          this.setState({ snackbarOpen: true });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29120,6 +29139,13 @@
 	    value: function setTodayTab() {
 	      var today_tab = this.state.date.getDay();
 	      this.handleOpenTab(today_tab);
+	    }
+	  }, {
+	    key: 'handleRequestClose',
+	    value: function handleRequestClose() {
+	      this.setState({
+	        snackbarOpen: false
+	      });
 	    }
 	  }, {
 	    key: 'loadHabits',
@@ -29209,6 +29235,17 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_HabitForm2.default, { goals: this.state.goals, onHabitSubmit: this.handleHabitSubmit, filteredSchedules: filteredSchedules, findDayInWeek: this.findDayInWeek })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_materialUi.Snackbar, {
+	            style: { textAlign: 'center' },
+	            open: this.state.snackbarOpen,
+	            message: this.state.message,
+	            autoHideDuration: this.state.autoHideDuration,
+	            onRequestClose: this.handleRequestClose
+	          })
 	        )
 	      );
 	    }
@@ -29342,16 +29379,19 @@
 	  }, {
 	    key: 'renderDayOption',
 	    value: function renderDayOption(label, day) {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'small-1 small-centered columns' },
-	        _react2.default.createElement(_materialUi.Toggle, {
-	          value: this.props.findDayInWeek(day),
-	          label: label,
-	          style: { marginBottom: 16 },
-	          onToggle: this.handleDateChange.bind(this)
-	        })
-	      );
+	      var styles = {};
+	      var labelStyles = {
+	        width: '5px',
+	        paddingRight: '25px',
+	        paddingBottom: '5px'
+	      };
+	      return _react2.default.createElement(_materialUi.Toggle, {
+	        labelStyle: labelStyles,
+	        style: styles,
+	        value: this.props.findDayInWeek(day),
+	        label: label,
+	        onToggle: this.handleDateChange.bind(this)
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -29366,7 +29406,7 @@
 	        goals
 	      ), _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'small-6 small-centered columns' },
 	        this.renderDayOption('M', 1),
 	        this.renderDayOption('T', 2),
 	        this.renderDayOption('W', 3),
@@ -29379,7 +29419,9 @@
 	        value: 'repeat',
 	        label: 'Repeat This Schedule Weekly?',
 	        defaultChecked: true,
-	        onCheck: this.handleRepeat.bind(this)
+	        onCheck: this.handleRepeat.bind(this),
+	        labelPosition: 'left',
+	        style: { paddingRight: '50px' }
 	      }), _react2.default.createElement(_materialUi.FlatButton, {
 	        label: 'Cancel',
 	        secondary: true,
@@ -61415,7 +61457,9 @@
 	    value: function getStyles(day) {
 	      var styles = {
 	        backgroundColor: '#FEFEFE',
-	        color: 'black'
+	        color: 'black',
+	        fontWeight: 'bold',
+	        fontSize: '20'
 	      };
 	      var today = new Date().getDay();
 
