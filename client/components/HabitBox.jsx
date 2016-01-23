@@ -276,6 +276,14 @@ export class HabitBox extends React.Component {
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
       <div className="habitBox" style={styles}>
+        <div className="small-12 columns">
+          <HabitForm
+            goals={this.state.goals}
+            onHabitSubmit={this.handleHabitSubmit}
+            filteredSchedules={filteredSchedules}
+            findDayInWeek={this.findDayInWeek}
+            />
+        </div>
         <div>
           <HabitTabs
             filteredSchedules={filteredSchedules}
@@ -291,17 +299,8 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitForm
-            goals={this.state.goals}
-            onHabitSubmit={this.handleHabitSubmit}
-            filteredSchedules={filteredSchedules}
-            findDayInWeek={this.findDayInWeek}
-          />
-        </div>
-        <div>
           <HabitDisplay
             goals={this.state.goals}
-            filteredSchedules={filteredSchedules}
           />
         </div>
         <div>

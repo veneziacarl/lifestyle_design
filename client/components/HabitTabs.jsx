@@ -61,7 +61,7 @@ export class HabitTabs extends React.Component {
 
   getStyles (day) {
     const styles = {
-      backgroundColor: '#FEFEFE',
+      backgroundColor: '#FFFFFF',
       color: 'black',
       fontWeight: 'bold',
       fontSize: '20'
@@ -100,8 +100,9 @@ export class HabitTabs extends React.Component {
 
   render() {
     const styles = {
-      height: '600px',
-      overflow: 'auto'
+      height: '80vh',
+      overflow: 'auto',
+      padding: '10px'
     }
     return (
       <div className="habitTabs small-12 medium-6 large-4 columns">

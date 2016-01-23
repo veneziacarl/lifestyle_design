@@ -23,7 +23,13 @@ class HabitDisplay extends React.Component {
     return (
       {
         chart: {
-          polar: true
+          polar: true,
+          spacingBottom: 15,
+          spacingTop: 10,
+          spacingLeft: 10,
+          spacingRight: 10,
+          width: 300,
+          height: 300
         },
         xAxis: {
           categories: goalTitles
@@ -31,23 +37,27 @@ class HabitDisplay extends React.Component {
         series: [{
           data: goalSchedules,
           name: "number of schedules"
-        }]
+        }],
+        title: {
+          text: "Schedules for goals"
+        }
       }
     );
   }
 
   render () {
     const styles = {
-      height: '600px'
+      height: '80vh',
+      padding: '10px'
     }
     return (
       <div className="small-6 columns">
         <Paper style={styles} zDepth={1}>
           <div>
-            <HabitChart createConfig={this.createConfig} />
+            <p>here is some filler text</p>
           </div>
           <div>
-            <p>here is some filler text</p>
+            <HabitChart createConfig={this.createConfig} />
           </div>
         </Paper>
       </div>

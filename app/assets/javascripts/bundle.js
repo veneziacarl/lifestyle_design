@@ -29240,6 +29240,16 @@
 	        { className: 'habitBox', style: styles },
 	        _react2.default.createElement(
 	          'div',
+	          { className: 'small-12 columns' },
+	          _react2.default.createElement(_HabitForm2.default, {
+	            goals: this.state.goals,
+	            onHabitSubmit: this.handleHabitSubmit,
+	            filteredSchedules: filteredSchedules,
+	            findDayInWeek: this.findDayInWeek
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'div',
 	          null,
 	          _react2.default.createElement(_HabitTabs2.default, {
 	            filteredSchedules: filteredSchedules,
@@ -29257,19 +29267,8 @@
 	        _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(_HabitForm2.default, {
-	            goals: this.state.goals,
-	            onHabitSubmit: this.handleHabitSubmit,
-	            filteredSchedules: filteredSchedules,
-	            findDayInWeek: this.findDayInWeek
-	          })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
 	          _react2.default.createElement(_HabitDisplay2.default, {
-	            goals: this.state.goals,
-	            filteredSchedules: filteredSchedules
+	            goals: this.state.goals
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -61352,10 +61351,15 @@
 	        onClick: this.handleSubmit.bind(this)
 	      })];
 
+	      var styles = {
+	        width: '300px',
+	        marginBottom: '20px'
+	      };
+
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'habitForm small-12 medium-6 large-4 columns' },
-	        _react2.default.createElement(_materialUi.RaisedButton, { label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
+	        { className: 'habitForm small-centered small-12 medium-6 large-4 columns' },
+	        _react2.default.createElement(_materialUi.RaisedButton, { style: styles, label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
 	        _react2.default.createElement(
 	          _materialUi.Dialog,
 	          {
@@ -61492,7 +61496,7 @@
 	    key: 'getStyles',
 	    value: function getStyles(day) {
 	      var styles = {
-	        backgroundColor: '#FEFEFE',
+	        backgroundColor: '#FFFFFF',
 	        color: 'black',
 	        fontWeight: 'bold',
 	        fontSize: '20'
@@ -61535,8 +61539,9 @@
 	    key: 'render',
 	    value: function render() {
 	      var styles = {
-	        height: '600px',
-	        overflow: 'auto'
+	        height: '80vh',
+	        overflow: 'auto',
+	        padding: '10px'
 	      };
 	      return _react2.default.createElement(
 	        'div',
@@ -69071,7 +69076,13 @@
 
 	      return {
 	        chart: {
-	          polar: true
+	          polar: true,
+	          spacingBottom: 15,
+	          spacingTop: 10,
+	          spacingLeft: 10,
+	          spacingRight: 10,
+	          width: 300,
+	          height: 300
 	        },
 	        xAxis: {
 	          categories: goalTitles
@@ -69079,14 +69090,18 @@
 	        series: [{
 	          data: goalSchedules,
 	          name: "number of schedules"
-	        }]
+	        }],
+	        title: {
+	          text: "Schedules for goals"
+	        }
 	      };
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var styles = {
-	        height: '600px'
+	        height: '80vh',
+	        padding: '10px'
 	      };
 	      return _react2.default.createElement(
 	        'div',
@@ -69097,16 +69112,16 @@
 	          _react2.default.createElement(
 	            'div',
 	            null,
-	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createConfig })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            null,
 	            _react2.default.createElement(
 	              'p',
 	              null,
 	              'here is some filler text'
 	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createConfig })
 	          )
 	        )
 	      );
@@ -69275,7 +69290,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'small-8 columns' },
+	        null,
 	        _react2.default.createElement(_highcharts2.default, { config: this.props.createConfig() })
 	      );
 	    }
