@@ -142,15 +142,15 @@ export class HabitForm extends React.Component {
     ];
 
     const styles = {
-      width: '300px',
-      marginBottom: '20px'
+      width: '300',
+      marginBottom: '20',
+      marginLeft: '70'
     }
 
     return (
-      <div className="habitForm small-centered small-12 medium-6 large-4 columns">
+      <div className="habitForm">
         <RaisedButton style={styles} label="Create New" onTouchTap={this.handleOpen.bind(this)} />
         <Dialog
-          class="row"
           title="Create New Habit Or Goal"
           actions={actions}
           modal={false}

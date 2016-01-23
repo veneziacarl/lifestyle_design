@@ -29229,18 +29229,15 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var styles = {
-	        height: '100%'
-	      };
 	      var filteredSchedules = this.state.schedules.filter(function (schedule) {
 	        return _this2.createDay(schedule) === _this2.state.currentSelectedTab;
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'habitBox', style: styles },
+	        { className: 'habitBox row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'small-12 columns' },
+	          { className: 'small-12 small-centered columns' },
 	          _react2.default.createElement(_HabitForm2.default, {
 	            goals: this.state.goals,
 	            onHabitSubmit: this.handleHabitSubmit,
@@ -29250,26 +29247,30 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_HabitTabs2.default, {
-	            filteredSchedules: filteredSchedules,
-	            onTabClick: this.handleOpenTab,
-	            onScheduleDelete: this.handleScheduleDelete,
-	            onHabitEdit: this.handleScheduleUpdate,
-	            onPositionChange: this.handlePositionChange,
-	            onMount: function onMount() {},
-	            addDays: this.addDays,
-	            initialSelectedIndex: this.state.currentSelectedTab,
-	            onScheduleComplete: this.handleScheduleComplete,
-	            onScheduleMiss: this.handleScheduleMiss
-	          })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_HabitDisplay2.default, {
-	            goals: this.state.goals
-	          })
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-12 medium-5 columns' },
+	            _react2.default.createElement(_HabitTabs2.default, {
+	              filteredSchedules: filteredSchedules,
+	              onTabClick: this.handleOpenTab,
+	              onScheduleDelete: this.handleScheduleDelete,
+	              onHabitEdit: this.handleScheduleUpdate,
+	              onPositionChange: this.handlePositionChange,
+	              onMount: function onMount() {},
+	              addDays: this.addDays,
+	              initialSelectedIndex: this.state.currentSelectedTab,
+	              onScheduleComplete: this.handleScheduleComplete,
+	              onScheduleMiss: this.handleScheduleMiss
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-12 medium-7 columns' },
+	            _react2.default.createElement(_HabitDisplay2.default, {
+	              goals: this.state.goals
+	            })
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -61352,18 +61353,18 @@
 	      })];
 
 	      var styles = {
-	        width: '300px',
-	        marginBottom: '20px'
+	        width: '300',
+	        marginBottom: '20',
+	        marginLeft: '70'
 	      };
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'habitForm small-centered small-12 medium-6 large-4 columns' },
+	        { className: 'habitForm' },
 	        _react2.default.createElement(_materialUi.RaisedButton, { style: styles, label: 'Create New', onTouchTap: this.handleOpen.bind(this) }),
 	        _react2.default.createElement(
 	          _materialUi.Dialog,
 	          {
-	            'class': 'row',
 	            title: 'Create New Habit Or Goal',
 	            actions: actions,
 	            modal: false,
@@ -61541,11 +61542,12 @@
 	      var styles = {
 	        height: '80vh',
 	        overflow: 'auto',
-	        padding: '10px'
+	        padding: '10px',
+	        width: '100%'
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'habitTabs small-12 medium-6 large-4 columns' },
+	        { className: 'habitTabs' },
 	        _react2.default.createElement(
 	          _materialUi.Paper,
 	          { zDepth: 1, style: styles },
@@ -69059,13 +69061,14 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitDisplay).call(this, props));
 
-	    _this.createConfig = _this.createConfig.bind(_this);
+	    _this.createSumSchedulesConfig = _this.createSumSchedulesConfig.bind(_this);
+	    _this.createCompletionRatesConfig = _this.createCompletionRatesConfig.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(HabitDisplay, [{
-	    key: 'createConfig',
-	    value: function createConfig() {
+	    key: 'createSumSchedulesConfig',
+	    value: function createSumSchedulesConfig() {
 	      var goalTitles = [];
 	      var goalSchedules = [];
 
@@ -69079,8 +69082,41 @@
 	          polar: true,
 	          spacingBottom: 15,
 	          spacingTop: 10,
-	          spacingLeft: 10,
-	          spacingRight: 10,
+	          spacingLeft: 0,
+	          spacingRight: 0,
+	          width: 300,
+	          height: 300
+	        },
+	        xAxis: {
+	          categories: goalTitles
+	        },
+	        series: [{
+	          data: goalSchedules,
+	          name: "number of schedules"
+	        }],
+	        title: {
+	          text: "Schedules for goals"
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'createCompletionRatesConfig',
+	    value: function createCompletionRatesConfig() {
+	      var goalTitles = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
+	      var goalSchedules = [];
+
+	      this.props.goals.map(function (goal, i) {
+	        goalTitles.push(goal.title);
+	        goalSchedules.push(goal.sum_today_schedules);
+	      });
+
+	      return {
+	        chart: {
+	          polar: true,
+	          spacingBottom: 15,
+	          spacingTop: 10,
+	          spacingLeft: 0,
+	          spacingRight: 0,
 	          width: 300,
 	          height: 300
 	        },
@@ -69105,7 +69141,7 @@
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'small-6 columns' },
+	        null,
 	        _react2.default.createElement(
 	          _materialUi.Paper,
 	          { style: styles, zDepth: 1 },
@@ -69115,13 +69151,38 @@
 	            _react2.default.createElement(
 	              'p',
 	              null,
-	              'here is some filler text'
+	              'Today\'s completion rate:'
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'To Do: '
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Completed: '
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Missed: '
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Focus On: (habit title with weekly completion rate)'
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            null,
-	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createConfig })
+	            { className: 'small-12 large-6 columns' },
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createSumSchedulesConfig })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-12 large-6 columns' },
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createCompletionRatesConfig })
 	          )
 	        )
 	      );

@@ -270,13 +270,10 @@ export class HabitBox extends React.Component {
   }
 
   render () {
-    const styles = {
-      height: '100%'
-    }
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
-      <div className="habitBox" style={styles}>
-        <div className="small-12 columns">
+      <div className="habitBox row">
+        <div className="small-12 small-centered columns">
           <HabitForm
             goals={this.state.goals}
             onHabitSubmit={this.handleHabitSubmit}
@@ -284,24 +281,26 @@ export class HabitBox extends React.Component {
             findDayInWeek={this.findDayInWeek}
             />
         </div>
-        <div>
-          <HabitTabs
-            filteredSchedules={filteredSchedules}
-            onTabClick={this.handleOpenTab}
-            onScheduleDelete={this.handleScheduleDelete}
-            onHabitEdit={this.handleScheduleUpdate}
-            onPositionChange={this.handlePositionChange}
-            onMount={() => {}}
-            addDays={this.addDays}
-            initialSelectedIndex={this.state.currentSelectedTab}
-            onScheduleComplete={this.handleScheduleComplete}
-            onScheduleMiss={this.handleScheduleMiss}
-          />
-        </div>
-        <div>
-          <HabitDisplay
-            goals={this.state.goals}
-          />
+        <div className="row">
+          <div className="small-12 medium-5 columns">
+            <HabitTabs
+              filteredSchedules={filteredSchedules}
+              onTabClick={this.handleOpenTab}
+              onScheduleDelete={this.handleScheduleDelete}
+              onHabitEdit={this.handleScheduleUpdate}
+              onPositionChange={this.handlePositionChange}
+              onMount={() => {}}
+              addDays={this.addDays}
+              initialSelectedIndex={this.state.currentSelectedTab}
+              onScheduleComplete={this.handleScheduleComplete}
+              onScheduleMiss={this.handleScheduleMiss}
+            />
+          </div>
+          <div className="small-12 medium-7 columns">
+            <HabitDisplay
+              goals={this.state.goals}
+            />
+          </div>
         </div>
         <div>
           <Snackbar

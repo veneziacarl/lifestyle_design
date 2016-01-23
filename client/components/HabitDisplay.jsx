@@ -8,10 +8,11 @@ class HabitDisplay extends React.Component {
   constructor(props) {
     super(props);
 
-    this.createConfig = this.createConfig.bind(this)
+    this.createSumSchedulesConfig = this.createSumSchedulesConfig.bind(this)
+    this.createCompletionRatesConfig = this.createCompletionRatesConfig.bind(this)
   }
 
-  createConfig () {
+  createSumSchedulesConfig () {
     const goalTitles = []
     const goalSchedules = []
 
@@ -26,8 +27,42 @@ class HabitDisplay extends React.Component {
           polar: true,
           spacingBottom: 15,
           spacingTop: 10,
-          spacingLeft: 10,
-          spacingRight: 10,
+          spacingLeft: 0,
+          spacingRight: 0,
+          width: 300,
+          height: 300
+        },
+        xAxis: {
+          categories: goalTitles
+        },
+        series: [{
+          data: goalSchedules,
+          name: "number of schedules"
+        }],
+        title: {
+          text: "Schedules for goals"
+        }
+      }
+    );
+  }
+
+  createCompletionRatesConfig () {
+    const goalTitles = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
+    const goalSchedules = []
+
+    this.props.goals.map( (goal, i) => {
+      goalTitles.push(goal.title)
+      goalSchedules.push(goal.sum_today_schedules)
+    });
+
+    return (
+      {
+        chart: {
+          polar: true,
+          spacingBottom: 15,
+          spacingTop: 10,
+          spacingLeft: 0,
+          spacingRight: 0,
           width: 300,
           height: 300
         },
@@ -51,13 +86,20 @@ class HabitDisplay extends React.Component {
       padding: '10px'
     }
     return (
-      <div className="small-6 columns">
+      <div>
         <Paper style={styles} zDepth={1}>
           <div>
-            <p>here is some filler text</p>
+            <p>Today's completion rate:</p>
+            <p>To Do: </p>
+            <p>Completed: </p>
+            <p>Missed: </p>
+            <p>Focus On: (habit title with weekly completion rate)</p>
           </div>
-          <div>
-            <HabitChart createConfig={this.createConfig} />
+          <div className="small-12 large-6 columns">
+            <HabitChart createConfig={this.createSumSchedulesConfig} />
+          </div>
+          <div className="small-12 large-6 columns">
+            <HabitChart createConfig={this.createCompletionRatesConfig} />
           </div>
         </Paper>
       </div>

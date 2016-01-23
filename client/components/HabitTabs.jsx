@@ -102,10 +102,11 @@ export class HabitTabs extends React.Component {
     const styles = {
       height: '80vh',
       overflow: 'auto',
-      padding: '10px'
+      padding: '10px',
+      width: '100%'
     }
     return (
-      <div className="habitTabs small-12 medium-6 large-4 columns">
+      <div className="habitTabs">
         <Paper zDepth={1} style={styles}>
           <div>
            <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
