@@ -29,6 +29,7 @@ export class HabitBox extends React.Component {
     this.handlePositionChange = this.handlePositionChange.bind(this);
     this.handleScheduleComplete = this.handleScheduleComplete.bind(this);
     this.handleScheduleMiss = this.handleScheduleMiss.bind(this);
+    this.checkScheduleDates = this.checkScheduleDates.bind(this);
     this.handleOpenTab = this.handleOpenTab.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.addDays = this.addDays.bind(this);
@@ -233,10 +234,25 @@ export class HabitBox extends React.Component {
   onMount () {
   }
 
+  checkScheduleDates () {
+    var schedulesArray = this.state.schedules;
+    var date = new Date;
+    date.setHours(0,0,0,0);
+    for(var i = 0; i < schedulesArray.length; i++) {
+      var scheduleDate = (new Date(schedulesArray[i].date))
+      if(scheduleDate < date) {
+        var schedule = schedulesArray.splice(i, 1)
+        this.handleScheduleMiss(schedule.id)
+      }
+    }
+    this.setState({schedules: schedulesArray});
+  }
+
   componentDidMount () {
     this.setTodayTab();
     this.loadGoals();
     this.loadHabits();
+    setInterval(this.checkScheduleDates, this.props.pollInterval);
   }
 
   handlePositionChange (schedules, dragIndex, hoverIndex) {
