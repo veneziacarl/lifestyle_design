@@ -13,6 +13,8 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
+    "highcharts-exporting": "0.0.8",
+    "highcharts-more": "0.0.8",
     "highcharts-release": "^4.2.1",
     "jquery": "^2.1.4",
     "material-ui": "^0.14.0",

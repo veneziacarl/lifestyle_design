@@ -298,7 +298,9 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitDisplay />
+          <HabitDisplay
+            goals={this.state.goals}
+          />
         </div>
         <div>
           <Snackbar
