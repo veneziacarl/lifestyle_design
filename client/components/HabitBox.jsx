@@ -5,6 +5,7 @@ import $ from 'jquery';
 
 import HabitForm from './HabitForm.jsx';
 import HabitTabs from './HabitTabs.jsx';
+import HabitDisplay from './HabitDisplay.jsx';
 
 
 const propTypes = {
@@ -288,7 +289,15 @@ export class HabitBox extends React.Component {
           />
         </div>
         <div>
-          <HabitForm goals={this.state.goals} onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
+          <HabitForm
+            goals={this.state.goals}
+            onHabitSubmit={this.handleHabitSubmit}
+            filteredSchedules={filteredSchedules}
+            findDayInWeek={this.findDayInWeek}
+          />
+        </div>
+        <div>
+          <HabitDisplay />
         </div>
         <div>
           <Snackbar
