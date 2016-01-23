@@ -62,7 +62,9 @@ export class HabitTabs extends React.Component {
   getStyles (day) {
     const styles = {
       backgroundColor: '#FEFEFE',
-      color: 'black'
+      color: 'black',
+      fontWeight: 'bold',
+      fontSize: '20'
     }
     var today = (new Date).getDay()
 

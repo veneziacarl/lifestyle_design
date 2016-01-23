@@ -1,5 +1,5 @@
 import React from 'react';
-import { RadioButton, RadioButtonGroup, RaisedButton, FlatButton, Dialog, Checkbox, Toggle, SelectField, MenuItem } from 'material-ui';
+import { RaisedButton, FlatButton, Dialog, Checkbox, Toggle, SelectField, MenuItem } from 'material-ui';
 
 export class HabitForm extends React.Component {
   constructor(props) {
@@ -80,18 +80,23 @@ export class HabitForm extends React.Component {
   }
 
   renderDayOption (label, day) {
+    const styles = {
+    }
+    const labelStyles = {
+      width: '5px',
+      paddingRight: '25px',
+      paddingBottom: '5px'
+    }
     return (
-      <div className="small-1 small-centered columns">
         <Toggle
+          labelStyle={labelStyles}
+          style={styles}
           value={this.props.findDayInWeek(day)}
           label={label}
-          style={{marginBottom:16}}
           onToggle={this.handleDateChange.bind(this)}
         />
-      </div>
     );
   }
-
 
   render() {
     const goals = this.props.goals.map ( (goal, i) => {
@@ -106,7 +111,7 @@ export class HabitForm extends React.Component {
           <MenuItem value="choose the related goal" primaryText="choose the related goal"/>
           {goals}
         </SelectField>,
-        <div className="row">
+        <div className="small-6 small-centered columns">
           {this.renderDayOption('M', 1)}
           {this.renderDayOption('T', 2)}
           {this.renderDayOption('W', 3)}
@@ -121,6 +126,8 @@ export class HabitForm extends React.Component {
           label="Repeat This Schedule Weekly?"
           defaultChecked={true}
           onCheck={this.handleRepeat.bind(this)}
+          labelPosition="left"
+          style={{paddingRight: '50px'}}
         />,
       <FlatButton
         label="Cancel"
