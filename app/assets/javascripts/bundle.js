@@ -29016,6 +29016,7 @@
 	          this.setState({ schedules: schedulesArray });
 	          this.setState({ message: 'Created habit and schedules' });
 	          this.setState({ snackbarOpen: true });
+	          this.loadGoals();
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29267,7 +29268,8 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_HabitDisplay2.default, {
-	            goals: this.state.goals
+	            goals: this.state.goals,
+	            filteredSchedules: filteredSchedules
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -69050,45 +69052,61 @@
 	  function HabitDisplay(props) {
 	    _classCallCheck(this, HabitDisplay);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitDisplay).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HabitDisplay).call(this, props));
+
+	    _this.createConfig = _this.createConfig.bind(_this);
+	    return _this;
 	  }
 
-	  // xAxis: {
-	  //   categories: ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
-	  // },
-
 	  _createClass(HabitDisplay, [{
-	    key: 'render',
-	    value: function render() {
-	      var goalsTitles = this.props.goals.map(function (goal, i) {
-	        return goal.title;
+	    key: 'createConfig',
+	    value: function createConfig() {
+	      var goalTitles = [];
+	      var goalSchedules = [];
+
+	      this.props.goals.map(function (goal, i) {
+	        goalTitles.push(goal.title);
+	        goalSchedules.push(goal.sum_today_schedules);
 	      });
 
-	      var data = [2, 3, 5, 1, 0, 8];
-
-	      var config = {
+	      return {
 	        chart: {
 	          polar: true
 	        },
 	        xAxis: {
-	          categories: goalsTitles
+	          categories: goalTitles
 	        },
 	        series: [{
-	          data: data,
-	          name: "amount of schedules"
+	          data: goalSchedules,
+	          name: "number of schedules"
 	        }]
 	      };
-
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var styles = {
+	        height: '600px'
+	      };
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'small-6 columns' },
 	        _react2.default.createElement(
 	          _materialUi.Paper,
-	          { zDepth: 1 },
+	          { style: styles, zDepth: 1 },
 	          _react2.default.createElement(
 	            'div',
 	            null,
-	            _react2.default.createElement(_HabitChart2.default, { config: config })
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createConfig })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'here is some filler text'
+	            )
 	          )
 	        )
 	      );
@@ -69257,8 +69275,8 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(_highcharts2.default, { config: this.props.config })
+	        { className: 'small-8 columns' },
+	        _react2.default.createElement(_highcharts2.default, { config: this.props.createConfig() })
 	      );
 	    }
 	  }]);

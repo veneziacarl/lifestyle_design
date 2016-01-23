@@ -12,8 +12,8 @@ class HabitChart extends React.Component {
 
   render () {
     return (
-      <div>
-        <Highcharts config={this.props.config}></Highcharts>
+      <div className="small-8 columns">
+        <Highcharts config={this.props.createConfig()}></Highcharts>
       </div>
     );
   }

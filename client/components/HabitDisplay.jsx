@@ -7,39 +7,47 @@ import HabitChart from './HabitChart.jsx';
 class HabitDisplay extends React.Component {
   constructor(props) {
     super(props);
+
+    this.createConfig = this.createConfig.bind(this)
   }
 
-  // xAxis: {
-  //   categories: ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
-  // },
+  createConfig () {
+    const goalTitles = []
+    const goalSchedules = []
 
-  render () {
-    const goalsTitles = this.props.goals.map( (goal, i) => {
-      return (
-        goal.title
-      );
-    })
-
-    const data = [2, 3, 5, 1, 0, 8]
-
-    const config = {
-      chart: {
-        polar: true
-      },
-      xAxis: {
-        categories: goalsTitles
-      },
-      series: [{
-        data: data,
-        name: "amount of schedules"
-      }]
-    }
+    this.props.goals.map( (goal, i) => {
+      goalTitles.push(goal.title)
+      goalSchedules.push(goal.sum_today_schedules)
+    });
 
     return (
+      {
+        chart: {
+          polar: true
+        },
+        xAxis: {
+          categories: goalTitles
+        },
+        series: [{
+          data: goalSchedules,
+          name: "number of schedules"
+        }]
+      }
+    );
+  }
+
+  render () {
+    const styles = {
+      height: '600px'
+    }
+    return (
       <div className="small-6 columns">
-        <Paper zDepth={1}>
+        <Paper style={styles} zDepth={1}>
           <div>
-            <HabitChart config={config} />
+            <HabitChart createConfig={this.createConfig} />
+          </div>
+          <div>
+            <p>here is some filler text</p>
           </div>
         </Paper>
       </div>

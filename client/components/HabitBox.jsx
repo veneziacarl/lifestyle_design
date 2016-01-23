@@ -80,6 +80,7 @@ export class HabitBox extends React.Component {
         this.setState({schedules: schedulesArray});
         this.setState({message: 'Created habit and schedules'})
         this.setState({snackbarOpen: true })
+        this.loadGoals()
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -300,6 +301,7 @@ export class HabitBox extends React.Component {
         <div>
           <HabitDisplay
             goals={this.state.goals}
+            filteredSchedules={filteredSchedules}
           />
         </div>
         <div>
