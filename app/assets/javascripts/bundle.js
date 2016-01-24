@@ -28950,7 +28950,8 @@
 	      goals: [],
 	      autoHideDuration: 5000,
 	      message: 'Added habit and schedules',
-	      snackbarOpen: false
+	      snackbarOpen: false,
+	      todayStats: ''
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
 	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
@@ -29017,6 +29018,7 @@
 	          this.setState({ message: 'Created habit and schedules' });
 	          this.setState({ snackbarOpen: true });
 	          this.loadGoals();
+	          this.loadStats();
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29100,6 +29102,7 @@
 	          this.setState({ schedules: schedulesArray });
 	          this.setState({ message: 'Habit completed. Good work!' });
 	          this.setState({ snackbarOpen: true });
+	          this.loadStats();
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29128,6 +29131,7 @@
 	          this.setState({ schedules: schedulesArray });
 	          this.setState({ message: 'Habit marked as missed' });
 	          this.setState({ snackbarOpen: true });
+	          this.loadStats();
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29186,6 +29190,22 @@
 	      });
 	    }
 	  }, {
+	    key: 'loadStats',
+	    value: function loadStats() {
+	      _jquery2.default.ajax({
+	        url: '/api/v1/stats/today',
+	        method: 'GET',
+	        dataType: 'json',
+	        cache: false,
+	        success: (function (info) {
+	          this.setState({ todayStats: info });
+	        }).bind(this),
+	        error: (function (xhr, status, err) {
+	          console.error(this.props, status, err.toString());
+	        }).bind(this)
+	      });
+	    }
+	  }, {
 	    key: 'onMount',
 	    value: function onMount() {}
 	  }, {
@@ -29210,6 +29230,7 @@
 	      this.setTodayTab();
 	      this.loadGoals();
 	      this.loadHabits();
+	      this.loadStats();
 	      setInterval(this.checkScheduleDates, this.props.pollInterval);
 	    }
 	  }, {
@@ -29237,7 +29258,7 @@
 	        { className: 'habitBox row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'small-12 small-centered columns' },
+	          { className: 'small-6 small-centered columns' },
 	          _react2.default.createElement(_HabitForm2.default, {
 	            goals: this.state.goals,
 	            onHabitSubmit: this.handleHabitSubmit,
@@ -29268,7 +29289,8 @@
 	            'div',
 	            { className: 'small-12 medium-7 columns' },
 	            _react2.default.createElement(_HabitDisplay2.default, {
-	              goals: this.state.goals
+	              goals: this.state.goals,
+	              todayStats: this.state.todayStats
 	            })
 	          )
 	        ),
@@ -69041,7 +69063,7 @@
 
 	var _materialUi = __webpack_require__(162);
 
-	var _HabitChart = __webpack_require__(505);
+	var _HabitChart = __webpack_require__(502);
 
 	var _HabitChart2 = _interopRequireDefault(_HabitChart);
 
@@ -69092,7 +69114,8 @@
 	        },
 	        series: [{
 	          data: goalSchedules,
-	          name: "number of schedules"
+	          name: "number of schedules",
+	          animation: false
 	        }],
 	        title: {
 	          text: "Schedules for goals"
@@ -69102,17 +69125,15 @@
 	  }, {
 	    key: 'createCompletionRatesConfig',
 	    value: function createCompletionRatesConfig() {
-	      var goalTitles = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
-	      var goalSchedules = [];
+	      var days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
+	      var completions = [1, 3, 6, 2, 10, 2, 0];
 
-	      this.props.goals.map(function (goal, i) {
-	        goalTitles.push(goal.title);
-	        goalSchedules.push(goal.sum_today_schedules);
-	      });
+	      // this.props.stats.day_stats.map( (stat, i) => {
+	      //   completions.push(stat.)
+	      // });
 
 	      return {
 	        chart: {
-	          polar: true,
 	          spacingBottom: 15,
 	          spacingTop: 10,
 	          spacingLeft: 0,
@@ -69121,14 +69142,14 @@
 	          height: 300
 	        },
 	        xAxis: {
-	          categories: goalTitles
+	          categories: days
 	        },
 	        series: [{
-	          data: goalSchedules,
-	          name: "number of schedules"
+	          data: completions,
+	          name: "completion percentage"
 	        }],
 	        title: {
-	          text: "Schedules for goals"
+	          text: "Completed habits this week"
 	        }
 	      };
 	    }
@@ -69147,42 +69168,55 @@
 	          { style: styles, zDepth: 1 },
 	          _react2.default.createElement(
 	            'div',
-	            null,
+	            { className: 'row' },
 	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Today\'s completion rate:'
+	              'div',
+	              { className: 'small-6 columns' },
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Today'
+	              ),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Completion Percentage ',
+	                this.props.todayStats.percent_complete
+	              ),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Habits Remaining ',
+	                this.props.todayStats.do_count
+	              ),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Habits Completed ',
+	                this.props.todayStats.completed_count
+	              ),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Habits Missed ',
+	                this.props.todayStats.missed_count
+	              )
 	            ),
 	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'To Do: '
-	            ),
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Completed: '
-	            ),
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Missed: '
-	            ),
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Focus On: (habit title with weekly completion rate)'
+	              'div',
+	              { className: 'small-6 columns' },
+	              'here is some text to go besides the day stats, maybe some habits that need focus?'
 	            )
 	          ),
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'small-12 large-6 columns' },
-	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createSumSchedulesConfig })
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createCompletionRatesConfig })
 	          ),
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'small-12 large-6 columns' },
-	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createCompletionRatesConfig })
+	            _react2.default.createElement(_HabitChart2.default, { createConfig: this.createSumSchedulesConfig })
 	          )
 	        )
 	      );
@@ -69196,6 +69230,65 @@
 
 /***/ },
 /* 502 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _highcharts = __webpack_require__(503);
+
+	var _highcharts2 = _interopRequireDefault(_highcharts);
+
+	__webpack_require__(504);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HighchartsMore = __webpack_require__(505);
+	HighchartsMore(global.Highcharts);
+
+	var HabitChart = (function (_React$Component) {
+	  _inherits(HabitChart, _React$Component);
+
+	  function HabitChart(props) {
+	    _classCallCheck(this, HabitChart);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitChart).call(this, props));
+	  }
+
+	  _createClass(HabitChart, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_highcharts2.default, { config: this.props.createConfig() })
+	      );
+	    }
+	  }]);
+
+	  return HabitChart;
+	})(_react2.default.Component);
+
+	exports.default = HabitChart;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 503 */
 /***/ function(module, exports, __webpack_require__) {
 
 	!function(t,e){ true?module.exports=e(__webpack_require__(2)):"function"==typeof define&&define.amd?define(["react"],e):"object"==typeof exports?exports.Highcharts=e(require("react")):t.Highcharts=e(t.react)}(this,function(t){return function(t){function e(n){if(i[n])return i[n].exports;var o=i[n]={exports:{},id:n,loaded:!1};return t[n].call(o.exports,o,o.exports,e),o.loaded=!0,o.exports}var i={};return e.m=t,e.c=i,e.p="",e(0)}([function(t,e,i){(function(e){"use strict";"undefined"==typeof e.Highcharts&&(e.Highcharts=i(6)),t.exports=i(3)}).call(e,function(){return this}())},function(t,e,i){"use strict";var n=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var i=arguments[e];for(var n in i)Object.prototype.hasOwnProperty.call(i,n)&&(t[n]=i[n])}return t},o=i(2);if("undefined"==typeof Highcharts)throw Error('Starting with version 3 of react-highcharts, Highcharts is not bundled by default.  use "react-highcharts/dist/bundle/highcharts" instead, or include highcharts. ');t.exports=function(t,e){var i="Highcharts"+e,r=o.createClass({displayName:i,propTypes:{config:o.PropTypes.object.isRequired,isPureConfig:o.PropTypes.bool},renderChart:function(o){if(!o)throw new Error("Config must be specified for the "+i+" component");var r=o.chart;this.chart=new t[e](n({},o,{chart:n({},r,{renderTo:this.refs.chart})}))},shouldComponentUpdate:function(t){return this.props.isPureConfig&&this.props.config===t.config||this.renderChart(t.config),!0},getChart:function(){if(!this.chart)throw new Error("getChart() should not be called before the component is mounted");return this.chart},componentDidMount:function(){this.renderChart(this.props.config)},render:function(){var t=this.props;return t=n({},t,{ref:"chart"}),o.createElement("div",t)}});return r.Highcharts=t,r}},function(e,i){e.exports=t},function(t,e,i){"use strict";var n=i(1);t.exports=n(Highcharts,"Chart")},,,function(t,e){/**
@@ -69213,7 +69306,7 @@
 	t.addClass(Kt+"tracker").on("mouseover",g).on("mouseout",function(t){l.onTrackerMouseOut(t)}).css(u),N&&t.on("touchstart",g)}))}};return se.column&&(Ze.prototype.drawTracker=ti.drawTrackerPoint),se.pie&&(se.pie.prototype.drawTracker=ti.drawTrackerPoint),se.scatter&&($e.prototype.drawTracker=ti.drawTrackerPoint),xe(Xe.prototype,{setItemEvents:function(t,e,i,n,o){var r=this;(i?e:t.legendGroup).on("mouseover",function(){t.setState(ie),e.css(r.options.itemHoverStyle)}).on("mouseout",function(){e.css(t.visible?n:o),t.setState()}).on("click",function(e){var i="legendItemClick",n=function(){t.setVisible&&t.setVisible()};e={browserEvent:e},t.firePointEvent?t.firePointEvent(i,e,n):ge(t,i,e,n)})},createCheckboxForItem:function(t){var e=this;t.checkbox=y("input",{type:"checkbox",checked:t.selected,defaultChecked:t.selected},e.options.itemCheckboxStyle,e.chart.container),ue(t.checkbox,"click",function(e){var i=e.target;ge(t.series||t,"checkboxClick",{checked:i.checked,item:t},function(){t.select()})})}}),V.legend.itemStyle.cursor="pointer",xe(Ge.prototype,{showResetZoom:function(){function t(){e.zoomOut()}var e=this,i=V.lang,n=e.options.chart.resetZoomButton,o=n.theme,r=o.states,s="chart"===n.relativeTo?null:"plotBox";this.resetZoomButton=e.renderer.button(i.resetZoom,null,null,t,o,r&&r.hover).attr({align:n.position.align,title:i.resetZoomTitle}).add().align(n.position,!1,s)},zoomOut:function(){var t=this;ge(t,"selection",{resetSelection:!0},function(){t.zoom()})},zoom:function(t){var e,i,n=this,o=n.pointer,r=!1;!t||t.resetSelection?he(n.axes,function(t){e=t.zoom()}):he(t.xAxis.concat(t.yAxis),function(t){var i=t.axis,n=i.isXAxis;(o[n?"zoomX":"zoomY"]||o[n?"pinchX":"pinchY"])&&(e=i.zoom(t.min,t.max),i.displayBtn&&(r=!0))}),i=n.resetZoomButton,r&&!i?n.showResetZoom():!r&&s(i)&&(n.resetZoomButton=i.destroy()),e&&n.redraw(be(n.options.chart.animation,t&&t.animation,n.pointCount<100))},pan:function(t,e){var i,n=this,o=n.hoverPoints;o&&he(o,function(t){t.setState()}),he("xy"===e?[1,0]:[1],function(e){var o=t[e?"chartX":"chartY"],r=n[e?"xAxis":"yAxis"][0],s=n[e?"mouseDownX":"mouseDownY"],a=(r.pointRange||0)/2,l=r.getExtremes(),h=r.toValue(s-o,!0)+a,c=r.toValue(s+n[e?"plotWidth":"plotHeight"]-o,!0)-a,d=s>o;r.series.length&&(d||h>bt(l.dataMin,l.min))&&(!d||c<xt(l.dataMax,l.max))&&(r.setExtremes(h,c,!1,!1,{trigger:"pan"}),i=!0),n[e?"mouseDownX":"mouseDownY"]=o}),i&&n.redraw(!1),m(n.container,{cursor:"move"})}}),xe(Ye.prototype,{select:function(t,e){var i=this,n=i.series,o=n.chart;t=be(t,!i.selected),i.firePointEvent(t?"select":"unselect",{accumulate:e},function(){i.selected=i.options.selected=t,n.options.data[le(i,n.data)]=i.options,i.setState(t&&ne),e||he(o.getSelectedPoints(),function(t){t.selected&&t!==i&&(t.selected=t.options.selected=!1,n.options.data[le(t,n.data)]=t.options,t.setState(ee),t.firePointEvent("unselect"))})})},onMouseOver:function(t,e){var i=this,n=i.series,o=n.chart,r=o.tooltip,s=o.hoverPoint;o.hoverSeries!==n&&n.onMouseOver(),s&&s!==i&&s.onMouseOut(),i.series&&(i.firePointEvent("mouseOver"),!r||r.shared&&!n.noSharedTooltip||r.refresh(i,t),i.setState(ie),e||(o.hoverPoint=i))},onMouseOut:function(){var t=this.series.chart,e=t.hoverPoints;this.firePointEvent("mouseOut"),e&&-1!==le(this,e)||(this.setState(),t.hoverPoint=null)},importEvents:function(){if(!this.hasImportedEvents){var t,e=this,i=n(e.series.options.point,e.options),o=i.events;e.events=o;for(t in o)ue(e,t,o[t]);this.hasImportedEvents=!0}},setState:function(t,e){var i,o,r,s,a=this,l=yt(a.plotX),h=a.plotY,c=a.series,d=c.options.states,p=we[c.type].marker&&c.options.marker,u=p&&!p.enabled,f=p&&p.states[t],g=f&&f.enabled===!1,m=c.stateMarkerGraphic,y=a.marker||{},v=c.chart,x=c.halo;t=t||ee,s=a.pointAttr[t]||c.pointAttr[t],t===a.state&&!e||a.selected&&t!==ne||d[t]&&d[t].enabled===!1||t&&(g||u&&f.enabled===!1)||t&&y.states&&y.states[t]&&y.states[t].enabled===!1||(a.graphic?(i=p&&a.graphic.symbolName&&s.r,a.graphic.attr(n(s,i?{x:l-i,y:h-i,width:2*i,height:2*i}:{})),m&&m.hide()):(t&&f&&(i=f.radius,r=y.symbol||c.symbol,m&&m.currentSymbol!==r&&(m=m.destroy()),m?m[e?"animate":"attr"]({x:l-i,y:h-i}):r&&(c.stateMarkerGraphic=m=v.renderer.symbol(r,l-i,h-i,2*i,2*i).attr(s).add(c.markerGroup),m.currentSymbol=r)),m&&(m[t&&v.isInsidePlot(l,h,v.inverted)?"show":"hide"](),m.element.point=a)),o=d[t]&&d[t].halo,o&&o.size?(x||(c.halo=x=v.renderer.path().add(v.seriesGroup)),x.attr(xe({fill:a.color||c.color,"fill-opacity":o.opacity},o.attributes))[e?"animate":"attr"]({d:a.haloPath(o.size)})):x&&x.attr({d:[]}),a.state=t)},haloPath:function(t){var e=this.series,i=e.chart,n=e.getPlotBox(),o=i.inverted,r=Math.floor(this.plotX);return i.renderer.symbols.circle(n.translateX+(o?e.yAxis.len-this.plotY:r)-t,n.translateY+(o?e.xAxis.len-r:this.plotY)-t,2*t,2*t)}}),xe(Ne.prototype,{onMouseOver:function(){var t=this,e=t.chart,i=e.hoverSeries;i&&i!==t&&i.onMouseOut(),t.options.events.mouseOver&&ge(t,"mouseOver"),t.setState(ie),e.hoverSeries=t},onMouseOut:function(){var t=this,e=t.options,i=t.chart,n=i.tooltip,o=i.hoverPoint;i.hoverSeries=null,o&&o.onMouseOut(),t&&e.events.mouseOut&&ge(t,"mouseOut"),!n||e.stickyTracking||n.shared&&!t.noSharedTooltip||n.hide(),t.setState()},setState:function(t){var e,i=this,n=i.options,o=i.graph,r=n.states,s=n.lineWidth,a=0;if(t=t||ee,i.state!==t){if(i.state=t,r[t]&&r[t].enabled===!1)return;if(t&&(s=r[t].lineWidth||s+(r[t].lineWidthPlus||0)),o&&!o.dashstyle)for(e={"stroke-width":s},o.attr(e);i["zoneGraph"+a];)i["zoneGraph"+a].attr(e),a+=1}},setVisible:function(t,e){var i,n=this,o=n.chart,r=n.legendItem,s=o.options.chart.ignoreHiddenSeries,a=n.visible;n.visible=t=n.userOptions.visible=t===F?!a:t,i=t?"show":"hide",he(["group","dataLabelsGroup","markerGroup","tracker"],function(t){n[t]&&n[t][i]()}),(o.hoverSeries===n||(o.hoverPoint&&o.hoverPoint.series)===n)&&n.onMouseOut(),r&&o.legend.colorizeItem(n,t),n.isDirty=!0,n.options.stacking&&he(o.series,function(t){t.options.stacking&&t.visible&&(t.isDirty=!0)}),he(n.linkedSeries,function(e){e.setVisible(t,!1)}),s&&(o.isDirtyBox=!0),e!==!1&&o.redraw(),ge(n,i)},show:function(){this.setVisible(!0)},hide:function(){this.setVisible(!1)},select:function(t){var e=this;e.selected=t=t===F?!e.selected:t,e.checkbox&&(e.checkbox.checked=t),ge(e,t?"select":"unselect")},drawTracker:ti.drawTrackerGraph}),xe(ut,{Color:E,Point:Ye,Tick:W,Renderer:Y,SVGElement:H,SVGRenderer:Te,arrayMin:P,arrayMax:L,charts:Gt,dateFormat:_,error:e,format:S,pathAnim:U,getOptions:B,hasBidiBug:Bt,isTouchDevice:Dt,setOptions:R,addEvent:ue,removeEvent:fe,createElement:y,discardElement:I,css:m,each:he,map:pe,merge:n,splat:f,stableSort:C,extendClass:v,pInt:o,svg:Rt,canvas:Et,vml:!Rt&&!Et,product:Yt,version:Nt}),ut})}])});
 
 /***/ },
-/* 503 */
+/* 504 */
 /***/ function(module, exports) {
 
 	/*
@@ -69243,7 +69336,7 @@
 
 
 /***/ },
-/* 504 */
+/* 505 */
 /***/ function(module, exports) {
 
 	/*
@@ -69303,65 +69396,6 @@
 	k.shapeArgs={d:f.symbols.arc(e[0],e[1],c-k.plotY,null,{start:a,end:a+k.pointWidth,innerR:c-o(k.yBottom,c)})},this.toXY(k),k.tooltipPos=[k.plotX,k.plotY],k.ttBelow=k.plotY>e[1]}}),r(e,"alignDataLabel",function(a,b,e,f,g,i){if(this.chart.polar){a=b.rectPlotX/Math.PI*180;if(f.align===null)f.align=a>20&&a<160?"left":a>200&&a<340?"right":"center";if(f.verticalAlign===null)f.verticalAlign=a<45||a>315?"bottom":a>135&&a<225?"top":"middle";c.alignDataLabel.call(this,b,e,f,g,i)}else a.call(this,b,e,f,g,i)});
 	r(f,"getCoordinates",function(a,b){var c=this.chart,f={xAxis:[],yAxis:[]};c.polar?s(c.axes,function(a){var d=a.isXAxis,e=a.center,i=b.chartX-e[0]-c.plotLeft,e=b.chartY-e[1]-c.plotTop;f[d?"xAxis":"yAxis"].push({axis:a,value:a.translate(d?Math.PI-Math.atan2(i,e):Math.sqrt(Math.pow(i,2)+Math.pow(e,2)),!0)})}):f=a.call(this,b);return f})})()});
 
-
-/***/ },
-/* 505 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _highcharts = __webpack_require__(502);
-
-	var _highcharts2 = _interopRequireDefault(_highcharts);
-
-	__webpack_require__(503);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HighchartsMore = __webpack_require__(504);
-	HighchartsMore(global.Highcharts);
-
-	var HabitChart = (function (_React$Component) {
-	  _inherits(HabitChart, _React$Component);
-
-	  function HabitChart(props) {
-	    _classCallCheck(this, HabitChart);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(HabitChart).call(this, props));
-	  }
-
-	  _createClass(HabitChart, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_highcharts2.default, { config: this.props.createConfig() })
-	      );
-	    }
-	  }]);
-
-	  return HabitChart;
-	})(_react2.default.Component);
-
-	exports.default = HabitChart;
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }
 /******/ ]);

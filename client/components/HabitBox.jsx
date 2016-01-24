@@ -22,7 +22,8 @@ export class HabitBox extends React.Component {
       goals: [],
       autoHideDuration: 5000,
       message: 'Added habit and schedules',
-      snackbarOpen: false
+      snackbarOpen: false,
+      todayStats: ''
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
     this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
@@ -78,9 +79,10 @@ export class HabitBox extends React.Component {
            schedulesArray.unshift(info.schedules[i]);
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Created habit and schedules'})
-        this.setState({snackbarOpen: true })
-        this.loadGoals()
+        this.setState({message: 'Created habit and schedules'});
+        this.setState({snackbarOpen: true });
+        this.loadGoals();
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -153,8 +155,9 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Habit completed. Good work!'})
-        this.setState({snackbarOpen: true })
+        this.setState({message: 'Habit completed. Good work!'});
+        this.setState({snackbarOpen: true });
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -178,8 +181,9 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Habit marked as missed' })
-        this.setState({snackbarOpen: true })
+        this.setState({message: 'Habit marked as missed' });
+        this.setState({snackbarOpen: true });
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -233,6 +237,21 @@ export class HabitBox extends React.Component {
     });
   }
 
+  loadStats () {
+    $.ajax({
+      url: '/api/v1/stats/today',
+      method: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(info) {
+        this.setState({todayStats: info})
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props, status, err.toString());
+      }.bind(this)
+    });
+  }
+
   onMount () {
   }
 
@@ -255,6 +274,7 @@ export class HabitBox extends React.Component {
     this.setTodayTab();
     this.loadGoals();
     this.loadHabits();
+    this.loadStats();
     setInterval(this.checkScheduleDates, this.props.pollInterval);
   }
 
@@ -273,7 +293,7 @@ export class HabitBox extends React.Component {
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
       <div className="habitBox row">
-        <div className="small-12 small-centered columns">
+        <div className="small-6 small-centered columns">
           <HabitForm
             goals={this.state.goals}
             onHabitSubmit={this.handleHabitSubmit}
@@ -299,6 +319,7 @@ export class HabitBox extends React.Component {
           <div className="small-12 medium-7 columns">
             <HabitDisplay
               goals={this.state.goals}
+              todayStats={this.state.todayStats}
             />
           </div>
         </div>

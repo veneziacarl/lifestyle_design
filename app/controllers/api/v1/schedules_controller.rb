@@ -53,6 +53,13 @@ class Api::V1::SchedulesController < Api::V1::BaseController
     render(json: Api::V1::ScheduleSerializer.new(updated_schedule))
   end
 
+  def stats_today
+    day_stats = Schedule.find_day_stats
+    rates = Habit.week_completion_rates
+    stats = day_stats
+    render json: stats
+  end
+
   private
 
   def schedule_params

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :goals, only: [:index]
       put '/completed/:id' => 'schedules#completed', as: :completed
       put '/missed/:id' => 'schedules#missed', as: :missed
+      get '/stats/today' => 'schedules#stats_today', as: :stats_today
     end
   end
 

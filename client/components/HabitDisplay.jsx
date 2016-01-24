@@ -37,7 +37,8 @@ class HabitDisplay extends React.Component {
         },
         series: [{
           data: goalSchedules,
-          name: "number of schedules"
+          name: "number of schedules",
+          animation: false
         }],
         title: {
           text: "Schedules for goals"
@@ -47,18 +48,16 @@ class HabitDisplay extends React.Component {
   }
 
   createCompletionRatesConfig () {
-    const goalTitles = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
-    const goalSchedules = []
+    const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
+    const completions = [1, 3, 6, 2, 10, 2, 0]
 
-    this.props.goals.map( (goal, i) => {
-      goalTitles.push(goal.title)
-      goalSchedules.push(goal.sum_today_schedules)
-    });
+    // this.props.stats.day_stats.map( (stat, i) => {
+    //   completions.push(stat.)
+    // });
 
     return (
       {
         chart: {
-          polar: true,
           spacingBottom: 15,
           spacingTop: 10,
           spacingLeft: 0,
@@ -67,14 +66,14 @@ class HabitDisplay extends React.Component {
           height: 300
         },
         xAxis: {
-          categories: goalTitles
+          categories: days
         },
         series: [{
-          data: goalSchedules,
-          name: "number of schedules"
+          data: completions,
+          name: "completion percentage"
         }],
         title: {
-          text: "Schedules for goals"
+          text: "Completed habits this week"
         }
       }
     );
@@ -88,24 +87,30 @@ class HabitDisplay extends React.Component {
     return (
       <div>
         <Paper style={styles} zDepth={1}>
-          <div>
-            <p>Today's completion rate:</p>
-            <p>To Do: </p>
-            <p>Completed: </p>
-            <p>Missed: </p>
-            <p>Focus On: (habit title with weekly completion rate)</p>
-          </div>
-          <div className="small-12 large-6 columns">
-            <HabitChart createConfig={this.createSumSchedulesConfig} />
+          <div className="row">
+            <div className="small-6 columns">
+              <p>Today</p>
+              <p>Completion Percentage {this.props.todayStats.percent_complete}</p>
+              <p>Habits Remaining {this.props.todayStats.do_count}</p>
+              <p>Habits Completed {this.props.todayStats.completed_count}</p>
+              <p>Habits Missed {this.props.todayStats.missed_count}</p>
+            </div>
+            <div className="small-6 columns">
+              here is some text
+              to go besides the day stats,
+              maybe some habits that need focus?
+            </div>
           </div>
           <div className="small-12 large-6 columns">
             <HabitChart createConfig={this.createCompletionRatesConfig} />
+          </div>
+          <div className="small-12 large-6 columns">
+            <HabitChart createConfig={this.createSumSchedulesConfig} />
           </div>
         </Paper>
       </div>
     );
   }
-
 }
 
 export default HabitDisplay;
