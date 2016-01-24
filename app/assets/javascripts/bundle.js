@@ -28951,9 +28951,12 @@
 	      autoHideDuration: 5000,
 	      message: 'Added habit and schedules',
 	      snackbarOpen: false,
-	      todayStats: ''
+	      todayStats: '',
+	      open: false
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
+	    _this.handleToggle = _this.handleToggle.bind(_this);
+	    _this.handleClose = _this.handleClose.bind(_this);
 	    _this.handleScheduleDelete = _this.handleScheduleDelete.bind(_this);
 	    _this.handleScheduleUpdate = _this.handleScheduleUpdate.bind(_this);
 	    _this.handlePositionChange = _this.handlePositionChange.bind(_this);
@@ -28983,6 +28986,16 @@
 	        day = day + 7;
 	      }
 	      return day;
+	    }
+	  }, {
+	    key: 'handleToggle',
+	    value: function handleToggle() {
+	      this.setState({ open: !this.state.open });
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false });
 	    }
 	  }, {
 	    key: 'findDayInWeek',
@@ -29256,6 +29269,34 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'habitBox row' },
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_materialUi.RaisedButton, {
+	            label: 'Controlled LeftNav That Opens From Right',
+	            onTouchTap: this.handleToggle }),
+	          _react2.default.createElement(
+	            _materialUi.LeftNav,
+	            {
+	              docked: false,
+	              width: 200,
+	              open: this.state.open,
+	              onRequestChange: function onRequestChange(open) {
+	                return _this2.setState({ open: open });
+	              }
+	            },
+	            _react2.default.createElement(
+	              _materialUi.MenuItem,
+	              { onTouchTap: this.handleClose },
+	              'Menu Item'
+	            ),
+	            _react2.default.createElement(
+	              _materialUi.MenuItem,
+	              { onTouchTap: this.handleClose },
+	              'Menu Item 2'
+	            )
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'small-6 small-centered columns' },

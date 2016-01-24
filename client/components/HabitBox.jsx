@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Snackbar } from 'material-ui';
+import { Snackbar, LeftNav, MenuItem, RaisedButton } from 'material-ui';
 import {render} from 'react-dom';
 import $ from 'jquery';
 
@@ -23,9 +23,12 @@ export class HabitBox extends React.Component {
       autoHideDuration: 5000,
       message: 'Added habit and schedules',
       snackbarOpen: false,
-      todayStats: ''
+      todayStats: '',
+      open: false
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
     this.handleScheduleUpdate = this.handleScheduleUpdate.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
@@ -51,6 +54,14 @@ export class HabitBox extends React.Component {
       day = day + 7
     }
     return day;
+  }
+
+  handleToggle (){
+    this.setState({open: !this.state.open});
+  }
+
+  handleClose () {
+    this.setState({open: false});
   }
 
   findDayInWeek (day) {
@@ -293,6 +304,20 @@ export class HabitBox extends React.Component {
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
       <div className="habitBox row">
+        <div>
+          <RaisedButton
+           label="Controlled LeftNav That Opens From Right"
+           onTouchTap={this.handleToggle} />
+          <LeftNav
+            docked={false}
+            width={200}
+            open={this.state.open}
+            onRequestChange={open => this.setState({open})}
+          >
+            <MenuItem onTouchTap={this.handleClose}>Menu Item</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>Menu Item 2</MenuItem>
+          </LeftNav>
+        </div>
         <div className="small-6 small-centered columns">
           <HabitForm
             goals={this.state.goals}
