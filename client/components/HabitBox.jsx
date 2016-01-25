@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { Snackbar } from 'material-ui';
+import { Snackbar, LeftNav, MenuItem, RaisedButton } from 'material-ui';
 import {render} from 'react-dom';
 import $ from 'jquery';
 
 import HabitForm from './HabitForm.jsx';
 import HabitTabs from './HabitTabs.jsx';
+import HabitDisplay from './HabitDisplay.jsx';
 
 
 const propTypes = {
@@ -21,9 +22,14 @@ export class HabitBox extends React.Component {
       goals: [],
       autoHideDuration: 5000,
       message: 'Added habit and schedules',
-      snackbarOpen: false
+      snackbarOpen: false,
+      todayStats: '',
+      weekStats: '',
+      open: false
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleScheduleDelete = this.handleScheduleDelete.bind(this);
     this.handleScheduleUpdate = this.handleScheduleUpdate.bind(this);
     this.handlePositionChange = this.handlePositionChange.bind(this);
@@ -49,6 +55,14 @@ export class HabitBox extends React.Component {
       day = day + 7
     }
     return day;
+  }
+
+  handleToggle (){
+    this.setState({open: !this.state.open});
+  }
+
+  handleClose () {
+    this.setState({open: false});
   }
 
   findDayInWeek (day) {
@@ -77,8 +91,10 @@ export class HabitBox extends React.Component {
            schedulesArray.unshift(info.schedules[i]);
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Created habit and schedules'})
-        this.setState({snackbarOpen: true })
+        this.setState({message: 'Created habit and schedules'});
+        this.setState({snackbarOpen: true });
+        this.loadGoals();
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -103,6 +119,7 @@ export class HabitBox extends React.Component {
         this.setState({schedules: schedulesArray});
         this.setState({message: 'Deleted schedule'})
         this.setState({snackbarOpen: true })
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -151,8 +168,9 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Habit completed. Good work!'})
-        this.setState({snackbarOpen: true })
+        this.setState({message: 'Habit completed. Good work!'});
+        this.setState({snackbarOpen: true });
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -176,8 +194,9 @@ export class HabitBox extends React.Component {
           }
         }
         this.setState({schedules: schedulesArray});
-        this.setState({message: 'Habit marked as missed' })
-        this.setState({snackbarOpen: true })
+        this.setState({message: 'Habit marked as missed' });
+        this.setState({snackbarOpen: true });
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -231,6 +250,22 @@ export class HabitBox extends React.Component {
     });
   }
 
+  loadStats () {
+    $.ajax({
+      url: '/api/v1/stats/today',
+      method: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(info) {
+        this.setState({todayStats: info.schedules[0]})
+        this.setState({weekStats: info.schedules[1]})
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props, status, err.toString());
+      }.bind(this)
+    });
+  }
+
   onMount () {
   }
 
@@ -239,19 +274,21 @@ export class HabitBox extends React.Component {
     var date = new Date;
     date.setHours(0,0,0,0);
     for(var i = 0; i < schedulesArray.length; i++) {
-      var scheduleDate = (new Date(schedulesArray[i].date))
+      var schedule = schedulesArray[i]
+      var scheduleDate = (new Date(schedule.date))
       if(scheduleDate < date) {
-        var schedule = schedulesArray.splice(i, 1)
+        schedulesArray.splice(i, 1)
         this.handleScheduleMiss(schedule.id)
+        this.setState({schedules: schedulesArray});
       }
     }
-    this.setState({schedules: schedulesArray});
   }
 
   componentDidMount () {
     this.setTodayTab();
     this.loadGoals();
     this.loadHabits();
+    this.loadStats();
     setInterval(this.checkScheduleDates, this.props.pollInterval);
   }
 
@@ -267,28 +304,53 @@ export class HabitBox extends React.Component {
   }
 
   render () {
-    const styles = {
-      height: '100%'
-    }
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
-      <div className="habitBox" style={styles}>
+      <div className="habitBox row">
         <div>
-          <HabitTabs
-            filteredSchedules={filteredSchedules}
-            onTabClick={this.handleOpenTab}
-            onScheduleDelete={this.handleScheduleDelete}
-            onHabitEdit={this.handleScheduleUpdate}
-            onPositionChange={this.handlePositionChange}
-            onMount={() => {}}
-            addDays={this.addDays}
-            initialSelectedIndex={this.state.currentSelectedTab}
-            onScheduleComplete={this.handleScheduleComplete}
-            onScheduleMiss={this.handleScheduleMiss}
-          />
+          <RaisedButton
+           label="Controlled LeftNav That Opens From Right"
+           onTouchTap={this.handleToggle} />
+          <LeftNav
+            docked={false}
+            width={200}
+            open={this.state.open}
+            onRequestChange={open => this.setState({open})}
+          >
+            <MenuItem onTouchTap={this.handleClose}>Menu Item</MenuItem>
+            <MenuItem onTouchTap={this.handleClose}>Menu Item 2</MenuItem>
+          </LeftNav>
         </div>
-        <div>
-          <HabitForm goals={this.state.goals} onHabitSubmit={this.handleHabitSubmit} filteredSchedules={filteredSchedules} findDayInWeek={this.findDayInWeek} />
+        <div className="small-6 small-centered columns">
+          <HabitForm
+            goals={this.state.goals}
+            onHabitSubmit={this.handleHabitSubmit}
+            filteredSchedules={filteredSchedules}
+            findDayInWeek={this.findDayInWeek}
+            />
+        </div>
+        <div className="row">
+          <div className="small-12 medium-5 columns">
+            <HabitTabs
+              filteredSchedules={filteredSchedules}
+              onTabClick={this.handleOpenTab}
+              onScheduleDelete={this.handleScheduleDelete}
+              onHabitEdit={this.handleScheduleUpdate}
+              onPositionChange={this.handlePositionChange}
+              onMount={() => {}}
+              addDays={this.addDays}
+              initialSelectedIndex={this.state.currentSelectedTab}
+              onScheduleComplete={this.handleScheduleComplete}
+              onScheduleMiss={this.handleScheduleMiss}
+            />
+          </div>
+          <div className="small-12 medium-7 columns">
+            <HabitDisplay
+              goals={this.state.goals}
+              todayStats={this.state.todayStats}
+              weekStats={this.state.weekStats}
+            />
+          </div>
         </div>
         <div>
           <Snackbar

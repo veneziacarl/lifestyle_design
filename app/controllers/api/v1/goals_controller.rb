@@ -4,7 +4,11 @@ class Api::V1::GoalsController < Api::V1::BaseController
 
   def index
     @goals = Goal.order(id: :desc)
-    render json: @goals
+    render json: ActiveModel::ArraySerializer.new(
+      @goals,
+      each_serializer: Api::V1::GoalSerializer,
+      root: 'goals'
+    )
   end
 
   def create

@@ -61,7 +61,7 @@ export class HabitTabs extends React.Component {
 
   getStyles (day) {
     const styles = {
-      backgroundColor: '#FEFEFE',
+      backgroundColor: '#FFFFFF',
       color: 'black',
       fontWeight: 'bold',
       fontSize: '20'
@@ -99,17 +99,27 @@ export class HabitTabs extends React.Component {
   }
 
   render() {
+    const styles = {
+      height: '80vh',
+      overflow: 'auto',
+      padding: '10px',
+      width: '100%'
+    }
     return (
-      <div className="habitTabs small-12 medium-6 large-4 columns">
-         <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
-           {this.renderTabCategory('M', 1)}
-           {this.renderTabCategory('T', 2)}
-           {this.renderTabCategory('W', 3)}
-           {this.renderTabCategory('Th', 4)}
-           {this.renderTabCategory('F', 5)}
-           {this.renderTabCategory('S', 6)}
-           {this.renderTabCategory('Su', 7)}
-         </Tabs>
+      <div className="habitTabs">
+        <Paper zDepth={1} style={styles}>
+          <div>
+           <Tabs initialSelectedIndex={this.props.initialSelectedIndex} >
+             {this.renderTabCategory('M', 1)}
+             {this.renderTabCategory('T', 2)}
+             {this.renderTabCategory('W', 3)}
+             {this.renderTabCategory('Th', 4)}
+             {this.renderTabCategory('F', 5)}
+             {this.renderTabCategory('S', 6)}
+             {this.renderTabCategory('Su', 7)}
+           </Tabs>
+         </div>
+       </Paper>
       </div>
     );
   }

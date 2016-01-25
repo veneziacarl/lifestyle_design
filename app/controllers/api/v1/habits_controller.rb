@@ -83,7 +83,7 @@ class Api::V1::HabitsController < Api::V1::BaseController
       if schedule.save
         saved_schedules << schedule
       else
-        saved_schedules = false
+        return false
       end
     end
     saved_schedules
