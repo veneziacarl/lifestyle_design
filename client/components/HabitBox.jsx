@@ -323,6 +323,8 @@ export class HabitBox extends React.Component {
               onScheduleDelete={this.handleScheduleDelete}
               onHabitEdit={this.handleScheduleUpdate}
               onPositionChange={this.handlePositionChange}
+              date={this.state.date}
+              currentSelectedTab={this.state.currentSelectedTab}
               onMount={() => {}}
               addDays={this.addDays}
               initialSelectedIndex={this.state.currentSelectedTab}

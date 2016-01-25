@@ -56,12 +56,8 @@ class Api::V1::SchedulesController < Api::V1::BaseController
   def stats_today
     day_stats = Schedule.find_day_stats
     week_stats = Schedule.week_completion_rates
-    stats = [day_stats, week_stats]
+    stats = [day_stats, week_stats.to_a]
     render json: stats
-  end
-
-  def stats_week
-    render json: week_stats
   end
 
   private

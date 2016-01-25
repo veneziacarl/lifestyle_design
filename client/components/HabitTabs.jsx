@@ -84,6 +84,8 @@ export class HabitTabs extends React.Component {
       <Tab label={label} day={day} style={this.getStyles(day)} onClick={this.handleChange.bind(this)}>
         <div>
           <HabitList
+            date={this.props.date}
+            currentSelectedTab={this.props.currentSelectedTab}
             filteredSchedules={this.props.filteredSchedules}
             tab={this.props.currentSelectedTab}
             onScheduleDelete={this.handleDelete}
