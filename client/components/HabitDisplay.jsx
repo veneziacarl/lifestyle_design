@@ -37,8 +37,7 @@ class HabitDisplay extends React.Component {
         },
         series: [{
           data: goalSchedules,
-          name: "number of schedules",
-          animation: false
+          name: "number of schedules"
         }],
         title: {
           text: "Schedules for goals"
@@ -48,12 +47,13 @@ class HabitDisplay extends React.Component {
   }
 
   createCompletionRatesConfig () {
+    const completions = []
+    for(var i = 0; i < this.props.weekStats.length; i++) {
+      if (i <= ((new Date).getDay())) {
+        completions.push(this.props.weekStats[i][1])
+      }
+    }
     const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
-    const completions = [
-      this.props.weekStats[1], this.props.weekStats[2], this.props.weekStats[3],
-      this.props.weekStats[4], this.props.weekStats[5], this.props.weekStats[6],
-      this.props.weekStats[7]
-    ]
 
     return (
       {

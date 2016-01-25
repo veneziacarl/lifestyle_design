@@ -29294,6 +29294,8 @@
 	              onScheduleDelete: this.handleScheduleDelete,
 	              onHabitEdit: this.handleScheduleUpdate,
 	              onPositionChange: this.handlePositionChange,
+	              date: this.state.date,
+	              currentSelectedTab: this.state.currentSelectedTab,
 	              onMount: function onMount() {},
 	              addDays: this.addDays,
 	              initialSelectedIndex: this.state.currentSelectedTab,
@@ -61563,6 +61565,8 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(_HabitList2.default, {
+	            date: this.props.date,
+	            currentSelectedTab: this.props.currentSelectedTab,
 	            filteredSchedules: this.props.filteredSchedules,
 	            tab: this.props.currentSelectedTab,
 	            onScheduleDelete: this.handleDelete,
@@ -67907,7 +67911,7 @@
 	  }, {
 	    key: 'handleComplete',
 	    value: function handleComplete(scheduleInfo) {
-	      if (new Date(scheduleInfo.date).getDay() == new Date().getDay()) {
+	      if (this.props.date.getDay() == this.props.currentSelectedTab) {
 	        this.props.onScheduleComplete(scheduleInfo);
 	      } else {
 	        alert("You can only complete items on the current day");
@@ -67917,7 +67921,7 @@
 	  }, {
 	    key: 'handleMiss',
 	    value: function handleMiss(scheduleInfo) {
-	      if (new Date(scheduleInfo.date).getDay() == new Date().getDay()) {
+	      if (this.props.date.getDay() == this.props.currentSelectedTab) {
 	        this.props.onScheduleMiss(scheduleInfo);
 	      } else {
 	        alert("You can only miss items on the current day");
@@ -69141,8 +69145,7 @@
 	        },
 	        series: [{
 	          data: goalSchedules,
-	          name: "number of schedules",
-	          animation: false
+	          name: "number of schedules"
 	        }],
 	        title: {
 	          text: "Schedules for goals"
@@ -69152,8 +69155,13 @@
 	  }, {
 	    key: 'createCompletionRatesConfig',
 	    value: function createCompletionRatesConfig() {
+	      var completions = [];
+	      for (var i = 0; i < this.props.weekStats.length; i++) {
+	        if (i <= new Date().getDay()) {
+	          completions.push(this.props.weekStats[i][1]);
+	        }
+	      }
 	      var days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
-	      var completions = [this.props.weekStats[1], this.props.weekStats[2], this.props.weekStats[3], this.props.weekStats[4], this.props.weekStats[5], this.props.weekStats[6], this.props.weekStats[7]];
 
 	      return {
 	        chart: {

@@ -32,7 +32,7 @@ export class HabitList extends React.Component {
   }
 
   handleComplete (scheduleInfo) {
-    if (new Date(scheduleInfo.date).getDay() == (new Date).getDay()) {
+    if (this.props.date.getDay() == this.props.currentSelectedTab) {
       this.props.onScheduleComplete(scheduleInfo);
     } else {
       alert("You can only complete items on the current day");
@@ -41,7 +41,7 @@ export class HabitList extends React.Component {
   }
 
   handleMiss (scheduleInfo) {
-    if (new Date(scheduleInfo.date).getDay() == (new Date).getDay()) {
+    if (this.props.date.getDay() == this.props.currentSelectedTab) {
       this.props.onScheduleMiss(scheduleInfo);
     } else {
       alert("You can only miss items on the current day");
