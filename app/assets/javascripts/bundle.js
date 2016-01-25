@@ -29274,34 +29274,6 @@
 	        { className: 'habitBox row' },
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_materialUi.RaisedButton, {
-	            label: 'Controlled LeftNav That Opens From Right',
-	            onTouchTap: this.handleToggle }),
-	          _react2.default.createElement(
-	            _materialUi.LeftNav,
-	            {
-	              docked: false,
-	              width: 200,
-	              open: this.state.open,
-	              onRequestChange: function onRequestChange(open) {
-	                return _this2.setState({ open: open });
-	              }
-	            },
-	            _react2.default.createElement(
-	              _materialUi.MenuItem,
-	              { onTouchTap: this.handleClose },
-	              'Menu Item'
-	            ),
-	            _react2.default.createElement(
-	              _materialUi.MenuItem,
-	              { onTouchTap: this.handleClose },
-	              'Menu Item 2'
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
 	          { className: 'small-6 small-centered columns' },
 	          _react2.default.createElement(_HabitForm2.default, {
 	            goals: this.state.goals,
