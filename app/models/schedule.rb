@@ -31,4 +31,23 @@ class Schedule < ActiveRecord::Base
     day_stats[:percent_complete] = sprintf "%.2f", ( day_stats[:completed_count].to_f / day_stats[:habit_count].to_f )
     day_stats
   end
+
+  def self.week_completion_rates
+    today = DateTime.now.utc.beginning_of_day
+    monday = today.beginning_of_week
+    sunday = today.end_of_week
+    week = (monday..sunday).to_a
+    stats = {
+      1=> 0, 2=> 0, 3=> 0, 4=> 0, 5=> 0, 6=> 0, 7=> 0
+    }
+    week.each_with_index do |day, i|
+      schedules = Schedule.where("date >= ? AND status = ?", day, 'completed')
+      schedules.each do |schedule|
+        if schedule.date.midnight == day
+          stats[i+1] += 1
+        end
+      end
+    end
+    stats
+  end
 end

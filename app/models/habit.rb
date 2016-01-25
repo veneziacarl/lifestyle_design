@@ -7,21 +7,22 @@ class Habit < ActiveRecord::Base
   validates :title, presence: true
   validates :active, inclusion: { in: [true, false] }
 
-  def self.week_completion_rates
-  #   today = Date.today.utc
-  #   monday = today.beginning_of_week
-  #   sunday = today.end_of_week
-  #   habits = Habit.where('date >= ? AND date <= ?', monday, sunday)
-  #   sum_habits = 0
-  #   completions = []
-  #   habits.each do |habit|
-  #     habit_info = { 1: info: habit, completed: 0 }
-  #     habit.schedules.each do |schedule|
-  #       if schedule.status == 'completed'
-  #       end
-  #     end
-  #     completions << habit_info
-  #   end
-  #   completions
+  def self.most_missed
+    habits = Habit.all
+    highest_missed, second_missed, most_missed = 0, 0, {1 => '', 2 => ''}
+    habits.each do |habit|
+      miss_count = 0
+      habit.schedules.each do |schedule|
+        miss_count += 1 if schedule.status == 'missed'
+      end
+      if miss_count > highest_missed
+        most_missed['1'] = {habit: habit.title, miss_count: miss_count}
+        highest_missed = miss_count
+      elsif miss_count > second_missed
+        most_missed['2'] = {habit: habit.title, miss_count: miss_count}
+        second_missed = miss_count
+      end
+    end
+    most_missed
   end
 end

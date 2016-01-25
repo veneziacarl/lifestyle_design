@@ -16,10 +16,10 @@ class HabitDisplay extends React.Component {
     const goalTitles = []
     const goalSchedules = []
 
-    this.props.goals.map( (goal, i) => {
-      goalTitles.push(goal.title)
-      goalSchedules.push(goal.sum_today_schedules)
-    });
+    for(var i = 0; i < this.props.goals.length; i++) {
+      goalTitles.push(this.props.goals[i].title)
+      goalSchedules.push(this.props.goals[i].sum_today_schedules)
+    }
 
     return (
       {
@@ -49,11 +49,11 @@ class HabitDisplay extends React.Component {
 
   createCompletionRatesConfig () {
     const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
-    const completions = [1, 3, 6, 2, 10, 2, 0]
-
-    // this.props.stats.day_stats.map( (stat, i) => {
-    //   completions.push(stat.)
-    // });
+    const completions = [
+      this.props.weekStats[1], this.props.weekStats[2], this.props.weekStats[3],
+      this.props.weekStats[4], this.props.weekStats[5], this.props.weekStats[6],
+      this.props.weekStats[7]
+    ]
 
     return (
       {
@@ -84,6 +84,7 @@ class HabitDisplay extends React.Component {
       height: '80vh',
       padding: '10px'
     }
+
     return (
       <div>
         <Paper style={styles} zDepth={1}>
@@ -96,9 +97,7 @@ class HabitDisplay extends React.Component {
               <p>Habits Missed {this.props.todayStats.missed_count}</p>
             </div>
             <div className="small-6 columns">
-              here is some text
-              to go besides the day stats,
-              maybe some habits that need focus?
+              random quote or something
             </div>
           </div>
           <div className="small-12 large-6 columns">

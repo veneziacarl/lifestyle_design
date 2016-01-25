@@ -28952,6 +28952,7 @@
 	      message: 'Added habit and schedules',
 	      snackbarOpen: false,
 	      todayStats: '',
+	      weekStats: '',
 	      open: false
 	    };
 	    _this.handleHabitSubmit = _this.handleHabitSubmit.bind(_this);
@@ -29059,6 +29060,7 @@
 	          this.setState({ schedules: schedulesArray });
 	          this.setState({ message: 'Deleted schedule' });
 	          this.setState({ snackbarOpen: true });
+	          this.loadStats();
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29211,7 +29213,8 @@
 	        dataType: 'json',
 	        cache: false,
 	        success: (function (info) {
-	          this.setState({ todayStats: info });
+	          this.setState({ todayStats: info.schedules[0] });
+	          this.setState({ weekStats: info.schedules[1] });
 	        }).bind(this),
 	        error: (function (xhr, status, err) {
 	          console.error(this.props, status, err.toString());
@@ -29331,7 +29334,8 @@
 	            { className: 'small-12 medium-7 columns' },
 	            _react2.default.createElement(_HabitDisplay2.default, {
 	              goals: this.state.goals,
-	              todayStats: this.state.todayStats
+	              todayStats: this.state.todayStats,
+	              weekStats: this.state.weekStats
 	            })
 	          )
 	        ),
@@ -67931,12 +67935,22 @@
 	  }, {
 	    key: 'handleComplete',
 	    value: function handleComplete(scheduleInfo) {
-	      this.props.onScheduleComplete(scheduleInfo);
+	      if (new Date(scheduleInfo.date).getDay() == new Date().getDay()) {
+	        this.props.onScheduleComplete(scheduleInfo);
+	      } else {
+	        alert("You can only complete items on the current day");
+	        return;
+	      }
 	    }
 	  }, {
 	    key: 'handleMiss',
 	    value: function handleMiss(scheduleInfo) {
-	      this.props.onScheduleMiss(scheduleInfo);
+	      if (new Date(scheduleInfo.date).getDay() == new Date().getDay()) {
+	        this.props.onScheduleMiss(scheduleInfo);
+	      } else {
+	        alert("You can only miss items on the current day");
+	        return;
+	      }
 	    }
 	  }, {
 	    key: 'render',
@@ -69135,10 +69149,10 @@
 	      var goalTitles = [];
 	      var goalSchedules = [];
 
-	      this.props.goals.map(function (goal, i) {
-	        goalTitles.push(goal.title);
-	        goalSchedules.push(goal.sum_today_schedules);
-	      });
+	      for (var i = 0; i < this.props.goals.length; i++) {
+	        goalTitles.push(this.props.goals[i].title);
+	        goalSchedules.push(this.props.goals[i].sum_today_schedules);
+	      }
 
 	      return {
 	        chart: {
@@ -69167,11 +69181,7 @@
 	    key: 'createCompletionRatesConfig',
 	    value: function createCompletionRatesConfig() {
 	      var days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
-	      var completions = [1, 3, 6, 2, 10, 2, 0];
-
-	      // this.props.stats.day_stats.map( (stat, i) => {
-	      //   completions.push(stat.)
-	      // });
+	      var completions = [this.props.weekStats[1], this.props.weekStats[2], this.props.weekStats[3], this.props.weekStats[4], this.props.weekStats[5], this.props.weekStats[6], this.props.weekStats[7]];
 
 	      return {
 	        chart: {
@@ -69201,6 +69211,7 @@
 	        height: '80vh',
 	        padding: '10px'
 	      };
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -69246,7 +69257,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'small-6 columns' },
-	              'here is some text to go besides the day stats, maybe some habits that need focus?'
+	              'random quote or something'
 	            )
 	          ),
 	          _react2.default.createElement(

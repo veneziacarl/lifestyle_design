@@ -24,6 +24,7 @@ export class HabitBox extends React.Component {
       message: 'Added habit and schedules',
       snackbarOpen: false,
       todayStats: '',
+      weekStats: '',
       open: false
     };
     this.handleHabitSubmit = this.handleHabitSubmit.bind(this);
@@ -118,6 +119,7 @@ export class HabitBox extends React.Component {
         this.setState({schedules: schedulesArray});
         this.setState({message: 'Deleted schedule'})
         this.setState({snackbarOpen: true })
+        this.loadStats();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -255,7 +257,8 @@ export class HabitBox extends React.Component {
       dataType: 'json',
       cache: false,
       success: function(info) {
-        this.setState({todayStats: info})
+        this.setState({todayStats: info.schedules[0]})
+        this.setState({weekStats: info.schedules[1]})
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props, status, err.toString());
@@ -345,6 +348,7 @@ export class HabitBox extends React.Component {
             <HabitDisplay
               goals={this.state.goals}
               todayStats={this.state.todayStats}
+              weekStats={this.state.weekStats}
             />
           </div>
         </div>
