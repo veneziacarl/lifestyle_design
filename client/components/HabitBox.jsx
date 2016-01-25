@@ -307,20 +307,6 @@ export class HabitBox extends React.Component {
     const filteredSchedules = this.state.schedules.filter(schedule => this.createDay(schedule) === this.state.currentSelectedTab)
     return (
       <div className="habitBox row">
-        <div>
-          <RaisedButton
-           label="Controlled LeftNav That Opens From Right"
-           onTouchTap={this.handleToggle} />
-          <LeftNav
-            docked={false}
-            width={200}
-            open={this.state.open}
-            onRequestChange={open => this.setState({open})}
-          >
-            <MenuItem onTouchTap={this.handleClose}>Menu Item</MenuItem>
-            <MenuItem onTouchTap={this.handleClose}>Menu Item 2</MenuItem>
-          </LeftNav>
-        </div>
         <div className="small-6 small-centered columns">
           <HabitForm
             goals={this.state.goals}
