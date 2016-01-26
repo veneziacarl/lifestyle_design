@@ -1,7 +1,136 @@
+$orange: #D45E00;
+$blue: #00bcd4;
+$red: #D4002E;
+
+
+.top-bar {
+  height: 50px;
+  background-color: #ffffff;
+  font-family: Roboto, sans-serif;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  border-radius: 2px;
+
+  ul {
+    background-color: inherit;
+  }
+
+  .top-bar-left {
+    float: left;
+    padding-top: 7px;
+    margin-left: 50px;
+    li {
+      list-style: none;
+      display: inline;
+      margin-left: 20px;
+    }
+  }
+
+  .top-bar-title {
+    float: left;
+    padding-top: 7px;
+  }
+}
+
 .habitBox {
   padding-top: 25px;
 }
 
 .centered {
   text-align: center;
+}
+
+.goals-list {
+}
+
+.wordwrap {
+   white-space: pre-wrap;
+   white-space: -moz-pre-wrap;
+   white-space: -pre-wrap;
+   white-space: -o-pre-wrap;
+   word-wrap: break-word;
+}
+
+.goals-header {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.add-goal {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.goal-details {
+  background-color: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  font-family: Roboto, sans-serif;
+  height: 50px;
+  margin: 10px;
+
+  a {
+    color: black;
+
+    .card {
+      background-color: inherit;
+    }
+
+    &:hover {
+      color: lighten(black, 40%);;
+    }
+  }
+
+  ul li {
+    font-size: 16px;
+    list-style: none;
+    padding-top: 13px;
+
+    .inline {
+      display: inline;
+    }
+  }
+
+  .goals-logo-red {
+    background-color: $red;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
+  }
+
+  .goals-logo-blue {
+    background-color: $blue;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
+  }
+
+  .goals-logo-orange {
+    background-color: $orange;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
+  }
+}
+
+.goal-show {
+  height: 200px;
+  margin: 25px;
+}
+
+.habits-list {
+  ul li {
+    list-style: none;
+  }
 }

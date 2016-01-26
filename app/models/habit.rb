@@ -25,4 +25,16 @@ class Habit < ActiveRecord::Base
     end
     most_missed
   end
+
+  def recent_progress
+    recent = ""
+    schedules.each do |schedule|
+      if recent == ""
+        recent = schedule.updated_at
+      elsif schedule.updated_at > recent
+        recent = schedule.updated_at
+      end
+    end
+    recent
+  end
 end

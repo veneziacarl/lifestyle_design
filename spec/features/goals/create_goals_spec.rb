@@ -18,23 +18,19 @@ feature 'create goals', %{
 
   before(:each) do
     user_sign_in(user)
+    click_link 'Goals'
   end
 
   scenario 'logged in user navigates to manager page' do
-    click_link 'Goals'
-
     expect(page).to have_content('You have no goals to display.')
     expect(page).to have_content('Your Goals:')
-
-    click_link 'Create New Goal'
-
     expect(page).to have_css('form')
   end
 
-  scenario 'logged in user adds new goal, is brought to goal show page, sees goal on index' do
-    visit new_goal_path
+  scenario 'logged in user adds new goal, sees goal on index' do
     fill_in 'Title', with: 'be healthy'
     fill_in 'Description', with: 'do the little things to make it work'
+    choose 'goal_color_d45e00'
     click_button 'Add Goal'
 
     expect(page).to have_content('New Goal Created Successfully!')
@@ -48,7 +44,6 @@ feature 'create goals', %{
   scenario 'logged in user incorrectly fills out form' do
     description = 'this should not work since title is required'
 
-    visit new_goal_path
     fill_in 'Description', with: description
     click_button 'Add Goal'
 

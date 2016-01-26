@@ -12,16 +12,33 @@
   </head>
 
   <body>
-
-    <% if user_signed_in? %>
-      logged in as: <%= current_user.full_name %>
-      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to 'Sign Up', new_user_registration_path %>
-      <%= link_to 'Sign In', new_user_session_path %>
-    <% end %>
-
-    <%= link_to 'Home', root_path %>
+    <div class="top-bar">
+      <div class="top-bar-title">
+        <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+          <span class="menu-icon dark" data-toggle></span>
+        </span>
+        <strong><%= link_to 'Lifestyle Design', root_path %></strong>
+      </div>
+      <div id="responsive-menu">
+        <div class="top-bar-left">
+          <ul>
+            <li><%= link_to 'Goals', goals_path %></li>
+            <li><%= link_to 'Habits', habits_path %></li>
+          </ul>
+        </div>
+        <div class="top-bar-right">
+          <ul class="menu">
+            <% if user_signed_in? %>
+              <li>logged in as: <%= current_user.full_name %></li>
+              <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+            <% else %>
+              <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+              <li><%= link_to 'Sign In', new_user_session_path %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <%= render "layouts/flash" %>
 

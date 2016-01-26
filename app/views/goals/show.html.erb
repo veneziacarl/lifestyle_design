@@ -1,11 +1,34 @@
-<%= link_to 'Back to Goals Index', goals_path %>
-
-<%= render @goal %>
+<div class="goal-details goal-show row">
+  <ul>
+    <li>
+      <% if @goal.color == "#00bcd4" %>
+        <div class="goals-logo-<%= 'blue' %>">
+      <% elsif @goal.color == "#D45E00" %>
+        <div class="goals-logo-<%= 'orange' %>">
+      <% elsif @goal.color == "#D4002E" %>
+        <div class="goals-logo-<%= 'red' %>">
+      <% end %>
+        <%= @goal.title.chars.first %>
+      </div>
+      </li>
+    <li>
+      Goal: <%= @goal.title %>
+    </li>
+    <li>
+      Description: <%= @goal.description %>
+    </li>
+  </ul>
+</div>
 
 <hr />
-Habits that build to this goal:
-<% if @habits.empty? %>
-  No habits yet.
-<% else %>
-  <%= render @habits %>
-<% end %>
+
+<div class="row">
+  <div class="habits-list small-12 small-centered columns">
+    Habits that build to this goal:
+    <% if @habits.empty? %>
+    No habits yet.
+    <% else %>
+    <%= render @habits %>
+    <% end %>
+  </div>
+</div>

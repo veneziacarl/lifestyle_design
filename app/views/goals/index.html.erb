@@ -1,9 +1,20 @@
-<%= link_to 'Create New Goal', new_goal_path %>
+<div class="add-goal small-5 small-centered columns">
+  <%= render 'form' %>
+</div>
 
-Your Goals:
+<hr />
 
-<% if @goals.empty? %>
-  You have no goals to display.
-<% else %>
-  <%= render @goals %>
-<% end %>
+<div class="all-goals">
+  <div class="goals-header">
+    Your Goals:
+  </div>
+  <div class="row" data-equalizer data-equalize-on='small'>
+    <div class="goals-list">
+      <% if @goals.empty? %>
+        You have no goals to display.
+      <% else %>
+        <%= render @goals %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -70,7 +70,7 @@ class HabitDisplay extends React.Component {
         },
         series: [{
           data: completions,
-          name: "completion percentage"
+          name: "completed"
         }],
         title: {
           text: "Completed habits this week"
@@ -97,7 +97,7 @@ class HabitDisplay extends React.Component {
               <p>Habits Missed {this.props.todayStats.missed_count}</p>
             </div>
             <div className="small-6 columns">
-              random quote or something
+              comparison stats to last week
             </div>
           </div>
           <div className="small-12 large-6 columns">

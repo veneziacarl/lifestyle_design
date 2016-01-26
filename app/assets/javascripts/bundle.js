@@ -68749,7 +68749,7 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              { color: styles.background, backgroundColor: _colors.colors.lightBlue },
+	              { color: styles.background, backgroundColor: this.props.habitInfo.habit.goal.color },
 	              this.props.habitInfo.habit.goal.title.charAt(0)
 	            ),
 	            title: this.props.habitInfo.habit.title,
@@ -69177,7 +69177,7 @@
 	        },
 	        series: [{
 	          data: completions,
-	          name: "completion percentage"
+	          name: "completed"
 	        }],
 	        title: {
 	          text: "Completed habits this week"
@@ -69237,7 +69237,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'small-6 columns' },
-	              'random quote or something'
+	              'comparison stats to last week'
 	            )
 	          ),
 	          _react2.default.createElement(

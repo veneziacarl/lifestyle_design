@@ -2,6 +2,7 @@ class GoalsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @goal = Goal.new
     @goals = Goal.order(id: :desc)
   end
 
@@ -11,12 +12,6 @@ class GoalsController < ApplicationController
   end
 
   def new
-    if user_signed_in?
-      @goal = Goal.new
-    else
-      flash[:error] = "You must be signed in to add a goal!"
-      redirect_to root_path
-    end
   end
 
   def create
@@ -34,6 +29,6 @@ class GoalsController < ApplicationController
   private
 
   def goal_params
-    params.require(:goal).permit(:id, :title, :description, :active)
+    params.require(:goal).permit(:id, :title, :description, :active, :color)
   end
 end
