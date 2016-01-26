@@ -9,8 +9,4 @@ RSpec.describe Schedule, type: :model do
 
   it { should have_valid(:frequency).when("day") }
   it { should_not have_valid(:frequency).when("d", "", nil, 1) }
-
-  it 'correctly finds the current weeks completion rates' do
-    
-  end
 end

@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Goal, type: :model do
-  let (:goal) { FactoryGirl.create(:goal) }
-  let (:habit) { FactoryGirl.create(:habit, goal: goal) }
-  let! (:schedule) { FactoryGirl.create(:schedule, habit: habit) }
-  let! (:schedule2) { FactoryGirl.create(:schedule, habit: habit) }
+  let(:goal) { FactoryGirl.create(:goal) }
+  let(:habit) { FactoryGirl.create(:habit, goal: goal) }
+  let!(:schedule) { FactoryGirl.create(:schedule, habit: habit) }
+  let!(:schedule2) { FactoryGirl.create(:schedule, habit: habit) }
 
   it { should have_valid(:title).when('title', 'aNother TitlE') }
   it { should_not have_valid(:title).when(nil, '') }

@@ -31,8 +31,8 @@ class Habit < ActiveRecord::Base
     schedules.each do |schedule|
       if recent == ""
         recent = schedule.updated_at
-      else
-        recent = schedule.updated_at if schedule.updated_at > recent
+      elsif schedule.updated_at > recent
+        recent = schedule.updated_at
       end
     end
     recent

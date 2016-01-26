@@ -62,11 +62,11 @@ $red: #D4002E;
 
 .goal-details {
   background-color: #ffffff;
-  font-family: Roboto, sans-serif;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
   border-radius: 2px;
-  margin: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  font-family: Roboto, sans-serif;
   height: 50px;
+  margin: 10px;
 
   a {
     color: black;
@@ -81,8 +81,8 @@ $red: #D4002E;
   }
 
   ul li {
-    list-style: none;
     font-size: 16px;
+    list-style: none;
     padding-top: 13px;
 
     .inline {
@@ -91,42 +91,42 @@ $red: #D4002E;
   }
 
   .goals-logo-red {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    display: inline-block;
-    text-align: center;
-    font-size: 24px;
-    color: white;
     background-color: $red;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
   }
 
   .goals-logo-blue {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    display: inline-block;
-    text-align: center;
-    font-size: 24px;
-    color: white;
     background-color: $blue;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
   }
 
   .goals-logo-orange {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    display: inline-block;
-    text-align: center;
-    font-size: 24px;
-    color: white;
     background-color: $orange;
+    border-radius: 50%;
+    color: white;
+    display: inline-block;
+    font-size: 24px;
+    height: 40px;
+    text-align: center;
+    width: 40px;
   }
 }
 
 .goal-show {
-  margin: 25px;
   height: 200px;
+  margin: 25px;
 }
 
 .habits-list {
