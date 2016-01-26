@@ -53,6 +53,7 @@ class HabitDisplay extends React.Component {
         completions.push(this.props.weekStats[i][1])
       }
     }
+    console.log(completions)
     const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
 
     return (
@@ -70,7 +71,7 @@ class HabitDisplay extends React.Component {
         },
         series: [{
           data: completions,
-          name: "completion percentage"
+          name: "completed"
         }],
         title: {
           text: "Completed habits this week"

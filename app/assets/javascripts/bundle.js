@@ -69161,6 +69161,7 @@
 	          completions.push(this.props.weekStats[i][1]);
 	        }
 	      }
+	      console.log(completions);
 	      var days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
 
 	      return {
@@ -69177,7 +69178,7 @@
 	        },
 	        series: [{
 	          data: completions,
-	          name: "completion percentage"
+	          name: "completed"
 	        }],
 	        title: {
 	          text: "Completed habits this week"
