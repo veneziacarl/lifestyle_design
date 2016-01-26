@@ -42,6 +42,7 @@
         </div>
       </div>
     </div>
+
     <% if user_signed_in? %>
       logged in as: <%= current_user.full_name %>
       <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
@@ -50,7 +51,7 @@
       <%= link_to 'Sign In', new_user_session_path %>
     <% end %>
 
-
+    <%= link_to 'Home', root_path %>
 
     <%= render "layouts/flash" %>
 

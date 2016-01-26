@@ -1,3 +1,9 @@
+$orange: #D45E00;
+$blue: #00bcd4;
+$red: #D4002E;
+
+
+
 .habitBox {
   padding-top: 25px;
 }
@@ -7,11 +13,14 @@
 }
 
 .goals-list {
-  padding: 25px;
+}
 
-  ul li {
-    list-style: none;
-  }
+.wordwrap {
+   white-space: pre-wrap;
+   white-space: -moz-pre-wrap;
+   white-space: -pre-wrap;
+   white-space: -o-pre-wrap;
+   word-wrap: break-word;
 }
 
 .goals-header {
@@ -22,4 +31,68 @@
 .add-goal {
   padding-top: 50px;
   padding-bottom: 20px;
+}
+
+.goal-details {
+  background-color: #ffffff;
+  font-family: Roboto, sans-serif;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  border-radius: 2px;
+  margin: 10px;
+  height: 50px;
+
+  a {
+    color: black;
+
+    .card {
+      background-color: inherit;
+    }
+
+    &:hover {
+      color: lighten(black, 40%);;
+    }
+  }
+
+  ul li {
+    list-style: none;
+    font-size: 16px;
+    padding-top: 13px;
+
+    .inline {
+      display: inline;
+    }
+  }
+
+  .goals-logo-red {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    background-color: $red;
+  }
+
+  .goals-logo-blue {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    background-color: $blue;
+  }
+
+  .goals-logo-orange {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    font-size: 24px;
+    color: white;
+    background-color: $orange;
+  }
 }

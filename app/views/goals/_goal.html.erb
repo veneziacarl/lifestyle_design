@@ -1,9 +1,23 @@
-<div class="goal-details small-3 columns end">
-  <ul>
-    <li><%= link_to 'See more details', goal_path(goal) %></li>
-    <li>Title: <%= goal.title %></li>
-    <li>Description: <%= goal.description %></li>
-    <li>Active: <%= goal.active %></li>
-    <li>Color: <%= goal.color %></li>
-  </ul>
+
+<div class="goal-details small-12 medium-5 columns end" data-equalizer-watch>
+  <%= link_to goal_path(goal), class: 'card' do %>
+    <ul>
+      <div>
+        <li>
+          <% if goal.color == "#00bcd4" %>
+            <div class="goals-logo-<%= 'blue' %>">
+          <% elsif goal.color == "#D45E00" %>
+            <div class="goals-logo-<%= 'orange' %>">
+          <% elsif goal.color == "#D4002E" %>
+            <div class="goals-logo-<%= 'red' %>">
+          <% end %>
+            <%= goal.title.chars.first %>
+            </div>
+        </li>
+        <li class="wordwrap"><%= goal.title %></li>
+      </div>
+      <li class="inline">Habits: <%= goal.habits.count %></li>
+      <li class="inline">Last Progress Made: <%= goal.habits.count %></li>
+    </ul>
+  <% end %>
 </div>

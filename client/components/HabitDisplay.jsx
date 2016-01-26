@@ -53,7 +53,6 @@ class HabitDisplay extends React.Component {
         completions.push(this.props.weekStats[i][1])
       }
     }
-    console.log(completions)
     const days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn']
 
     return (

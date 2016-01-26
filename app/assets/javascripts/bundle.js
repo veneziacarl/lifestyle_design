@@ -68749,7 +68749,7 @@
 	            showExpandableButton: true,
 	            avatar: _react2.default.createElement(
 	              _materialUi.Avatar,
-	              { color: styles.background, backgroundColor: _colors.colors.lightBlue },
+	              { color: styles.background, backgroundColor: this.props.habitInfo.habit.goal.color },
 	              this.props.habitInfo.habit.goal.title.charAt(0)
 	            ),
 	            title: this.props.habitInfo.habit.title,
@@ -69161,7 +69161,6 @@
 	          completions.push(this.props.weekStats[i][1]);
 	        }
 	      }
-	      console.log(completions);
 	      var days = ['M', 'T', 'W', 'Th', 'F', 'S', 'Sn'];
 
 	      return {
