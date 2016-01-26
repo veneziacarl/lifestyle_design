@@ -1,14 +1,14 @@
-$orange: #D45E00;
+$orange: #d45e00;
 $blue: #00bcd4;
-$red: #D4002E;
+$red: #d4002e;
 
 
 .top-bar {
-  height: 50px;
   background-color: #ffffff;
-  font-family: Roboto, sans-serif;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
   border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  font-family: Roboto, sans-serif;
+  height: 50px;
 
   ul {
     background-color: inherit;
@@ -16,11 +16,11 @@ $red: #D4002E;
 
   .top-bar-left {
     float: left;
-    padding-top: 7px;
     margin-left: 50px;
+    padding-top: 7px;
     li {
-      list-style: none;
       display: inline;
+      list-style: none;
       margin-left: 20px;
     }
   }
@@ -43,21 +43,21 @@ $red: #D4002E;
 }
 
 .wordwrap {
-   white-space: pre-wrap;
-   white-space: -moz-pre-wrap;
-   white-space: -pre-wrap;
-   white-space: -o-pre-wrap;
-   word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 .goals-header {
-  text-align: center;
   padding-bottom: 20px;
+  text-align: center;
 }
 
 .add-goal {
-  padding-top: 50px;
   padding-bottom: 20px;
+  padding-top: 50px;
 }
 
 .goal-details {
