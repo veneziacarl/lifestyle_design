@@ -30,13 +30,12 @@ feature 'create goals', %{
   scenario 'logged in user adds new goal, sees goal on index' do
     fill_in 'Title', with: 'be healthy'
     fill_in 'Description', with: 'do the little things to make it work'
-    choose 'goal_color_orange'
+    choose 'goal_color_d45e00'
     click_button 'Add Goal'
 
     expect(page).to have_content('New Goal Created Successfully!')
     expect(page).to have_content('be healthy')
     expect(page).to have_content('do the little things to make it work')
-    expect(page).to have_content("Color: Orange")
 
     visit goals_path
     expect(page).to have_content('be healthy')

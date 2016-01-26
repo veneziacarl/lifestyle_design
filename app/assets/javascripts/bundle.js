@@ -69237,7 +69237,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'small-6 columns' },
-	              'random quote or something'
+	              'comparison stats to last week'
 	            )
 	          ),
 	          _react2.default.createElement(

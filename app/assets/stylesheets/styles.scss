@@ -17,10 +17,11 @@ $red: #D4002E;
   .top-bar-left {
     float: left;
     padding-top: 7px;
-
+    margin-left: 50px;
     li {
       list-style: none;
       display: inline;
+      margin-left: 20px;
     }
   }
 
@@ -120,5 +121,16 @@ $red: #D4002E;
     font-size: 24px;
     color: white;
     background-color: $orange;
+  }
+}
+
+.goal-show {
+  margin: 25px;
+  height: 200px;
+}
+
+.habits-list {
+  ul li {
+    list-style: none;
   }
 }

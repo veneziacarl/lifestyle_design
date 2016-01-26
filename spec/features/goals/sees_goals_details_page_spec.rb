@@ -19,11 +19,10 @@ feature 'see goals details page', %{
 
   scenario "sees the details" do
     visit goals_path
-    click_link('See more details')
+    click_on(goal.title)
 
     expect(page).to have_content(goal.title)
     expect(page).to have_content(goal.description)
-    expect(page).to have_content(goal.active)
 
     expect(page).to have_content("Habits that build to this goal:")
     expect(page).to have_content("No habits yet.")
@@ -31,7 +30,7 @@ feature 'see goals details page', %{
 
   scenario "navigates back to goals index page" do
     visit goal_path(goal)
-    click_link("Back to Goals Index")
+    click_link("Goals")
 
     expect(current_path).to eq(goals_path)
     expect(page).to have_content(goal.title)
