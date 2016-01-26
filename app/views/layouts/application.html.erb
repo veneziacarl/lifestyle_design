@@ -17,41 +17,30 @@
         <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
           <span class="menu-icon dark" data-toggle></span>
         </span>
-        <strong>Site Title</strong>
+        <strong><%= link_to 'Lifestyle Design', root_path %></strong>
       </div>
       <div id="responsive-menu">
         <div class="top-bar-left">
-          <ul class="dropdown menu" data-dropdown-menu>
-            <li>
-              <a href="#">One</a>
-              <ul class="menu vertical">
-                <li><a href="#">One</a></li>
-                <li><a href="#">Two</a></li>
-                <li><a href="#">Three</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Two</a></li>
-            <li><a href="#">Three</a></li>
+          <ul>
+            <li><a href="#">Goals</a></li>
+            <li><a href="#">Habits</a></li>
           </ul>
         </div>
         <div class="top-bar-right">
           <ul class="menu">
-            <li><input type="search" placeholder="Search"></li>
-            <li><button type="button" class="button">Search</button></li>
+            <% if user_signed_in? %>
+              <li>logged in as: <%= current_user.full_name %></li>
+              <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+            <% else %>
+              <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+              <li><%= link_to 'Sign In', new_user_session_path %></li>
+            <% end %>
           </ul>
         </div>
       </div>
     </div>
 
-    <% if user_signed_in? %>
-      logged in as: <%= current_user.full_name %>
-      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to 'Sign Up', new_user_registration_path %>
-      <%= link_to 'Sign In', new_user_session_path %>
-    <% end %>
 
-    <%= link_to 'Home', root_path %>
 
     <%= render "layouts/flash" %>
 

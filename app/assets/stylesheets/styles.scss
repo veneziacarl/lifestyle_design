@@ -3,6 +3,32 @@ $blue: #00bcd4;
 $red: #D4002E;
 
 
+.top-bar {
+  height: 50px;
+  background-color: #ffffff;
+  font-family: Roboto, sans-serif;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  border-radius: 2px;
+
+  ul {
+    background-color: inherit;
+  }
+
+  .top-bar-left {
+    float: left;
+    padding-top: 7px;
+
+    li {
+      list-style: none;
+      display: inline;
+    }
+  }
+
+  .top-bar-title {
+    float: left;
+    padding-top: 7px;
+  }
+}
 
 .habitBox {
   padding-top: 25px;
