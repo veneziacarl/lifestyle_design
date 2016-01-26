@@ -1,9 +1,22 @@
 <%= link_to 'Create New Goal', new_goal_path %>
 
-Your Goals:
+<div class="add-goal small-5 small-centered columns">
+  <%= render 'form' %>
+</div>
 
-<% if @goals.empty? %>
-  You have no goals to display.
-<% else %>
-  <%= render @goals %>
-<% end %>
+<hr />
+
+<div class="all-goals">
+  <div class="goals-header">
+    Your Goals:
+  </div>
+  <div class="row">
+    <div class="goals-list">
+      <% if @goals.empty? %>
+      You have no goals to display.
+      <% else %>
+      <%= render @goals %>
+      <% end %>
+    </div>
+  </div>
+</div>

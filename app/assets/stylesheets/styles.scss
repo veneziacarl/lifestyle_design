@@ -5,3 +5,21 @@
 .centered {
   text-align: center;
 }
+
+.goals-list {
+  padding: 25px;
+
+  ul li {
+    list-style: none;
+  }
+}
+
+.goals-header {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.add-goal {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
